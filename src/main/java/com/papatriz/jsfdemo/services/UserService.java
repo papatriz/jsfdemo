@@ -20,4 +20,13 @@ public class UserService {
 
         return  userRepository.findAll();
     }
+
+    public void saveUser(User user){
+        userRepository.save(user);
+    }
+
+    public void deleteUser(User user){
+        System.out.println("USER ID IS "+user.getId());
+        userRepository.deleteById(user.getId());
+    }
 }

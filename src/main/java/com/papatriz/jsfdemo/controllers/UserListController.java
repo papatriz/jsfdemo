@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Scope (value = "session")
-@Component (value = "userList")
-@ELBeanName(value = "userList")
+@Component (value = "userListController")
+@ELBeanName(value = "userListController")
 @Join(path = "/userlist", to = "/userlist.xhtml")
 public class UserListController {
     @Autowired
@@ -35,5 +35,13 @@ public class UserListController {
         System.out.println(("getUsers executed"));
 
         return users;
+    }
+
+    public String deleteUser(User user){
+        System.out.println("deleteUser executed, user id is "+user.getId());
+
+        userService.deleteUser(user);
+
+        return  "/userlist.xhtml?faces-redirect=true";
     }
 }

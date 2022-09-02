@@ -15,10 +15,10 @@
 <h:body>
     <h:form id="form">
         <p:panel header="Users List">
-            <p:dataTable id="table" var="user" value="#{userList.users}">
+            <p:dataTable id="table" var="user" value="#{userListController.users}">
                 <p:column>
-                    <f:facet name="header"># Id</f:facet>
-                    <h:outputText value="#{user.id}" />
+                    <f:facet name="header"># </f:facet>
+                    <h:outputText value="#{userlist.users.rowIndex + 1}" />
                 </p:column>
 
                 <p:column>
@@ -35,6 +35,10 @@
                     <f:facet name="header">Role</f:facet>
                     <h:outputText value="#{user.role}">
                     </h:outputText>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">Delete</f:facet>
+                    <h:commandButton value="Delete" action="#{userListController.deleteUser(user)}" />
                 </p:column>
             </p:dataTable>
         </p:panel>
