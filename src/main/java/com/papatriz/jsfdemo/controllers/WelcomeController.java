@@ -1,5 +1,6 @@
 package com.papatriz.jsfdemo.controllers;
 
+import com.papatriz.jsfdemo.repositories.UserRepository;
 import lombok.Data;
 import org.ocpsoft.rewrite.annotation.Join;
         import org.ocpsoft.rewrite.el.ELBeanName;
