@@ -23,6 +23,26 @@ public class UserListController {
 
     private List<User> users;
 
+    // Moved from AddUserController
+    private String testmessage = "TEST MESSAGE";
+
+    private User user = new User();
+
+    public User getUser() {
+        return user;
+    }
+    public String getTestmessage() {
+        return testmessage;
+    }
+
+    public String addUser(){
+        userService.saveUser(user);
+        user = new User();
+
+        return  "/userlist.xhtml?faces-redirect=true";
+    }
+    // ---------------------------
+
     @Deferred
     @RequestAction
     @IgnorePostback
@@ -44,4 +64,6 @@ public class UserListController {
 
         return  "/userlist.xhtml?faces-redirect=true";
     }
+
+
 }
