@@ -22,11 +22,11 @@
                    <p:outputLabel for="username" value="Username: " />
                    <p:inputText id="username" value="#{addUserController.user.username}" />
                    <p:outputLabel for="password" value="Password: " />
-                   <p:inputNumber id="password" value="#{addUserController.user.password}" />
+                   <p:inputText id="password" value="#{addUserController.user.password}" />
                    <p:outputLabel for="email" value="Email: " />
-                   <p:inputNumber id="email" value="#{addUserController.user.email}" />
+                   <p:inputText id="email" value="#{addUserController.user.email}" />
                    <p:outputLabel for="role" value="Role: " />
-                   <p:inputNumber id="role" value="#{addUserController.user.role}" />
+                   <p:inputText id="role" value="#{addUserController.user.role}" />
                    <h:commandButton value="Save" action="#{addUserController.addUser}" />
 
 
