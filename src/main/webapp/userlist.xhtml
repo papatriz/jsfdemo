@@ -14,8 +14,13 @@
 </h:head>
 
 <h:body>
-    <p:button href="adduser.xhtml" value="Add user" />
-    <p:commandButton  action="#{userListController.populateTestUsers()}" value="Populate test users" />
+    <div class="ui-fluid">
+        <p:panelGrid columns="2" layout="grid">
+            <p:button href="adduser.xhtml" value="Add user" />
+            <p:commandButton  action="#{userListController.populateTestUsers()}" value="Populate test users" />
+        </p:panelGrid>
+    </div>
+
 
     <h:form id="form">
         <p:outputPanel id="testContainer" header="Test user list" >
@@ -46,7 +51,12 @@
                 <p:column>
                     <div class="mb-3">
                     <f:facet name="header">Delete</f:facet>
-                    <p:commandButton value="Delete" action="#{userListController.deleteUser(user)}" />
+                    <p:commandButton type="button" onclick="PF('cd').show()" value="Delete" >
+                    </p:commandButton>
+                        <p:confirmDialog message="Are you sure?" header="Deleting user" severity="alert" widgetVar="cd">
+                            <p:commandButton value="Yes Sure" action="#{userListController.deleteUser(user)}" oncomplete="PF('cd').hide()"/>
+                            <p:commandButton value="Not Yet" onclick="PF('cd').hide();" type="button" />
+                        </p:confirmDialog>
                     </div>
                 </p:column>
             </p:dataTable>
@@ -55,8 +65,8 @@
     </h:form>
     <h:outputText id="test" value="#{userListController.getMessage()}">
         <p:autoUpdate on="myEvent"/>
-
     </h:outputText>
+
 </h:body>
 
 </html>
