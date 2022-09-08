@@ -9,17 +9,23 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>User list</title>
 </h:head>
 
 <h:body>
     <p:button href="adduser.xhtml" value="Add user" />
+    <p:commandButton  action="#{userListController.populateTestUsers()}" value="Populate test users" />
+
     <h:form id="form">
-        <p:panel header="Users List">
-            <p:dataTable id="table" var="user" value="#{userListController.users}">
+        <p:outputPanel id="testContainer" header="Test user list" >
+            <h:panelGroup>
+            <p:autoUpdate on="myEvent"/>
+
+            <p:dataTable  id="table" var="user" value="#{userListController.users}">
                 <p:column>
                     <f:facet name="header"># </f:facet>
-                    <h:outputText value="#{userlist.users.rowIndex + 1}" />
+                    <h:outputText value="#{userListController.getCurrentPos(user)}" />
                 </p:column>
 
                 <p:column>
@@ -38,12 +44,19 @@
                     </h:outputText>
                 </p:column>
                 <p:column>
+                    <div class="mb-3">
                     <f:facet name="header">Delete</f:facet>
-                    <h:commandButton value="Delete" action="#{userListController.deleteUser(user)}" />
+                    <p:commandButton value="Delete" action="#{userListController.deleteUser(user)}" />
+                    </div>
                 </p:column>
             </p:dataTable>
-        </p:panel>
+            </h:panelGroup>
+        </p:outputPanel>
     </h:form>
+    <h:outputText id="test" value="#{userListController.getMessage()}">
+        <p:autoUpdate on="myEvent"/>
+
+    </h:outputText>
 </h:body>
 
 </html>
