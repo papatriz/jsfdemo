@@ -8,10 +8,14 @@ import org.ocpsoft.rewrite.el.ELBeanName;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 import org.primefaces.PrimeFaces;
+import org.primefaces.component.outputlabel.OutputLabel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import java.util.List;
 import java.util.Random;
 
@@ -25,6 +29,7 @@ public class UserListController {
     private List<User> users;
 
     private int counter; // TEST
+    private OutputLabel label;
     @Deferred
     @RequestAction
     @IgnorePostback
@@ -38,15 +43,15 @@ public class UserListController {
 
         return users;
     }
-/*
-    public String deleteUser(User user){
-        System.out.println("deleteUser executed, user id is "+user.getId());
 
-        userService.deleteUser(user);
-
-        return  "/userlist.xhtml?faces-redirect=true";
+    public OutputLabel getLabel() {
+        return label;
     }
-*/
+
+    public void setLabel(OutputLabel label) {
+        this.label = label;
+    }
+
     public void deleteUser(User user){
         System.out.println("deleteUser executed, user id is "+user.getId());
 
@@ -54,7 +59,8 @@ public class UserListController {
         loadData();
         PrimeFaces.current().ajax().update("form:testContainer");
         PrimeFaces.current().ajax().update("test");
-       // return "/userlist.xhtml?faces-redirect=true";
+        String message = "User "+user.getUsername()+" deleted";
+        label.setValue(message);
     }
 
     public void populateTestUsers()
@@ -66,7 +72,6 @@ public class UserListController {
         }
         loadData();
         PrimeFaces.current().ajax().update("form:testContainer");
-
 
       //  return "/userlist.xhtml?faces-redirect=true";
     }
