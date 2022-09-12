@@ -27,6 +27,7 @@ public class UserListController {
     @Autowired
     private UserService userService;
     private List<User> users;
+    private User selectedUser;
 
     private int counter; // TEST
     private OutputLabel label;
@@ -42,6 +43,17 @@ public class UserListController {
         System.out.println(("getUsers executed"));
 
         return users;
+    }
+
+    public void setSelectedUser(User user)
+    {
+        System.out.println("User selected : "+user.getUsername());
+        selectedUser = user;
+    }
+
+    public User getSelectedUser()
+    {
+        return selectedUser;
     }
 
     public OutputLabel getLabel() {
@@ -62,18 +74,22 @@ public class UserListController {
         String message = "User "+user.getUsername()+" deleted";
         label.setValue(message);
     }
+    public void deleteSelectedUser(){
+        System.out.println("deleteUser executed, user id is "+selectedUser.getId());
+        userService.deleteUser(selectedUser);
+        loadData();
+        PrimeFaces.current().ajax().update("form:testContainer");
+    }
 
     public void populateTestUsers()
     {
         System.out.println("Populate users");
         for (int i=0; i < 4; i++){
-            User tmpUser = new User("user", "pass", "mail@mail.com", "ROLE_USER");
+            User tmpUser = new User("userX"+i, "pass", "mail@mail.com", "ROLE_USER");
             userService.saveUser(tmpUser);
         }
         loadData();
         PrimeFaces.current().ajax().update("form:testContainer");
-
-      //  return "/userlist.xhtml?faces-redirect=true";
     }
 
 
@@ -86,9 +102,8 @@ public class UserListController {
     public String getCurrentPos(User user){
        // int pos = users.listIterator().nextIndex();
         int pos = users.indexOf(user) + 1;
-        String result = String.valueOf(pos);
 
-        return result;
+        return String.valueOf(pos);
     }
 
 

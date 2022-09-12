@@ -21,7 +21,7 @@
         </p:panelGrid>
     </div>
     <div class="ui-fluid">
-<p:outputLabel id="topmessage" binding="#{userListController.label}" value="TOP MESSAGE"></p:outputLabel>
+<p:outputLabel id="topmessage" binding="#{userListController.label}"></p:outputLabel>
     <h:form id="form">
         <p:outputPanel id="testContainer" header="Test user list" >
             <h:panelGroup>
@@ -49,23 +49,17 @@
                     </h:outputText>
                 </p:column>
                 <p:column>
-                    <div class="mb-3">
                     <f:facet name="header">Delete</f:facet>
-                    <p:commandButton type="button" onclick="PF('cd').show()" value="Delete" >
-                    </p:commandButton>
-                        <p:confirmDialog message="Are you sure?" header="Deleting user" severity="alert" widgetVar="cd">
-                            <p:commandButton value="Yes Sure" action="#{userListController.deleteUser(user)}" oncomplete="PF('cd').hide()"/>
-                            <p:commandButton value="Not Yet" onclick="PF('cd').hide();" type="button" />
-                        </p:confirmDialog>
-                    </div>
+                    <p:commandLink action="#{userListController.setSelectedUser(user)}" type="button" ajax="true" oncomplete="PF('cd').show()"  value="Delete" />
                 </p:column>
             </p:dataTable>
             </h:panelGroup>
         </p:outputPanel>
     </h:form>
-    <h:outputText id="test" value="#{userListController.getMessage()}">
-        <p:autoUpdate on="myEvent"/>
-    </h:outputText>
+        <p:confirmDialog message="Are you sure?" header="Deleting user" severity="alert" widgetVar="cd">
+            <p:commandButton value="Yes Sure" action="#{userListController.deleteSelectedUser()}" oncomplete="PF('cd').hide()"/>
+            <p:commandButton value="Not Yet" onclick="PF('cd').hide();" type="button" />
+        </p:confirmDialog>
     </div>
 </h:body>
 
