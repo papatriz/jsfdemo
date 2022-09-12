@@ -36,4 +36,9 @@ public class User {
 
     @Column
     private String role;
+
+    public boolean hasRole(String role){
+
+        return this.role.equals(role);
+    }
 }

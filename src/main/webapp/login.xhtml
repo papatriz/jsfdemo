@@ -21,15 +21,16 @@
 </h:head>
 
 <h:body>
-    <h:form id="loginForm">
+    <h:form id="loginForm" prependId="false">
         <p:panel header="PLEASE LOGIN">
             <h:panelGrid columns="1">
-
+                <p:outputLabel value="Login failed!" styleClass="red"
+                               rendered="${!empty param['error']}" />
                 <p:outputLabel for="username" value="Username: " />
-                <p:inputText id="username" value="#{addUserController.user.username}" />
+                <p:inputText id="username" placeholder="Username"/>
                 <p:outputLabel for="password" value="Password: " />
-                <p:inputText id="password" value="#{addUserController.user.password}" />
-                <p:commandButton styleClass="downshift" value="Save" action="#{addUserController.addUser}" />
+                <p:inputText id="password" placeholder="Password" />
+                <p:commandButton styleClass="downshift" value="Login" ajax="false" />
             </h:panelGrid>
         </p:panel>
     </h:form>
