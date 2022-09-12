@@ -13,25 +13,37 @@
     <style type="text/css">
         .ui-button.downshift{
             position: relative;
-            left: 80px;
-            bottom: -50px;
-            border: 6px solid limegreen;
+            left: 0px;
+            bottom: -12px;
+            margin-bottom: 5px;
+        }
+        .ui-widget.center {
+            margin: auto;
+            width: 50%;
+            padding: 10px;
+        }
+        .ui-outputlabel.red
+        {
+            color:Tomato;
         }
     </style>
 </h:head>
 
 <h:body>
     <h:form id="loginForm" prependId="false">
-        <p:panel header="PLEASE LOGIN">
-            <h:panelGrid columns="1">
+        <p:panel styleClass="center" header="PLEASE LOGIN">
+
+            <div class="ui-fluid">
+            <h:panelGrid columns="1" styleClass="text-align-center">
                 <p:outputLabel value="Login failed!" styleClass="red"
                                rendered="${!empty param['error']}" />
                 <p:outputLabel for="username" value="Username: " />
-                <p:inputText id="username" placeholder="Username"/>
+                <p:inputText id="username" />
                 <p:outputLabel for="password" value="Password: " />
-                <p:inputText id="password" placeholder="Password" />
+                <p:inputText id="password"  />
                 <p:commandButton styleClass="downshift" value="Login" ajax="false" />
             </h:panelGrid>
+            </div>
         </p:panel>
     </h:form>
 
