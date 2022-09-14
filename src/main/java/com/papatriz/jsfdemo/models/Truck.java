@@ -38,7 +38,19 @@ public class Truck {
 
     public boolean isAvailable()
     {
-        if (order == null) return true;
-        return order.isComplete();
+        return getStatus() == ETruckStatus.AVAILABLE;
     }
+
+    public ETruckStatus getStatus(){
+
+        if (this.isBroken)
+            return ETruckStatus.BROKEN;
+        else
+            if (order == null)
+                return ETruckStatus.AVAILABLE;
+
+        return ETruckStatus.BUSY;
+    }
+
+
 }
