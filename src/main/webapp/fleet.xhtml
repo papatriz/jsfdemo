@@ -22,12 +22,34 @@
         </p:toolbarGroup>
     </p:toolbar>
 <!-- ADD NEW TRUCK BLOCK -->
-<p:panel header="Add new truck" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true">
-    <p:outputLabel value="ADD TRUCK FORM WILL BE HERE SOON"/>
+<p:panel header="Add new truck" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true" toggleSpeed="200">
+    <h:form id="addTruckForm">
+    <p:panelGrid columns="4" styleClass="ui-noborder" contentStyleClass="align-items-baseline ui-fluid">
+        <p:outputLabel for="regnum" value="Reg.number: " />
+        <p:inputText id="regnum" itemLabel="ILA" value="#{addUserController.user.username}" />
+
+        <p:outputLabel for="capacity" value="Capacity: " />
+        <p:inputNumber id="capacity" title="TIT" value="#{addUserController.user.password}" />
+        <p:outputLabel for="drivers" value="Drivers: " />
+        <p:inputNumber id="drivers" value="#{addUserController.user.email}" />
+        <p:outputLabel for="city" value="City: " />
+            <p:selectOneMenu id="city" value="#{addUserController.user.role}" style="width: 195px">
+                <f:selectItem itemLabel="Moscow" itemValue="Moscow"/>
+                <f:selectItem itemLabel="Petersburg" itemValue="Petersburg"/>
+                <f:selectItem itemLabel="Voronezh" itemValue="Voronezh"/>
+                <f:selectItem itemLabel="Novosibirsk" itemValue="Novosibirsk"/>
+            </p:selectOneMenu>
+        <p:outputLabel for="isbroken" value="Is broken?: " />
+        <p:selectBooleanCheckbox id="isbroken" value="#{addUserController.user.email}" />
+        <p:commandButton value="Save" action="#{fleetController.addUser}" />
+    </p:panelGrid>
+    </h:form>
 </p:panel>
 <!-- TRUCK LIST BLOCK -->
-    <p:panel header="Trucks list" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true">
- <p:dataTable var="truck" value="#{fleetController.fleet}">
+    <p:panel header="View trucks list" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true" toggleSpeed="200">
+        <p:outputPanel id="dataTablePanel">
+
+        <p:dataTable var="truck" value="#{fleetController.fleet}">
     <p:column headerText="Reg.number">
         <p:outputLabel value="#{truck.regNumber}"/>
     </p:column>
@@ -44,6 +66,7 @@
          <p:outputLabel value="#{truck.status}" style="#{fleetController.getColorByStatus(truck.status)}"/>
      </p:column>
  </p:dataTable>
+        </p:outputPanel>
 <!-- A NEXT BLOCK -->
 </p:panel>
 

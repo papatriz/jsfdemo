@@ -8,6 +8,7 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.el.ELBeanName;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
+import org.primefaces.PrimeFaces;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,8 @@ public class FleetController {
 
     private List<Truck> fleet;
 
+    private Truck truck;
+
     private Map<ETruckStatus, String> statusColor =
             Map.of(ETruckStatus.AVAILABLE, "DarkGreen", ETruckStatus.BUSY, "DarkOrange", ETruckStatus.BROKEN, "DarkRed");
 
@@ -44,6 +47,13 @@ public class FleetController {
 
     public List<Truck> getFleet() {
         return fleet;
+    }
+
+    public void addTruck(){
+        truckService.saveTruck(truck);
+        truck = new Truck();
+        loadData();
+        PrimeFaces.current().ajax().update("dataTablePanel");
     }
 
     public String getColorByStatus(ETruckStatus status) {
