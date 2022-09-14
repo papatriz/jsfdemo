@@ -18,6 +18,7 @@
         <p:panelGrid columns="2" layout="grid">
             <p:button href="adduser.xhtml" value="Add user" />
             <p:commandButton  action="#{userListController.populateTestUsers()}" value="Populate test users" />
+            <p:button href="/logout" value="LOG OUT" />
         </p:panelGrid>
     </div>
     <div class="ui-fluid">
@@ -50,7 +51,9 @@
                 </p:column>
                 <p:column>
                     <f:facet name="header">Delete</f:facet>
-                    <p:commandLink action="#{userListController.setSelectedUser(user)}" type="button" ajax="true" oncomplete="PF('cd').show()"  value="Delete" />
+                    <p:commandLink  image="ui-icon ui-icon-trash" action="#{userListController.setSelectedUser(user)}" type="button" ajax="true" oncomplete="PF('cd').show()"  value="Delete">
+                    </p:commandLink>
+                    <div class="ui-icon ui-icon-trash"></div>
                 </p:column>
             </p:dataTable>
             </h:panelGroup>

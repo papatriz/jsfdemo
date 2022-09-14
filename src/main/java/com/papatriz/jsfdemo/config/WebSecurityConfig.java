@@ -24,7 +24,7 @@ public class WebSecurityConfig {
 
                 httpSecurity
                 .authorizeRequests()
-                    .mvcMatchers("/fleet", "/fleet/**").hasAnyRole("EMPLOYEE", "ADMIN")
+                    .mvcMatchers("/manager", "/manager/**").hasAnyRole("MANAGER", "ADMIN")
                     .mvcMatchers("/driver").hasAnyRole("DRIVER", "ADMIN")
                     .mvcMatchers("/userlist").hasRole("ADMIN")
                     .antMatchers("/**").authenticated()
@@ -38,7 +38,7 @@ public class WebSecurityConfig {
                     .permitAll()
                 .and()
                 .logout()
-                    .logoutUrl("/do_logout");
+                    .logoutUrl("/logout");
 
                 httpSecurity.csrf().disable();
 

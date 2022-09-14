@@ -22,12 +22,12 @@
                    <p:outputLabel for="username" value="Username: " />
                    <p:inputText id="username" value="#{addUserController.user.username}" />
                    <p:outputLabel for="password" value="Password: " />
-                   <p:inputText id="password" value="#{addUserController.user.password}" />
+                <p:password id="password" value="#{addUserController.user.password}" feedback="true" inline="true" toggleMask="true" redisplay="true"/>
                    <p:outputLabel for="email" value="Email: " />
                    <p:inputText id="email" value="#{addUserController.user.email}" />
                    <p:outputLabel for="role" value="Role: " />
-                <div class="field col-12 md:col-4">
-                    <p:selectOneMenu id="role" value="#{addUserController.user.role}">
+                <div class="field col-12 md:col-6">
+                    <p:selectOneMenu id="role" value="#{addUserController.user.role}" style="width: 195px">
                         <f:selectItem itemLabel="Select One" itemValue=""/>
                         <f:selectItem itemLabel="MANAGER" itemValue="ROLE_MANAGER"/>
                         <f:selectItem itemLabel="DRIVER" itemValue="ROLE_DRIVER"/>

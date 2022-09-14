@@ -1,13 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-<f:view>
-    <h:outputLabel value="Hello, brave Driver!"/>
-</f:view>
+
+<h:head>
+    <title>Welcome, Driver</title>
+    <style type="text/css">
+        .ui-button.downshift{
+            position: relative;
+            left: 0px;
+            bottom: -12px;
+            margin-bottom: 5px;
+        }
+        .ui-widget.center {
+            margin: auto;
+            width: 50%;
+            padding: 10px;
+        }
+
+    </style>
+</h:head>
+
+<h:body>
+    <p:panelGrid columns="1" layout="flex" styleClass="center">
+    <p:outputLabel value="Hello, Driver!"/>
+    <p:button href="/logout" value="LOG OUT" />
+    </p:panelGrid>
+</h:body>
+
 </html>
