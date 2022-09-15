@@ -13,7 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import java.util.List;
 import java.util.Map;
 
@@ -29,9 +30,8 @@ public class FleetController {
     }
 
     private List<Truck> fleet;
-
-    private Truck truck;
-
+    private Truck truck = new Truck();
+    private Truck selectedTruck;
     private Map<ETruckStatus, String> statusColor =
             Map.of(ETruckStatus.AVAILABLE, "DarkGreen", ETruckStatus.BUSY, "DarkOrange", ETruckStatus.BROKEN, "DarkRed");
 
@@ -50,13 +50,46 @@ public class FleetController {
     }
 
     public void addTruck(){
+        System.out.println("Inside addTruck");
+        truck.setRegNumber(truck.getRegNumber().toUpperCase());
         truckService.saveTruck(truck);
         truck = new Truck();
+        loadData();
+        PrimeFaces.current().ajax().update("dataTablePanel");
+        PrimeFaces.current().ajax().update("addTruckForm");
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "New truck added"));
+    }
+
+    public void deleteSelectedTruck() {
+        System.out.println("DELETE TRUCK "+selectedTruck.getRegNumber());
+
+        truckService.removeTruck(selectedTruck);
+        loadData();
+        PrimeFaces.current().ajax().update("dataTablePanel");
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "", "Truck "+selectedTruck.getRegNumber()+" deleted"));
+
+    }
+
+    public void deleteTruck(Truck truck) {
+        System.out.println("DELETE TRUCK "+selectedTruck.getRegNumber());
+
+        truckService.removeTruck(selectedTruck);
         loadData();
         PrimeFaces.current().ajax().update("dataTablePanel");
     }
 
     public String getColorByStatus(ETruckStatus status) {
         return "color:"+statusColor.get(status);
+    }
+
+    public Truck getTruck() {
+        return truck;
+    }
+
+    public void setSelectedTruck(Truck selectedTruck) {
+        System.out.println("Truck selected "+selectedTruck.getRegNumber());
+        this.selectedTruck = selectedTruck;
     }
 }

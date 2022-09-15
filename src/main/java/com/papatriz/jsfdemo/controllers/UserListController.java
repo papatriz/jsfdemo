@@ -40,7 +40,6 @@ public class UserListController {
     }
 
     public List<User> getUsers() {
-        System.out.println(("getUsers executed"));
 
         return users;
     }
@@ -50,12 +49,6 @@ public class UserListController {
         System.out.println("User selected : "+user.getUsername());
         selectedUser = user;
     }
-
-    public User getSelectedUser()
-    {
-        return selectedUser;
-    }
-
     public OutputLabel getLabel() {
         return label;
     }
@@ -65,7 +58,6 @@ public class UserListController {
     }
 
     public void deleteUser(User user){
-        System.out.println("deleteUser executed, user id is "+user.getId());
 
         userService.deleteUser(user);
         loadData();

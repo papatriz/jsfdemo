@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TruckService implements ITruckService{
@@ -35,18 +36,18 @@ public class TruckService implements ITruckService{
     }
 
     @Override
-    public Truck getTruckById(String regnum) {
-        return null;
+    public Optional<Truck> getTruckById(String regnum) {
+        return truckRepository.findById(regnum);
     }
 
     @Override
     public void saveTruck(Truck truck) {
-
+        truckRepository.save(truck);
     }
 
     @Override
-    public void removeTruck(String regNum) {
-
+    public void removeTruck(Truck truck) {
+        truckRepository.delete(truck);
     }
 
     @Override
