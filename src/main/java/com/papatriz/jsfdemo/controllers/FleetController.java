@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +47,11 @@ public class FleetController {
         fleet = truckService.getAllTrucks();
     }
 
+    @PostConstruct
+    public void setDefaultDriversNum() {
+        truck.setDriversNum(1);
+    }
+
     public List<Truck> getFleet() {
         return fleet;
     }
@@ -53,8 +60,11 @@ public class FleetController {
         System.out.println("Inside addTruck");
         truck.setRegNumber(truck.getRegNumber().toUpperCase());
         truckService.saveTruck(truck);
+
         truck = new Truck();
+        setDefaultDriversNum();
         loadData();
+
         PrimeFaces.current().ajax().update("dataTablePanel");
         PrimeFaces.current().ajax().update("addTruckForm");
 
@@ -72,16 +82,15 @@ public class FleetController {
 
     }
 
-    public void deleteTruck(Truck truck) {
-        System.out.println("DELETE TRUCK "+selectedTruck.getRegNumber());
-
-        truckService.removeTruck(selectedTruck);
-        loadData();
-        PrimeFaces.current().ajax().update("dataTablePanel");
-    }
-
     public String getColorByStatus(ETruckStatus status) {
         return "color:"+statusColor.get(status);
+    }
+
+    public boolean hasMessage() {
+        FacesContext context = FacesContext.getCurrentInstance(); //obtain a reference to the FacesContext
+        Iterator<FacesMessage> messageQueue =  context.getMessages("messages"); //Obtain an Iterator for a List of possible queued messages for the component id you've provided.
+
+       return messageQueue.hasNext();
     }
 
     public Truck getTruck() {
@@ -92,4 +101,6 @@ public class FleetController {
         System.out.println("Truck selected "+selectedTruck.getRegNumber());
         this.selectedTruck = selectedTruck;
     }
+
+
 }

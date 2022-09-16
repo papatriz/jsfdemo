@@ -53,7 +53,7 @@ public class TruckRegnumValidator implements Validator {
         }
 
         if (hasError) {
-            FacesMessage msg = new FacesMessage("", errorMessage);
+            FacesMessage msg = new FacesMessage("messages", errorMessage);
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 
             throw new ValidatorException(msg);

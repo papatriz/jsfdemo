@@ -8,6 +8,12 @@
 <f:view>
     <h:outputLabel value="Hello, world"/>
     <!--     <p:inputMask id="regnum"  value="#{fleetController.truck.regNumber}" placeholder="XX00000" mask="aa99999" validateMask="true" /> -->
-
+    <p:outputPanel id="messOutPanel">
+        <p:panel id="messagePanel" rendered="#{fleetController.hasMessage()}" autoUpdate="true" styleClass="ui-panel ui-noborder" style="width: 80%; margin: auto;" >
+            <p:messages id="messages" showDetail="true" closable="true">
+                <p:autoUpdate/>
+            </p:messages>
+        </p:panel>
+    </p:outputPanel>
 </f:view>
 </html>
