@@ -16,4 +16,11 @@
         </p:panel>
     </p:outputPanel>
 </f:view>
+
+
+<p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-warning" action="#{fleetController.setSelectedTruck(truck)}" ajax="true" oncomplete="PF('confirmdelete').show()" />
+<p:confirmDialog message="Are you sure?" header="Deleting truck" severity="alert" widgetVar="confirmdelete">
+    <p:commandButton value="Yes Sure" action="#{fleetController.deleteSelectedTruck()}" oncomplete="PF('confirmdelete').hide()"/>
+    <p:commandButton value="Not Yet" onclick="PF('confirmdelete').hide();" type="button" />
+</p:confirmDialog>
 </html>

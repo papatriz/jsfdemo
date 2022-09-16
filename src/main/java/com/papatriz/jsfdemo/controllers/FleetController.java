@@ -71,6 +71,19 @@ public class FleetController {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "New truck added"));
     }
 
+    public void updateTruck(Truck updatedTruck){
+        System.out.println("Inside updateTruck");
+        updatedTruck.setRegNumber(updatedTruck.getRegNumber().toUpperCase());
+        truckService.saveTruck(updatedTruck);
+
+        loadData();
+
+        PrimeFaces.current().ajax().update("dataTablePanel");
+        PrimeFaces.current().ajax().update("addTruckForm");
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Truck updated"));
+    }
+
     public void deleteSelectedTruck() {
         System.out.println("DELETE TRUCK "+selectedTruck.getRegNumber());
 

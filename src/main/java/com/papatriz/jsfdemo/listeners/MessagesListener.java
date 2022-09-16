@@ -15,11 +15,16 @@ public class MessagesListener implements PhaseListener {
 
     @Override
     public void afterPhase(PhaseEvent phaseEvent) {
+      //  System.out.println("After RENDER_RESPONSE");
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "AFTER RENDER_RESPONSE"));
 
     }
 
     @Override
     public void beforePhase(PhaseEvent phaseEvent) {
+     //   System.out.println("Before RENDER_RESPONSE");
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "", "Before RENDER_RESPONSE"));
+
         Iterator<FacesMessage> messageIterator = phaseEvent.getFacesContext().getMessages();
         if(messageIterator.hasNext()) {
             System.out.println("WHERE IS SOME MESSAGE!");
@@ -29,7 +34,7 @@ public class MessagesListener implements PhaseListener {
             wasMessage = true;
         } else
             if (wasMessage) {
-                System.out.println("PANEL MAGICALLY DISAPPEAR!");
+             //   System.out.println("PANEL MAGICALLY DISAPPEAR!");
               //  FacesContext.getCurrentInstance().getViewRoot().findComponent("messagePanel").setRendered(false);
               //  PrimeFaces.current().ajax().update("messOutPanel");
                 wasMessage = false;

@@ -34,7 +34,7 @@
 <f:validator binding="#{truckRegnumValidator}" />
 </p:inputText>
         <p:outputLabel for="capacity" value="Capacity: " />
-        <p:inputNumber id="capacity" minValue="5000" maxValue="20000" decimalPlaces="0"  required="true" emptyValue="empty" value="#{fleetController.truck.capacity}" />
+        <p:inputNumber id="capacity" minValue="0" maxValue="20000" decimalPlaces="0"  required="true" emptyValue="empty" value="#{fleetController.truck.capacity}" />
         <p:outputLabel for="drivers" value="Drivers: " />
         <p:selectOneButton id="drivers" value="#{fleetController.truck.driversNum}">
             <f:selectItem default="true" selected="true" itemLabel=" 1 " itemValue="1"/>
@@ -48,7 +48,7 @@
                 <f:selectItem itemLabel="Voronezh" itemValue="Voronezh"/>
                 <f:selectItem itemLabel="Novosibirsk" itemValue="Novosibirsk"/>
             </p:selectOneMenu>
-        <p:outputLabel for="isbroken" value="Is broken?: " />
+        <p:outputLabel for="isbroken" value="Out of duty: " />
         <p:selectBooleanCheckbox id="isbroken" value="#{fleetController.truck.broken}" />
         <p:commandButton value="Save" action="#{fleetController.addTruck}" />
     </p:panelGrid>
@@ -59,8 +59,8 @@
     <p:panel header="View trucks list" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true" toggleSpeed="200">
         <p:outputPanel id="dataTablePanel">
 
-        <p:dataTable var="truck" value="#{fleetController.fleet}">
-    <p:column headerText="Reg.number">
+        <p:dataTable rowExpandMode="single" var="truck" value="#{fleetController.fleet}"  rowKey="#{truck.regNumber}">
+    <p:column headerText="Reg.number" editable="true">
         <p:outputLabel value="#{truck.regNumber}"/>
     </p:column>
      <p:column headerText="Capacity">
@@ -77,17 +77,49 @@
      </p:column>
      <p:column headerText="Action">
          <p:panelGrid layout="grid" columns="2" styleClass="ui-noborder">
-         <p:button icon="pi pi-pencil" styleClass="rounded-button ui-button-info" />
              <h:form>
-         <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-warning" action="#{fleetController.setSelectedTruck(truck)}" ajax="true" oncomplete="PF('confirmdelete').show()" />
-                 <p:confirmDialog message="Are you sure?" header="Deleting truck" severity="alert" widgetVar="confirmdelete">
-                     <p:commandButton value="Yes Sure" action="#{fleetController.deleteSelectedTruck()}" oncomplete="PF('confirmdelete').hide()"/>
-                     <p:commandButton value="Not Yet" onclick="PF('confirmdelete').hide();" type="button" />
-                 </p:confirmDialog>
+
              </h:form>
          </p:panelGrid>
      </p:column>
- </p:dataTable>
+     <p:column>
+         <p:rowToggler expandLabel="EDIT" collapseLabel="Hide">
+         </p:rowToggler>
+     </p:column>
+            <!-- ===================== EDIT FORM ====================== -->
+            <p:rowExpansion>
+                <h:form id="editTruckForm">
+                    <p:panelGrid  columns="4" styleClass="ui-noborder" contentStyleClass="align-items-baseline ui-fluid">
+                        <p:outputLabel for="regnum_ed" value="Reg.number: " />
+                        <p:inputText id="regnum_ed" value="#{truck.regNumber}">
+                            <f:validator binding="#{truckRegnumValidator}" />
+                        </p:inputText>
+                        <p:outputLabel for="capacity_ed" value="Capacity: " />
+                        <p:inputNumber id="capacity_ed" minValue="0" maxValue="20000" decimalPlaces="0" value="#{truck.capacity}" />
+                        <p:outputLabel for="drivers_ed" value="Drivers: " />
+                        <p:selectOneButton id="drivers_ed" value="#{truck.driversNum}">
+                            <f:selectItem default="true" selected="true" itemLabel=" 1 " itemValue="1"/>
+                            <f:selectItem itemLabel=" 2 " itemValue="2"/>
+                            <f:selectItem itemLabel=" 3 " itemValue="3"/>
+                        </p:selectOneButton>
+                        <p:outputLabel for="city_ed" value="City: " />
+                        <p:selectOneMenu id="city_ed" value="#{truck.currentCity}" style="width: 195px">
+                            <f:selectItem itemLabel="Moscow" itemValue="Moscow"/>
+                            <f:selectItem itemLabel="Petersburg" itemValue="Petersburg"/>
+                            <f:selectItem itemLabel="Voronezh" itemValue="Voronezh"/>
+                            <f:selectItem itemLabel="Novosibirsk" itemValue="Novosibirsk"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel for="isbroken_ed" value="Out of duty: " />
+                        <p:selectBooleanCheckbox id="isbroken_ed" value="#{truck.broken}" />
+                        <p:commandButton type="submit" process="editTruckForm" icon="pi pi-pencil" styleClass="rounded-button ui-button-info" value="UPDATE" action="#{fleetController.updateTruck(truck)}" />
+                        <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-warning" value="DELETE" action="#{fleetController.addTruck}" />
+
+                    </p:panelGrid>
+                </h:form>
+            </p:rowExpansion>
+            <!-- ===================== EDIT FORM ====================== -->
+
+        </p:dataTable>
         </p:outputPanel>
 <!-- A NEXT BLOCK -->
 
