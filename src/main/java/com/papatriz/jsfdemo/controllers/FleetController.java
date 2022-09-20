@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ public class FleetController {
     }
 
     private List<Truck> fleet;
+    private List<Truck> filteredTrucks = new ArrayList<>();
     private Truck truck = new Truck();
     private Truck selectedTruck;
     private final Map<ETruckStatus, String> statusColor =
@@ -101,9 +103,24 @@ public class FleetController {
         return "color:"+statusColor.get(status);
     }
 
+    public List<Truck> getFilteredTrucks() {
+        System.out.println("getFilteredTrucks called");
+
+        return filteredTrucks;
+    }
+
+    public void setFilteredTrucks(List<Truck> filteredTrucks) {
+        System.out.println("setFilteredTrucks called");
+        for (Truck truck:filteredTrucks) {
+            System.out.println(truck.getRegNumber());
+
+        }
+        this.filteredTrucks = filteredTrucks;
+    }
+
     public boolean hasMessage() {
-        FacesContext context = FacesContext.getCurrentInstance(); //obtain a reference to the FacesContext
-        Iterator<FacesMessage> messageQueue =  context.getMessages("messages"); //Obtain an Iterator for a List of possible queued messages for the component id you've provided.
+        FacesContext context = FacesContext.getCurrentInstance();
+        Iterator<FacesMessage> messageQueue =  context.getMessages("messages");
 
        return messageQueue.hasNext();
     }

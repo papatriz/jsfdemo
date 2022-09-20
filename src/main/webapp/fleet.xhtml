@@ -62,9 +62,10 @@
     <!-- ===================== TRUCK LIST ====================== -->
     <p:panel header="View trucks list" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true" toggleSpeed="200">
         <p:outputPanel id="dataTablePanel">
-        <p:dataTable reflow="true" rowExpandMode="single" rowHover="true"
-                     var="truck" value="#{fleetController.fleet}"  rowKey="#{truck.regNumber}">
-            <p:column filterBy="#{truck.regNumber}" headerText="Reg.number" editable="true">
+        <p:dataTable id="truckListID" reflow="true" rowExpandMode="single" rowHover="true"
+                     var="truck" value="#{fleetController.fleet}"  rowKey="#{truck.regNumber}"
+                     filteredValue="#{fleetController.filteredTrucks}" widgetVar="truckList">
+            <p:column headerText="Reg.number">
                 <p:outputLabel value="#{truck.regNumber}"/>
             </p:column>
              <p:column sortBy="#{truck.capacity}" headerText="Capacity">

@@ -32,6 +32,14 @@ public class TruckRegnumValidator implements Validator {
 
         String regnum = (String) o;
 
+        System.out.println("Validate UIComponent: "+uiComponent.getId());
+        boolean test1 = truckService.getTruckById(regnum).isPresent();
+        boolean test2 = uiComponent.getId().equals("regnum_ed");
+        boolean notAllowed = test1 && !test2;
+        System.out.println("Truck present: "+ test1);
+        System.out.println("UIComponent "+uiComponent.getId()+" is edit field: "+ test2);
+        System.out.println("Need to check if exists: "+ notAllowed);
+
         boolean properFormat = Pattern.matches("\\D{2}\\d{5}", regnum);
 
         if (regnum.length() < 7) {
@@ -47,7 +55,7 @@ public class TruckRegnumValidator implements Validator {
             errorMessage = "Wrong reg.number format. Proper format: XX12345";
         }
 
-        if (truckService.getTruckById(regnum).isPresent()) {
+        if (notAllowed) {
             hasError = true;
             errorMessage = "Truck with reg.number "+regnum+" already exists in database";
         }
