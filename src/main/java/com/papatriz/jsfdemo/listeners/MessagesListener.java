@@ -27,7 +27,7 @@ public class MessagesListener implements PhaseListener {
 
         Iterator<FacesMessage> messageIterator = phaseEvent.getFacesContext().getMessages();
         if(messageIterator.hasNext()) {
-            System.out.println("WHERE IS SOME MESSAGE!");
+           // System.out.println("WHERE IS SOME MESSAGE!");
           //  FacesContext.getCurrentInstance().getViewRoot().findComponent("messagePanel").setRendered(true);
           //  PrimeFaces.current().ajax().update("messOutPanel");
 

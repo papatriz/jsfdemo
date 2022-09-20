@@ -10,9 +10,14 @@
 
 <h:head>
     <title>Fleet managment</title>
+    <h:outputScript >
+        $(document).on('pfAjaxComplete', function() {
+        console.log('pfAjaxComplete');
+    });</h:outputScript>
 </h:head>
 
 <h:body>
+    <!-- ===================== TOOLBAR ====================== -->
     <p:toolbar style="width: 80%; margin: auto;">
         <p:toolbarGroup>
             <p:button href="/manager"  value="Back.." icon="pi pi-arrow-circle-left" styleClass="mr-2" />
@@ -24,17 +29,16 @@
     <p:messages id="messages" showDetail="true" closable="true"  style="width: 80%; margin: auto;">
         <p:autoUpdate/>
     </p:messages>
-<!-- ADD NEW TRUCK BLOCK -->
-<p:panel header="Add new truck" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true" toggleSpeed="200">
+    <!-- ===================== ADD NEW TRUCK FORM ====================== -->
+    <p:panel header="Add new truck" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true" toggleSpeed="200">
     <h:form id="addTruckForm">
-
-    <p:panelGrid columns="4" styleClass="ui-noborder" contentStyleClass="align-items-baseline ui-fluid">
+        <p:panelGrid columns="4" styleClass="ui-noborder" layout="grid" contentStyleClass="align-items-center ui-fluid">
         <p:outputLabel for="regnum" value="Reg.number: " />
-<p:inputText id="regnum" value="#{fleetController.truck.regNumber}" placeholder="XX00000">
-<f:validator binding="#{truckRegnumValidator}" />
-</p:inputText>
+        <p:inputText id="regnum" value="#{fleetController.truck.regNumber}" placeholder="XX00000">
+            <f:validator binding="#{truckRegnumValidator}" />
+        </p:inputText>
         <p:outputLabel for="capacity" value="Capacity: " />
-        <p:inputNumber id="capacity" minValue="0" maxValue="20000" decimalPlaces="0"  required="true" emptyValue="empty" value="#{fleetController.truck.capacity}" />
+        <p:inputNumber id="capacity" minValue="0" maxValue="20000" decimalPlaces="0"  value="#{fleetController.truck.capacity}" />
         <p:outputLabel for="drivers" value="Drivers: " />
         <p:selectOneButton id="drivers" value="#{fleetController.truck.driversNum}">
             <f:selectItem default="true" selected="true" itemLabel=" 1 " itemValue="1"/>
@@ -42,7 +46,7 @@
             <f:selectItem itemLabel=" 3 " itemValue="3"/>
         </p:selectOneButton>
         <p:outputLabel for="city" value="City: " />
-            <p:selectOneMenu id="city" value="#{fleetController.truck.currentCity}" style="width: 195px">
+            <p:selectOneMenu id="city" value="#{fleetController.truck.currentCity}" >
                 <f:selectItem itemLabel="Moscow" itemValue="Moscow"/>
                 <f:selectItem itemLabel="Petersburg" itemValue="Petersburg"/>
                 <f:selectItem itemLabel="Voronezh" itemValue="Voronezh"/>
@@ -50,52 +54,45 @@
             </p:selectOneMenu>
         <p:outputLabel for="isbroken" value="Out of duty: " />
         <p:selectBooleanCheckbox id="isbroken" value="#{fleetController.truck.broken}" />
-        <p:commandButton value="Save" action="#{fleetController.addTruck}" />
-    </p:panelGrid>
-    </h:form>
-</p:panel>
-
-<!-- TRUCK LIST BLOCK -->
+        <p:outputLabel value=" " />
+        <p:commandButton process="addTruckForm" value="ADD TRUCK" action="#{fleetController.addTruck}" />
+        </p:panelGrid>
+     </h:form>
+    </p:panel>
+    <!-- ===================== TRUCK LIST ====================== -->
     <p:panel header="View trucks list" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true" toggleSpeed="200">
         <p:outputPanel id="dataTablePanel">
-
-        <p:dataTable rowExpandMode="single" var="truck" value="#{fleetController.fleet}"  rowKey="#{truck.regNumber}">
-    <p:column headerText="Reg.number" editable="true">
-        <p:outputLabel value="#{truck.regNumber}"/>
-    </p:column>
-     <p:column headerText="Capacity">
-         <p:outputLabel value="#{truck.capacity}"/>
-     </p:column>
-     <p:column headerText="Drivers">
-         <p:outputLabel value="#{truck.driversNum}"/>
-     </p:column>
-     <p:column headerText="Curr.city">
-         <p:outputLabel value="#{truck.currentCity}"/>
-     </p:column>
-     <p:column headerText="Status">
-         <p:outputLabel value="#{truck.status}" style="#{fleetController.getColorByStatus(truck.status)}"/>
-     </p:column>
-     <p:column headerText="Action">
-         <p:panelGrid layout="grid" columns="2" styleClass="ui-noborder">
-             <h:form>
-
-             </h:form>
-         </p:panelGrid>
-     </p:column>
-     <p:column>
-         <p:rowToggler expandLabel="EDIT" collapseLabel="Hide">
-         </p:rowToggler>
-     </p:column>
-            <!-- ===================== EDIT FORM ====================== -->
+        <p:dataTable reflow="true" rowExpandMode="single" rowHover="true"
+                     var="truck" value="#{fleetController.fleet}"  rowKey="#{truck.regNumber}">
+            <p:column filterBy="#{truck.regNumber}" headerText="Reg.number" editable="true">
+                <p:outputLabel value="#{truck.regNumber}"/>
+            </p:column>
+             <p:column sortBy="#{truck.capacity}" headerText="Capacity">
+                 <p:outputLabel value="#{truck.capacity}"/>
+             </p:column>
+             <p:column sortBy="#{truck.driversNum}" headerText="Drivers">
+                 <p:outputLabel value="#{truck.driversNum}"/>
+             </p:column>
+             <p:column sortBy="#{truck.currentCity}" headerText="Curr.city">
+                 <p:outputLabel value="#{truck.currentCity}"/>
+             </p:column>
+             <p:column sortBy="#{truck.status}" headerText="Status">
+                 <p:outputLabel value="#{truck.status}" style="#{fleetController.getColorByStatus(truck.status)}"/>
+             </p:column>
+             <p:column headerText="Action">
+                 <p:rowToggler expandLabel="EDIT" collapseLabel="Hide">
+                 </p:rowToggler>
+             </p:column>
+     <!-- ===================== EDIT FORM ====================== -->
             <p:rowExpansion>
                 <h:form id="editTruckForm">
-                    <p:panelGrid  columns="4" styleClass="ui-noborder" contentStyleClass="align-items-baseline ui-fluid">
+                    <p:panelGrid columns="4" styleClass="ui-noborder" layout="grid" contentStyleClass="align-items-center ui-fluid">
                         <p:outputLabel for="regnum_ed" value="Reg.number: " />
-                        <p:inputText id="regnum_ed" value="#{truck.regNumber}">
+                        <p:inputText id="regnum_ed" value="#{truck.regNumber}" placeholder="XX00000">
                             <f:validator binding="#{truckRegnumValidator}" />
                         </p:inputText>
                         <p:outputLabel for="capacity_ed" value="Capacity: " />
-                        <p:inputNumber id="capacity_ed" minValue="0" maxValue="20000" decimalPlaces="0" value="#{truck.capacity}" />
+                        <p:inputNumber id="capacity_ed" minValue="0" maxValue="20000" decimalPlaces="0"  value="#{truck.capacity}" />
                         <p:outputLabel for="drivers_ed" value="Drivers: " />
                         <p:selectOneButton id="drivers_ed" value="#{truck.driversNum}">
                             <f:selectItem default="true" selected="true" itemLabel=" 1 " itemValue="1"/>
@@ -103,7 +100,7 @@
                             <f:selectItem itemLabel=" 3 " itemValue="3"/>
                         </p:selectOneButton>
                         <p:outputLabel for="city_ed" value="City: " />
-                        <p:selectOneMenu id="city_ed" value="#{truck.currentCity}" style="width: 195px">
+                        <p:selectOneMenu id="city_ed" value="#{truck.currentCity}" >
                             <f:selectItem itemLabel="Moscow" itemValue="Moscow"/>
                             <f:selectItem itemLabel="Petersburg" itemValue="Petersburg"/>
                             <f:selectItem itemLabel="Voronezh" itemValue="Voronezh"/>
@@ -111,21 +108,24 @@
                         </p:selectOneMenu>
                         <p:outputLabel for="isbroken_ed" value="Out of duty: " />
                         <p:selectBooleanCheckbox id="isbroken_ed" value="#{truck.broken}" />
-                        <p:commandButton type="submit" process="editTruckForm" icon="pi pi-pencil" styleClass="rounded-button ui-button-info" value="UPDATE" action="#{fleetController.updateTruck(truck)}" />
-                        <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-warning" value="DELETE" action="#{fleetController.addTruck}" />
-
+                        <p:column>
+                            <p:commandButton type="submit" process="editTruckForm" icon="pi pi-pencil" styleClass="rounded-button ui-button-info" value="UPDATE" action="#{fleetController.updateTruck(truck)}" />
+                        </p:column>
+                            <p:commandButton process="@this" icon="pi pi-trash" styleClass="rounded-button ui-button-warning"
+                                             value="DELETE" action="#{fleetController.setSelectedTruck(truck)}" ajax="true" oncomplete="PF('confirmdelete').show()">
+                            </p:commandButton>
                     </p:panelGrid>
                 </h:form>
             </p:rowExpansion>
-            <!-- ===================== EDIT FORM ====================== -->
-
         </p:dataTable>
+        <!-- ===================== DIALOGS ====================== -->
+            <p:confirmDialog message="Are you sure?" header="Deleting truck" severity="alert" widgetVar="confirmdelete">
+                <p:commandButton process="@this" value="Yes Sure" action="#{fleetController.deleteSelectedTruck()}" oncomplete="PF('confirmdelete').hide()"/>
+                <p:commandButton value="Not Yet" onclick="PF('confirmdelete').hide();" type="button" />
+            </p:confirmDialog>
         </p:outputPanel>
-<!-- A NEXT BLOCK -->
-
+        <!-- =========================================== -->
 
 </p:panel>
-
 </h:body>
-
 </html>

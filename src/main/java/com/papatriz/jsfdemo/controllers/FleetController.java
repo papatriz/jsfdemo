@@ -34,7 +34,7 @@ public class FleetController {
     private List<Truck> fleet;
     private Truck truck = new Truck();
     private Truck selectedTruck;
-    private Map<ETruckStatus, String> statusColor =
+    private final Map<ETruckStatus, String> statusColor =
             Map.of(ETruckStatus.AVAILABLE, "DarkGreen", ETruckStatus.BUSY, "DarkOrange", ETruckStatus.BROKEN, "DarkRed");
 
     @Deferred
@@ -50,6 +50,7 @@ public class FleetController {
     @PostConstruct
     public void setDefaultDriversNum() {
         truck.setDriversNum(1);
+        truck.setCapacity(1000);
     }
 
     public List<Truck> getFleet() {
@@ -88,6 +89,7 @@ public class FleetController {
         System.out.println("DELETE TRUCK "+selectedTruck.getRegNumber());
 
         truckService.removeTruck(selectedTruck);
+       // selectedTruck = new Truck();
         loadData();
         PrimeFaces.current().ajax().update("dataTablePanel");
 

@@ -52,6 +52,5 @@ public class TruckService implements ITruckService{
 
     @Override
     public void updateTruck(Truck truck) {
-
     }
 }
