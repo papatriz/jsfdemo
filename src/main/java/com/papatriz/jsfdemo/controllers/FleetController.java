@@ -33,7 +33,7 @@ public class FleetController {
     }
 
     private List<Truck> fleet;
-    private List<Truck> filteredTrucks = new ArrayList<>();
+    private List<Truck> filteredTrucks;
     private Truck truck = new Truck();
     private Truck selectedTruck;
     private final Map<ETruckStatus, String> statusColor =

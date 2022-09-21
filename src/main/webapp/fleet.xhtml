@@ -10,10 +10,7 @@
 
 <h:head>
     <title>Fleet managment</title>
-    <h:outputScript >
-        $(document).on('pfAjaxComplete', function() {
-        console.log('pfAjaxComplete');
-    });</h:outputScript>
+
 </h:head>
 
 <h:body>
@@ -62,10 +59,15 @@
     <!-- ===================== TRUCK LIST ====================== -->
     <p:panel header="View trucks list" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true" toggleSpeed="200">
         <p:outputPanel id="dataTablePanel">
-        <p:dataTable id="truckListID" reflow="true" rowExpandMode="single" rowHover="true"
+            <h:form id="editTruckForm">
+            <p:dataTable id="truckListID" reflow="true" rowExpandMode="single" rowHover="true"
                      var="truck" value="#{fleetController.fleet}"  rowKey="#{truck.regNumber}"
                      filteredValue="#{fleetController.filteredTrucks}" widgetVar="truckList">
-            <p:column headerText="Reg.number">
+            <f:facet name="header">
+                <h:outputText value="Search all fields:" />
+                <h:inputText id="globalFilter" onkeyup="PF('truckList').filter(); console.log('Filter started')" />
+            </f:facet>
+            <p:column filterBy="#{truck.regNumber}" filterMatchMode="contains" headerText="Reg.number">
                 <p:outputLabel value="#{truck.regNumber}"/>
             </p:column>
              <p:column sortBy="#{truck.capacity}" headerText="Capacity">
@@ -86,7 +88,6 @@
              </p:column>
      <!-- ===================== EDIT FORM ====================== -->
             <p:rowExpansion>
-                <h:form id="editTruckForm">
                     <p:panelGrid columns="4" styleClass="ui-noborder" layout="grid" contentStyleClass="align-items-center ui-fluid">
                         <p:outputLabel for="regnum_ed" value="Reg.number: " />
                         <p:inputText id="regnum_ed" value="#{truck.regNumber}" placeholder="XX00000">
@@ -116,9 +117,10 @@
                                              value="DELETE" action="#{fleetController.setSelectedTruck(truck)}" ajax="true" oncomplete="PF('confirmdelete').show()">
                             </p:commandButton>
                     </p:panelGrid>
-                </h:form>
             </p:rowExpansion>
         </p:dataTable>
+        </h:form>
+
         <!-- ===================== DIALOGS ====================== -->
             <p:confirmDialog message="Are you sure?" header="Deleting truck" severity="alert" widgetVar="confirmdelete">
                 <p:commandButton process="@this" value="Yes Sure" action="#{fleetController.deleteSelectedTruck()}" oncomplete="PF('confirmdelete').hide()"/>
