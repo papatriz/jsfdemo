@@ -44,20 +44,20 @@ public class TruckRegnumValidator implements Validator {
 
         if (regnum.length() < 7) {
             hasError = true;
-            errorMessage = "Reg.number too short. Proper format: XX12345";
+            errorMessage = "Registration number is too short. \nProper format: XX12345";
         }
         if (regnum.length() > 7) {
             hasError = true;
-            errorMessage = "Reg.number too long. Proper format: XX12345";
+            errorMessage = "Registration number is too long. \nProper format: XX12345";
         }
         if (!properFormat && !hasError) {
             hasError = true;
-            errorMessage = "Wrong reg.number format. Proper format: XX12345";
+            errorMessage = "Wrong registration number format. \nProper format: XX12345";
         }
 
         if (notAllowed) {
             hasError = true;
-            errorMessage = "Truck with reg.number "+regnum+" already exists in database";
+            errorMessage = "Truck with registration number "+regnum+" already exists";
         }
 
         if (hasError) {

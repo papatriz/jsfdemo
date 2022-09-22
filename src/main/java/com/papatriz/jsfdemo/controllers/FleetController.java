@@ -24,7 +24,7 @@ import java.util.Map;
 @Scope(value = "session")
 @Component(value = "fleetController")
 @ELBeanName(value = "fleetController")
-@Join(path = "/fleet", to = "/fleet.xhtml")
+@Join(path = "/fleet", to = "/manage_fleet.xhtml")
 public class FleetController {
     private final ITruckService truckService;
     @Autowired

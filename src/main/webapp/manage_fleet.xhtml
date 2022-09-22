@@ -8,30 +8,17 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-<h:head>
-    <title>Fleet managment</title>
-
-</h:head>
-
-<h:body>
     <!-- ===================== TOOLBAR ====================== -->
-    <p:toolbar style="width: 80%; margin: auto;">
-        <p:toolbarGroup>
-            <p:button href="/manager"  value="Back.." icon="pi pi-arrow-circle-left" styleClass="mr-2" />
-        </p:toolbarGroup>
-        <p:toolbarGroup>
-            <p:button href="/logout" value="Log out" icon="pi pi-sign-out" styleClass="ui-button-success" />
-        </p:toolbarGroup>
-    </p:toolbar>
-    <p:messages id="messages" showDetail="true" closable="true"  style="width: 80%; margin: auto;">
-        <p:autoUpdate/>
-    </p:messages>
+
+    <!-- ====================== CONTENT ================================ -->
+    <ui:composition template="layout_manager.xhtml">
+    <ui:define name="content">
     <!-- ===================== ADD NEW TRUCK FORM ====================== -->
     <p:panel header="Add new truck" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true" toggleSpeed="200">
     <h:form id="addTruckForm">
         <p:panelGrid columns="4" styleClass="ui-noborder" layout="grid" contentStyleClass="align-items-center ui-fluid">
         <p:outputLabel for="regnum" value="Reg.number: " />
-        <p:inputText id="regnum" value="#{fleetController.truck.regNumber}" placeholder="XX00000">
+        <p:inputText id="regnum" value="#{fleetController.truck.regNumber}" placeholder="XX00000" style="#{facesContext.validationFailed ? 'border-color: crimson; border-width: 2px' : ''}">
             <f:validator binding="#{truckRegnumValidator}" />
         </p:inputText>
         <p:outputLabel for="capacity" value="Capacity: " />
@@ -52,7 +39,7 @@
         <p:outputLabel for="isbroken" value="Out of duty: " />
         <p:selectBooleanCheckbox id="isbroken" value="#{fleetController.truck.broken}" />
         <p:outputLabel value=" " />
-        <p:commandButton process="addTruckForm" value="ADD TRUCK" action="#{fleetController.addTruck}" />
+        <p:commandButton process="addTruckForm" value="Add truck" action="#{fleetController.addTruck}" update="@form"/>
         </p:panelGrid>
      </h:form>
     </p:panel>
@@ -63,10 +50,7 @@
             <p:dataTable id="truckListID" reflow="true" rowExpandMode="single" rowHover="true"
                      var="truck" value="#{fleetController.fleet}"  rowKey="#{truck.regNumber}"
                      filteredValue="#{fleetController.filteredTrucks}" widgetVar="truckList">
-            <f:facet name="header">
-                <h:outputText value="Search all fields:" />
-                <h:inputText id="globalFilter" onkeyup="PF('truckList').filter(); console.log('Filter started')" />
-            </f:facet>
+
             <p:column filterBy="#{truck.regNumber}" filterMatchMode="contains" headerText="Reg.number">
                 <p:outputLabel value="#{truck.regNumber}"/>
             </p:column>
@@ -111,16 +95,15 @@
                         <p:outputLabel for="isbroken_ed" value="Out of duty: " />
                         <p:selectBooleanCheckbox id="isbroken_ed" value="#{truck.broken}" />
                         <p:column>
-                            <p:commandButton type="submit" process="editTruckForm" icon="pi pi-pencil" styleClass="rounded-button ui-button-info" value="UPDATE" action="#{fleetController.updateTruck(truck)}" />
+                            <p:commandButton type="submit" process="editTruckForm" icon="pi pi-pencil" styleClass="rounded-button ui-button-info" value="Update" action="#{fleetController.updateTruck(truck)}" />
                         </p:column>
                             <p:commandButton process="@this" icon="pi pi-trash" styleClass="rounded-button ui-button-warning"
-                                             value="DELETE" action="#{fleetController.setSelectedTruck(truck)}" ajax="true" oncomplete="PF('confirmdelete').show()">
+                                             value="Delete" action="#{fleetController.setSelectedTruck(truck)}" ajax="true" oncomplete="PF('confirmdelete').show()">
                             </p:commandButton>
                     </p:panelGrid>
             </p:rowExpansion>
         </p:dataTable>
         </h:form>
-
         <!-- ===================== DIALOGS ====================== -->
             <p:confirmDialog message="Are you sure?" header="Deleting truck" severity="alert" widgetVar="confirmdelete">
                 <p:commandButton process="@this" value="Yes Sure" action="#{fleetController.deleteSelectedTruck()}" oncomplete="PF('confirmdelete').hide()"/>
@@ -128,7 +111,7 @@
             </p:confirmDialog>
         </p:outputPanel>
         <!-- =========================================== -->
-
-</p:panel>
-</h:body>
+    </p:panel>
+    </ui:define>
+    </ui:composition>
 </html>
