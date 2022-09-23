@@ -9,7 +9,7 @@ public interface IDriverService {
     List<Driver> getAllDrivers();
     Page<Driver> getDriversPageable(int page, int size, boolean sorted);
     Driver getDriverById(int id);
-    void addDriver(Driver driver);
+    void saveDriver(Driver driver);
     void removeDriver(int id);
     void updateDriver(Driver driver);
 }

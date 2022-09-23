@@ -4,5 +4,7 @@ public enum ECity {
     Moscow,
     Petersburg,
     Novosibirsk,
-    Voronezh
+    Voronezh,
+    Amsterdam,
+    Thessaloniki
 }

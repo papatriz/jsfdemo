@@ -7,9 +7,6 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-
-    <!-- ===================== TOOLBAR ====================== -->
-
     <!-- ====================== CONTENT ================================ -->
     <ui:composition template="layout_manager.xhtml">
     <ui:define name="content">
@@ -31,10 +28,8 @@
         </p:selectOneButton>
         <p:outputLabel for="city" value="City: " />
             <p:selectOneMenu id="city" value="#{fleetController.truck.currentCity}" >
-                <f:selectItem itemLabel="Moscow" itemValue="Moscow"/>
-                <f:selectItem itemLabel="Petersburg" itemValue="Petersburg"/>
-                <f:selectItem itemLabel="Voronezh" itemValue="Voronezh"/>
-                <f:selectItem itemLabel="Novosibirsk" itemValue="Novosibirsk"/>
+                <f:selectItems value="#{citiesController.cities}" var="tmp_city"
+                               itemLabel="#{tmp_city}" itemValue="#{tmp_city}"/>
             </p:selectOneMenu>
         <p:outputLabel for="isbroken" value="Out of duty: " />
         <p:selectBooleanCheckbox id="isbroken" value="#{fleetController.truck.broken}" />
@@ -87,10 +82,8 @@
                         </p:selectOneButton>
                         <p:outputLabel for="city_ed" value="City: " />
                         <p:selectOneMenu id="city_ed" value="#{truck.currentCity}" >
-                            <f:selectItem itemLabel="Moscow" itemValue="Moscow"/>
-                            <f:selectItem itemLabel="Petersburg" itemValue="Petersburg"/>
-                            <f:selectItem itemLabel="Voronezh" itemValue="Voronezh"/>
-                            <f:selectItem itemLabel="Novosibirsk" itemValue="Novosibirsk"/>
+                            <f:selectItems value="#{citiesController.cities}" var="tmp_city"
+                                           itemLabel="#{tmp_city}" itemValue="#{tmp_city}"/>
                         </p:selectOneMenu>
                         <p:outputLabel for="isbroken_ed" value="Out of duty: " />
                         <p:selectBooleanCheckbox id="isbroken_ed" value="#{truck.broken}" />

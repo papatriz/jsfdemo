@@ -13,11 +13,53 @@
     <ui:define name="content">
         <!-- ===================== ADD NEW DRIVER FORM ====================== -->
         <p:panel header="Add new driver" style="width: 80%; margin: auto;" toggleable="true" collapsed="false" toggleableHeader="true" toggleSpeed="200">
-            <p:outputLabel value="UNDER CONSTRUCTION"/>
+            <h:form id="addDriverForm">
+              <p:panelGrid columns="4" styleClass="ui-noborder" layout="grid" contentStyleClass="align-items-center ui-fluid">
+                <p:outputLabel for="name" value="Name:" />
+                <p:inputText id="name" value="#{manageDriversController.driver.name}"
+                             required="true"
+                             requiredMessage="Please, enter name."/>
+                <p:outputLabel for="surname" value="Surname:" />
+                <p:inputText id="surname" value="#{manageDriversController.driver.surname}"
+                             required="true"
+                             requiredMessage="Please, enter surname."/>
+                <p:outputLabel for="city" value="City:" />
+                <p:selectOneMenu id="city" value="#{manageDriversController.driver.currentCity}">
+                    <f:selectItems value="#{citiesController.cities}" var="tmp_city"
+                                   itemLabel="#{tmp_city}" itemValue="#{tmp_city}"/>
+                </p:selectOneMenu>
+                  <p:outputLabel value=" " />
+                  <p:commandButton process="addDriverForm" value="Add driver" action="#{manageDriversController.addDriver()}" update="@form"/>
+              </p:panelGrid>
+            </h:form>
         </p:panel>
         <!-- ===================== DRIVERS LIST ====================== -->
         <p:panel header="View drivers list" style="width: 80%; margin: auto;" toggleable="true" collapsed="false" toggleableHeader="true" toggleSpeed="200">
-            <p:outputLabel value="UNDER CONSTRUCTION"/>
+            <p:outputPanel id="driverListPanel">
+            <h:form id="editTruckForm">
+            <p:dataTable id="driverListDT" reflow="true" rowExpandMode="single" rowHover="true"
+                         var="driver" value="#{manageDriversController.driverList}"  rowKey="#{driver.id}"
+                         filteredValue="#{manageDriversController.filteredDrivers}" widgetVar="driverList">
+
+            <p:column sortBy="#{driver.name}" headerText="Name">
+                <p:outputLabel value="#{driver.name}"/>
+            </p:column>
+            <p:column sortBy="#{driver.surname}" headerText="Surname">
+                <p:outputLabel value="#{driver.surname}"/>
+            </p:column>
+            <p:column sortBy="#{driver.currentCity}" headerText="Curr.city">
+                <p:outputLabel value="#{driver.currentCity}"/>
+            </p:column>
+            <p:column sortBy="#{driver.status}" headerText="Status">
+                <p:outputLabel value="#{driver.status}" style="#{manageDriversController.getColorByStatus(driver.status)}"/>
+            </p:column>
+            <p:column headerText="Action">
+                <p:rowToggler expandLabel="EDIT" collapseLabel="Hide">
+                </p:rowToggler>
+            </p:column>
+            </p:dataTable>
+            </h:form>
+            </p:outputPanel>
         </p:panel>
     </ui:define>
 </ui:composition>

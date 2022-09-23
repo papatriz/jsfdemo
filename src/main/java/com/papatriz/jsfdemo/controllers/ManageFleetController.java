@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +24,10 @@ import java.util.Map;
 @Component(value = "fleetController")
 @ELBeanName(value = "fleetController")
 @Join(path = "/fleet", to = "/manage_fleet.xhtml")
-public class FleetController {
+public class ManageFleetController {
     private final ITruckService truckService;
     @Autowired
-    public FleetController(ITruckService truckService) {
+    public ManageFleetController(ITruckService truckService) {
         this.truckService = truckService;
     }
 
@@ -60,7 +59,7 @@ public class FleetController {
     }
 
     public void addTruck(){
-        System.out.println("Inside addTruck");
+
         truck.setRegNumber(truck.getRegNumber().toUpperCase());
         truckService.saveTruck(truck);
 
@@ -71,7 +70,7 @@ public class FleetController {
         PrimeFaces.current().ajax().update("dataTablePanel");
         PrimeFaces.current().ajax().update("addTruckForm");
 
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "New truck added"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New truck added", "New truck added"));
     }
 
     public void updateTruck(Truck updatedTruck){
@@ -84,7 +83,7 @@ public class FleetController {
         PrimeFaces.current().ajax().update("dataTablePanel");
         PrimeFaces.current().ajax().update("addTruckForm");
 
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Truck updated"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Truck updated", "Truck updated"));
     }
 
     public void deleteSelectedTruck() {
@@ -95,7 +94,7 @@ public class FleetController {
         loadData();
         PrimeFaces.current().ajax().update("dataTablePanel");
 
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "", "Truck "+selectedTruck.getRegNumber()+" deleted"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Truck "+selectedTruck.getRegNumber()+" deleted", "Truck "+selectedTruck.getRegNumber()+" deleted"));
 
     }
 

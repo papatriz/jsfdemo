@@ -12,7 +12,8 @@
         <title>Global logistic :: manage portal</title>
     </h:head>
     <h:body>
-    <p:toolbar style="width: 80%; margin: auto;">
+        <!-- ===================== TOOLBAR ====================== -->
+        <p:toolbar style="width: 80%; margin: auto;">
         <p:toolbarGroup>
             <p:button id="navtoolbarFleet" href="/fleet"  style="margin-right: .5em" value="Trucks" icon="pi pi-car" disabled="false" styleClass="ui-button-secondary" />
             <p:button id="navtoolbarDrivers" href="/manage_drivers.xhtml" style="margin-right: .5em" value="Drivers" icon="pi pi-id-card" styleClass="ui-button-secondary" />
@@ -23,7 +24,8 @@
             <p:button href="/logout" value="Log out" icon="pi pi-sign-out" styleClass="ui-button-outlined  ui-button-secondary" />
         </p:toolbarGroup>
     </p:toolbar>
-    <p:messages id="messages" showDetail="true" closable="true"  style="width: 80%; margin: auto;">
+    <!-- ===================== MESSAGES OUTPUT ====================== -->
+        <p:messages id="messages" showDetail="false" closable="true"  style="width: 80%; margin: auto;">
         <p:autoUpdate/>
     </p:messages>
     <ui:insert name="content" />
