@@ -9,6 +9,8 @@ import org.ocpsoft.rewrite.el.ELBeanName;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.ToggleEvent;
+import org.primefaces.model.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -95,6 +97,14 @@ public class ManageFleetController {
         PrimeFaces.current().ajax().update("dataTablePanel");
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Truck "+selectedTruck.getRegNumber()+" deleted", "Truck "+selectedTruck.getRegNumber()+" deleted"));
+
+    }
+
+    public void onRowToggle(ToggleEvent event) {
+
+        System.out.println( event.getVisibility());
+
+        System.out.println( event.getData().toString());
 
     }
 

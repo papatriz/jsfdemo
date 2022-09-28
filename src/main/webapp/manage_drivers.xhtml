@@ -36,30 +36,38 @@
         <!-- ===================== DRIVERS LIST ====================== -->
         <p:panel header="View drivers list" style="width: 80%; margin: auto;" toggleable="true" collapsed="false" toggleableHeader="true" toggleSpeed="200">
             <p:outputPanel id="driverListPanel">
-            <h:form id="editTruckForm">
+            <h:form id="editDriverForm">
             <p:dataTable id="driverListDT" reflow="true" rowExpandMode="single" rowHover="true"
                          var="driver" value="#{manageDriversController.driverList}"  rowKey="#{driver.id}"
-                         filteredValue="#{manageDriversController.filteredDrivers}" widgetVar="driverList">
-
-            <p:column sortBy="#{driver.name}" headerText="Name">
-                <p:outputLabel value="#{driver.name}"/>
-            </p:column>
-            <p:column sortBy="#{driver.surname}" headerText="Surname">
-                <p:outputLabel value="#{driver.surname}"/>
-            </p:column>
-            <p:column sortBy="#{driver.currentCity}" headerText="Curr.city">
-                <p:outputLabel value="#{driver.currentCity}"/>
-            </p:column>
-            <p:column sortBy="#{driver.status}" headerText="Status">
-                <p:outputLabel value="#{driver.status}" style="#{manageDriversController.getColorByStatus(driver.status)}"/>
-            </p:column>
-            <p:column headerText="Action">
-                <p:rowToggler expandLabel="EDIT" collapseLabel="Hide">
-                </p:rowToggler>
-            </p:column>
+                         filteredValue="#{manageDriversController.filteredDrivers}" widgetVar="driverList" expandedRow="#{true}">
+                   <p:ajax event="rowToggle" listener="#{manageDriversController.onRowToggle}"/>
+                <p:column sortBy="#{driver.name}" headerText="Name">
+                    <p:outputLabel value="#{driver.name}"/>
+                </p:column>
+                <p:column sortBy="#{driver.surname}" headerText="Surname">
+                    <p:outputLabel value="#{driver.surname}"/>
+                </p:column>
+                <p:column sortBy="#{driver.currentCity}" headerText="Curr.city">
+                    <p:outputLabel value="#{driver.currentCity}"/>
+                </p:column>
+                <p:column sortBy="#{driver.status}" headerText="Status">
+                    <p:outputLabel value="#{driver.status}" style="#{manageDriversController.getColorByStatus(driver.status)}"/>
+                </p:column>
+                <p:column headerText="Action">
+                    <p:commandButton type="submit" process="@form" icon="pi pi-pencil" styleClass="rounded-button ui-button-info"  />
+                </p:column>
+                <p:column>
+                    <div class="ui-row-toggler" style=" background: #73AD21; border-radius: 50%; width: 64px; height: 64px;">
+                        <p:commandButton type="button" onclick="console.log('click!')" icon="pi pi-pencil" styleClass="rounded-button ui-button-info"  />
+                    </div>
+                </p:column>
+                <p:rowExpansion>
+                    TEST
+                </p:rowExpansion>
             </p:dataTable>
             </h:form>
             </p:outputPanel>
+
         </p:panel>
     </ui:define>
 </ui:composition>

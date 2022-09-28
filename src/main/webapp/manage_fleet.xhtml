@@ -46,9 +46,11 @@
                      var="truck" value="#{fleetController.fleet}"  rowKey="#{truck.regNumber}"
                      filteredValue="#{fleetController.filteredTrucks}" widgetVar="truckList">
 
-            <p:column filterBy="#{truck.regNumber}" filterMatchMode="contains" headerText="Reg.number">
+                <p:column id="regNumColumn" filterBy="#{truck.regNumber}" filterMatchMode="contains" headerText="          " styleClass="watermark">
                 <p:outputLabel value="#{truck.regNumber}"/>
-            </p:column>
+                    <p:watermark for="@(.watermark)" value="Reg.number" />
+
+                </p:column>
              <p:column sortBy="#{truck.capacity}" headerText="Capacity">
                  <p:outputLabel value="#{truck.capacity}"/>
              </p:column>
@@ -61,13 +63,22 @@
              <p:column sortBy="#{truck.status}" headerText="Status">
                  <p:outputLabel value="#{truck.status}" style="#{fleetController.getColorByStatus(truck.status)}"/>
              </p:column>
-             <p:column headerText="Action">
-                 <p:rowToggler expandLabel="EDIT" collapseLabel="Hide">
-                 </p:rowToggler>
-             </p:column>
+                <p:column headerText="Edit">
+                <div class="ui-row-toggler ui-icon ui-icon-circle-triangle-e" style="align-content: center;">
+                    <p:commandButton type="button" onclick="console.log('click!')" icon="pi pi-pencil" style="position: relative; left: 28px; bottom:34px" styleClass="rounded-button ui-button-info"  />
+                </div>
+                </p:column>
+                <p:column headerText="Delete">
+                    <p:commandButton process="@this" icon="pi pi-trash" styleClass="rounded-button ui-button-warning" style="position: relative; left: -3px; bottom:13px"
+                                     action="#{fleetController.setSelectedTruck(truck)}" ajax="true" oncomplete="PF('confirmdelete').show()">
+                    </p:commandButton>
+                </p:column>
+
      <!-- ===================== EDIT FORM ====================== -->
             <p:rowExpansion>
-                    <p:panelGrid columns="4" styleClass="ui-noborder" layout="grid" contentStyleClass="align-items-center ui-fluid">
+                <p:outputPanel id="editTruckPanel">
+
+                <p:panelGrid columns="4" styleClass="ui-noborder" layout="grid" contentStyleClass="align-items-center ui-fluid">
                         <p:outputLabel for="regnum_ed" value="Reg.number: " />
                         <p:inputText id="regnum_ed" value="#{truck.regNumber}" placeholder="XX00000">
                             <f:validator binding="#{truckRegnumValidator}" />
@@ -87,15 +98,16 @@
                         </p:selectOneMenu>
                         <p:outputLabel for="isbroken_ed" value="Out of duty: " />
                         <p:selectBooleanCheckbox id="isbroken_ed" value="#{truck.broken}" />
+                    <p:column/>
                         <p:column>
-                            <p:commandButton type="submit" process="editTruckForm" icon="pi pi-pencil" styleClass="rounded-button ui-button-info" value="Update" action="#{fleetController.updateTruck(truck)}" />
+                            <p:commandButton type="submit" process="editTruckForm" icon="pi pi-pencil" styleClass=" ui-button-info" value="Save changes" action="#{fleetController.updateTruck(truck)}" />
                         </p:column>
-                            <p:commandButton process="@this" icon="pi pi-trash" styleClass="rounded-button ui-button-warning"
-                                             value="Delete" action="#{fleetController.setSelectedTruck(truck)}" ajax="true" oncomplete="PF('confirmdelete').show()">
-                            </p:commandButton>
+
                     </p:panelGrid>
+                </p:outputPanel>
             </p:rowExpansion>
-        </p:dataTable>
+
+            </p:dataTable>
         </h:form>
         <!-- ===================== DIALOGS ====================== -->
             <p:confirmDialog message="Are you sure?" header="Deleting truck" severity="alert" widgetVar="confirmdelete">
@@ -104,6 +116,7 @@
             </p:confirmDialog>
         </p:outputPanel>
         <!-- =========================================== -->
+
     </p:panel>
     </ui:define>
     </ui:composition>
