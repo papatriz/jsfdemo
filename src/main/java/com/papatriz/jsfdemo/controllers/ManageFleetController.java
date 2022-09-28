@@ -102,8 +102,18 @@ public class ManageFleetController {
 
     public void onRowToggle(ToggleEvent event) {
 
+        System.out.println( "Inside onRowToggle in Fleet controller");
+
+        System.out.println( event.getComponent());
+        System.out.println( event.getComponent().getId());
+
         System.out.println( event.getVisibility());
-        System.out.println( event.getData().toString());
+
+        String dataStr = ((Truck)event.getData()).getRegNumber();
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Truck "+dataStr+" ready to edit", ""));
+
+        // System.out.println(dataStr );
 
     }
 

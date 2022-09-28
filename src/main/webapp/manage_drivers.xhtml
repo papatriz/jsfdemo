@@ -39,7 +39,7 @@
             <h:form id="editDriverForm">
             <p:dataTable id="driverListDT" reflow="true" rowExpandMode="single" rowHover="true"
                          var="driver" value="#{manageDriversController.driverList}"  rowKey="#{driver.id}"
-                         filteredValue="#{manageDriversController.filteredDrivers}" widgetVar="driverList" expandedRow="#{true}">
+                         filteredValue="#{manageDriversController.filteredDrivers}" widgetVar="driverList">
                    <p:ajax event="rowToggle" listener="#{manageDriversController.onRowToggle}"/>
                 <p:column sortBy="#{driver.name}" headerText="Name">
                     <p:outputLabel value="#{driver.name}"/>
@@ -61,7 +61,23 @@
                     </div>
                 </p:column>
                 <p:rowExpansion>
-                    TEST
+                        <p:panelGrid columns="4" styleClass="ui-noborder" layout="grid" contentStyleClass="align-items-center ui-fluid">
+                            <p:outputLabel for="name1" value="Name:" />
+                            <p:inputText id="name1" value="#{driver.name}"
+                                         required="true"
+                                         requiredMessage="Please, enter name."/>
+                            <p:outputLabel for="surname1" value="Surname:" />
+                            <p:inputText id="surname1" value="#{driver.surname}"
+                                         required="true"
+                                         requiredMessage="Please, enter surname."/>
+                            <p:outputLabel for="city1" value="City:" />
+                            <p:selectOneMenu id="city1" value="#{driver.currentCity}">
+                                <f:selectItems value="#{citiesController.cities}" var="tmp_city"
+                                               itemLabel="#{tmp_city}" itemValue="#{tmp_city}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value=" " />
+                            <p:commandButton process="addDriverForm" value="Add driver" action="#{manageDriversController.addDriver()}" update="@form"/>
+                        </p:panelGrid>
                 </p:rowExpansion>
             </p:dataTable>
             </h:form>

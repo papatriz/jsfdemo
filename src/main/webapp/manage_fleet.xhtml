@@ -45,12 +45,11 @@
             <p:dataTable id="truckListID" reflow="true" rowExpandMode="single" rowHover="true"
                      var="truck" value="#{fleetController.fleet}"  rowKey="#{truck.regNumber}"
                      filteredValue="#{fleetController.filteredTrucks}" widgetVar="truckList">
-                <p:ajax event="rowToggle" listener="#{fleetController.onRowToggle}"/>
+                <p:ajax event="rowToggle" process="@this" listener="#{fleetController.onRowToggle}"/>
 
                 <p:column id="regNumColumn" filterBy="#{truck.regNumber}" filterMatchMode="contains" headerText="          " styleClass="watermark">
                 <p:outputLabel value="#{truck.regNumber}"/>
                     <p:watermark for="@(.watermark)" value="Reg.number" />
-
                 </p:column>
              <p:column sortBy="#{truck.capacity}" headerText="Capacity">
                  <p:outputLabel value="#{truck.capacity}"/>
@@ -77,7 +76,6 @@
 
      <!-- ===================== EDIT FORM ====================== -->
             <p:rowExpansion>
-                <p:outputPanel id="editTruckPanel">
 
                 <p:panelGrid columns="4" styleClass="ui-noborder" layout="grid" contentStyleClass="align-items-center ui-fluid">
                         <p:outputLabel for="regnum_ed" value="Reg.number: " />
@@ -105,7 +103,6 @@
                         </p:column>
 
                     </p:panelGrid>
-                </p:outputPanel>
             </p:rowExpansion>
 
             </p:dataTable>

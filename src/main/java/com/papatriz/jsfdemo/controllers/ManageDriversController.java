@@ -69,7 +69,9 @@ public class ManageDriversController {
 
     public void onRowToggle(ToggleEvent event) {
 
+        System.out.println( "Inside onRowToggle in Drivers controller");
 
+        System.out.println( event.getComponent().getId());
         System.out.println( event.getVisibility());
         System.out.println( event.getData().toString());
 
