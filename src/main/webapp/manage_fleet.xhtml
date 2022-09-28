@@ -45,6 +45,7 @@
             <p:dataTable id="truckListID" reflow="true" rowExpandMode="single" rowHover="true"
                      var="truck" value="#{fleetController.fleet}"  rowKey="#{truck.regNumber}"
                      filteredValue="#{fleetController.filteredTrucks}" widgetVar="truckList">
+                <p:ajax event="rowToggle" listener="#{fleetController.onRowToggle}"/>
 
                 <p:column id="regNumColumn" filterBy="#{truck.regNumber}" filterMatchMode="contains" headerText="          " styleClass="watermark">
                 <p:outputLabel value="#{truck.regNumber}"/>

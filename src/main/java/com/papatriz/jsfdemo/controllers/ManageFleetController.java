@@ -103,7 +103,6 @@ public class ManageFleetController {
     public void onRowToggle(ToggleEvent event) {
 
         System.out.println( event.getVisibility());
-
         System.out.println( event.getData().toString());
 
     }
