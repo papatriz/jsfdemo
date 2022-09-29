@@ -47,14 +47,14 @@
                      filteredValue="#{fleetController.filteredTrucks}" widgetVar="truckList">
                 <p:ajax event="rowToggle" process="@this" listener="#{fleetController.onRowToggle}"/>
 
-                <p:column id="regNumColumn" filterBy="#{truck.regNumber}" filterMatchMode="contains" headerText="          " styleClass="watermark">
+                <p:column id="regNumColumn" filterBy="#{truck.regNumber}" filterMatchMode="contains" headerText="          " style="text-align: center;" styleClass="watermark">
                 <p:outputLabel value="#{truck.regNumber}"/>
                     <p:watermark for="@(.watermark)" value="Reg.number" />
                 </p:column>
-             <p:column sortBy="#{truck.capacity}" headerText="Capacity">
+             <p:column sortBy="#{truck.capacity}" headerText="Capacity" style="text-align: center;">
                  <p:outputLabel value="#{truck.capacity}"/>
              </p:column>
-             <p:column sortBy="#{truck.driversNum}" headerText="Drivers">
+             <p:column sortBy="#{truck.driversNum}" headerText="Drivers" style="text-align: center; width:5rem">
                  <p:outputLabel value="#{truck.driversNum}"/>
              </p:column>
              <p:column sortBy="#{truck.currentCity}" headerText="Curr.city">
@@ -63,12 +63,12 @@
              <p:column sortBy="#{truck.status}" headerText="Status">
                  <p:outputLabel value="#{truck.status}" style="#{fleetController.getColorByStatus(truck.status)}"/>
              </p:column>
-                <p:column headerText="Edit">
-                <div class="ui-row-toggler ui-icon ui-icon-circle-triangle-e" style="align-content: center;">
+                <p:column headerText="Edit" style="align: center; width:4rem">
+                <div class="ui-row-toggler ui-icon ui-icon-circle-triangle-e">
                     <p:commandButton type="button" onclick="console.log('click!')" icon="pi pi-pencil" style="position: relative; left: 28px; bottom:34px" styleClass="rounded-button ui-button-info"  />
                 </div>
                 </p:column>
-                <p:column headerText="Delete">
+                <p:column headerText="Delete" style="text-align: center; width:4rem">
                     <p:commandButton process="@this" icon="pi pi-trash" styleClass="rounded-button ui-button-warning" style="position: relative; left: -3px; bottom:13px"
                                      action="#{fleetController.setSelectedTruck(truck)}" ajax="true" oncomplete="PF('confirmdelete').show()">
                     </p:commandButton>
