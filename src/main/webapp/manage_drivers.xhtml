@@ -12,7 +12,7 @@
     <!-- ====================== CONTENT ================================ -->
     <ui:define name="content">
         <!-- ===================== ADD NEW DRIVER FORM ====================== -->
-        <p:panel header="Add new driver" style="width: 80%; margin: auto;" toggleable="true" collapsed="false" toggleableHeader="true" toggleSpeed="200">
+        <p:panel header="Add new driver" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true" toggleSpeed="200">
             <h:form id="addDriverForm">
               <p:panelGrid columns="4" styleClass="ui-noborder" layout="grid" contentStyleClass="align-items-center ui-fluid">
                 <p:outputLabel for="name" value="Name:" />
@@ -76,13 +76,23 @@
                 <p:column sortBy="#{driver.status}" headerText="Status">
                     <p:outputLabel value="#{driver.status}" style="#{manageDriversController.getColorByStatus(driver.status)}"/>
                 </p:column>
-                <p:column headerText="Edit" style="width:6rem">
+                <p:column headerText="Edit" style="width:5rem" >
                     <p:rowEditor editTitle="Edit Row" cancelTitle="Cancel Edit" saveTitle="Save Row" />
                 </p:column>
-
+                <p:column headerText="Delete" style="width:4rem">
+                    <p:commandButton process="@this" icon="pi pi-trash" styleClass="rounded-button ui-button-warning"
+                                     action="#{manageDriversController.setSelectedDriver(driver)}" ajax="true" oncomplete="PF('confirmDelDriver').show()">
+                    </p:commandButton>
+                </p:column>
             </p:dataTable>
             </h:form>
+                <!-- ===================== DIALOGS ====================== -->
+                <p:confirmDialog message="Are you sure?" header="Deleting driver" severity="alert" widgetVar="confirmDelDriver">
+                    <p:commandButton process="editDriverForm" value="Yes, sure" action="#{manageDriversController.deleteSelectedDriver()}" oncomplete="PF('confirmDelDriver').hide()"/>
+                    <p:commandButton value="Not yet" onclick="PF('confirmDelDriver').hide();" type="button" />
+                </p:confirmDialog>
             </p:outputPanel>
+            <!-- =========================================== -->
 
         </p:panel>
     </ui:define>

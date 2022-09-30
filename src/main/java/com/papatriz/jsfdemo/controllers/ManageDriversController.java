@@ -74,8 +74,30 @@ public class ManageDriversController {
        // loadData();
     }
 
+    public void deleteSelectedDriver() {
+
+        System.out.println( "Inside deleteSelectedDriver in Drivers controller");
+
+       // selectedDriver.getCurrentTruck().getAssignedDrivers().remove(selectedDriver);
+       // selectedDriver.getOrder().getDrivers().remove(selectedDriver);
+
+       // driverService.removeDriver(selectedDriver);
+        driverService.removeDriverById(selectedDriver.getId());
+
+        loadData();
+        PrimeFaces.current().ajax().update("driverListPanel");
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Driver "+selectedDriver.getSurname()+" deleted", ""));
+
+    }
+
+    public void setSelectedDriver(Driver selectedDriver) {
+        this.selectedDriver = selectedDriver;
+        System.out.println("SELECT DRIVER "+selectedDriver.getSurname());
+    }
+
     public void onRowEdit(RowEditEvent<Driver> event) {
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Driver "+String.valueOf(event.getObject().getSurname())+" edited", "");
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Driver "+ event.getObject().getSurname() +" edited", "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
         updateDriver(event.getObject());
     }
