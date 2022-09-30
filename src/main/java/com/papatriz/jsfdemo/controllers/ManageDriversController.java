@@ -11,6 +11,7 @@ import org.ocpsoft.rewrite.el.ELBeanName;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.ToggleEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -67,14 +68,24 @@ public class ManageDriversController {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New driver added", "New driver added"));
     }
 
-    public void onRowToggle(ToggleEvent event) {
+    private void updateDriver(Driver driver) {
 
+        driverService.saveDriver(driver);
+       // loadData();
+    }
+
+    public void onRowEdit(RowEditEvent<Driver> event) {
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Driver "+String.valueOf(event.getObject().getSurname())+" edited", "");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        updateDriver(event.getObject());
+    }
+
+    public void onRowToggle(ToggleEvent event) {
         System.out.println( "Inside onRowToggle in Drivers controller");
 
         System.out.println( event.getComponent().getId());
         System.out.println( event.getVisibility());
         System.out.println( event.getData().toString());
-
     }
 
     public String getColorByStatus(EDriverStatus status) {

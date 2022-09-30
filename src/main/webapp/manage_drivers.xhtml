@@ -41,6 +41,7 @@
                          var="driver" value="#{manageDriversController.driverList}"  rowKey="#{driver.id}"
                          filteredValue="#{manageDriversController.filteredDrivers}" widgetVar="driverList" editable="true">
                    <p:ajax event="rowToggle" listener="#{manageDriversController.onRowToggle}"/>
+                <p:ajax event="rowEdit" listener="#{manageDriversController.onRowEdit}" update="messages"/>
                 <p:column sortBy="#{driver.name}" headerText="Name">
                     <p:cellEditor>
                         <f:facet name="output">
