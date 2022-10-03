@@ -46,7 +46,6 @@ public class DriverService implements IDriverService {
         System.out.println("After:Delete DRIVER "+driver.getSurname());
 
     }
-
     @Transactional
     @Override
     public void removeDriverById(int id) {

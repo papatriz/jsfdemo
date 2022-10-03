@@ -78,8 +78,8 @@ public class ManageDriversController {
 
         System.out.println( "Inside deleteSelectedDriver in Drivers controller");
 
-       // selectedDriver.getCurrentTruck().getAssignedDrivers().remove(selectedDriver);
-       // selectedDriver.getOrder().getDrivers().remove(selectedDriver);
+        selectedDriver.getCurrentTruck().getAssignedDrivers().remove(selectedDriver);
+        selectedDriver.getOrder().getDrivers().remove(selectedDriver);
 
        // driverService.removeDriver(selectedDriver);
         driverService.removeDriverById(selectedDriver.getId());

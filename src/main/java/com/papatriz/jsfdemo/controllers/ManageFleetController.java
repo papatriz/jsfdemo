@@ -109,9 +109,10 @@ public class ManageFleetController {
 
         System.out.println( event.getVisibility());
 
-        String dataStr = ((Truck)event.getData()).getRegNumber();
 
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Truck "+dataStr+" ready to edit", ""));
+        // String dataStr = ((Truck)event.getData()).getRegNumber();
+
+      //  FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Truck "+dataStr+" ready to edit", ""));
 
         // System.out.println(dataStr );
 
