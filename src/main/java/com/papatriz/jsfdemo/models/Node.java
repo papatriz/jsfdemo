@@ -15,7 +15,7 @@ public class Node {
     @Enumerated(EnumType.STRING)
     private ECity city;
     @Enumerated(EnumType.STRING)
-    private EOrderType type;
+    private EActionType type;
 
     @OneToOne()
     @JoinColumn(name = "cargo_id", referencedColumnName = "id")
