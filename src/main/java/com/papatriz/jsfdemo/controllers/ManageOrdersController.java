@@ -4,14 +4,18 @@ import com.papatriz.jsfdemo.models.Cargo;
 import com.papatriz.jsfdemo.models.EActionType;
 import com.papatriz.jsfdemo.models.Node;
 import com.papatriz.jsfdemo.models.Order;
+import com.papatriz.jsfdemo.services.IOrderService;
 import lombok.Data;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.el.ELBeanName;
 import org.primefaces.event.SelectEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +26,11 @@ import java.util.stream.Collectors;
 @ELBeanName(value = "manageOrdersController")
 @Join(path = "/manage_orders", to = "/manage_orders.xhtml")
 public class ManageOrdersController {
+    private final IOrderService orderService;
+    @Autowired
+    public ManageOrdersController(IOrderService orderService) {
+        this.orderService = orderService;
+    }
 
     private List<Order> orders;
     private Order newOrder = new Order();
@@ -45,9 +54,17 @@ public class ManageOrdersController {
         newOrder.setNodes(newOrderNodes);
     }
 
-    public void addNode() {
+    public void addOrder() {
 
-        newOrderNodes.add(new Node());
+        orderService.saveOrder(newOrder);
+        newOrder = new Order();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New order added", ""));
+    }
+
+    public void addNode() {
+        Node extraNode = new Node();
+        extraNode.setOrder(newOrder);
+        newOrderNodes.add(extraNode);
     }
 
     public boolean isFirstOrLastNode(Node checkedNode) {
@@ -66,10 +83,8 @@ public class ManageOrdersController {
     public void onCargoSelect(SelectEvent<String> event) {
         System.out.println("onCargoSelect :: "+event.getObject());
 
-        Cargo tmpCargo;
         String normalizedName = event.getObject().toLowerCase().trim();
         List<Node> nodes = newOrder.getNodes();
-      //  nodes.remove(nodes.size()-1);
 
         for (int i = 0; i < nodes.size()-1; i++) {
             System.out.println("Cargos in this order :: "+nodes.get(i).getCargo().getName() + " w: " + nodes.get(i).getCargo().getWeight());

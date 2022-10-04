@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "nodes")
 @Data
 public class Node {
 
@@ -17,16 +18,17 @@ public class Node {
     @Enumerated(EnumType.STRING)
     private EActionType type;
 
-    @OneToOne()
+    @OneToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "cargo_id", referencedColumnName = "id")
     private Cargo cargo;
 
-    @ManyToOne()
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
     public Node() {
         this.cargo = new Cargo();
+        this.cargo.setCurrentNode(this);
     }
 
     @Override

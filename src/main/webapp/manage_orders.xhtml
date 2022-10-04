@@ -20,7 +20,7 @@
                     <div class="ui-g-12 ui-md-6 ui-lg-3" style="font-weight: bold;">Cargo weight</div>
                     <div class="ui-g-12 ui-md-6 ui-lg-3" style="font-weight: bold;">Action</div>
                 </div>
-                <hr/>
+                <p:divider/>
 
                 <c:forEach items="#{manageOrdersController.newOrder.nodes}" var="node">
                     <div class="ui-g" >
@@ -47,11 +47,11 @@
                             </p:selectOneMenu>
                         </div>
                     </div>
-                   <hr/>
+                   <p:divider />
                 </c:forEach>
                     <p:commandButton update="@form" value="Add node" action="#{manageOrdersController.addNode}" />
                     <p:outputLabel value=" " />
-                    <p:commandButton process="addOrderForm" value="Add order" action="#{fleetController.addTruck}" update="@form"/>
+                    <p:commandButton process="addOrderForm" value="Add order" action="#{manageOrdersController.addOrder}" update="@form"/>
             </h:form>
         </p:panel>
     </ui:define>

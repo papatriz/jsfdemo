@@ -19,13 +19,13 @@ public class Order {
     private boolean isComplete;
 
     // ----- RELATED DATA -----
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST})
     private List<Node> nodes;
 
     @OneToOne(mappedBy = "order")
     private Truck assignedTruck;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST})
     private List<Driver> drivers;
 
 }
