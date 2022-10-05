@@ -1,13 +1,11 @@
 package com.papatriz.jsfdemo.controllers;
 
-import com.papatriz.jsfdemo.models.Cargo;
-import com.papatriz.jsfdemo.models.EActionType;
-import com.papatriz.jsfdemo.models.Node;
-import com.papatriz.jsfdemo.models.Order;
+import com.papatriz.jsfdemo.models.*;
 import com.papatriz.jsfdemo.services.IOrderService;
 import lombok.Data;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.el.ELBeanName;
+import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,19 +44,24 @@ public class ManageOrdersController {
         Cargo testCargo = new Cargo();
         testCargo.setName("Test cargo");
         testCargo.setWeight(500);
+        testCargo.setStatus(ECargoStatus.PREPARED);
+
         initNode.setCargo(testCargo);
         initNode.setType(EActionType.LOAD);
+      //  initNode.setOrder(newOrder);
 
         newOrderNodes.add(initNode);
 
         newOrder.setComplete(false);
         newOrder.setNodes(newOrderNodes);
+        newOrder.getNodes().get(0).setOrder(newOrder);
     }
 
     public void addOrder() {
 
         orderService.saveOrder(newOrder);
         newOrder = new Order();
+        initNewOrder();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New order added", ""));
     }
 
@@ -80,10 +84,18 @@ public class ManageOrdersController {
         return cargoNames.stream().filter(n -> n.toLowerCase().startsWith(inputLowerCase)).collect(Collectors.toList());
     }
 
-    public void onCargoSelect(SelectEvent<String> event) {
-        System.out.println("onCargoSelect :: "+event.getObject());
+    public void onSelectTest(AjaxBehaviorEvent theEvent) {
+        AutoComplete anAutoComplete = (AutoComplete) theEvent.getComponent();
+        String aSelection = anAutoComplete.getValue().toString();
 
-        String normalizedName = event.getObject().toLowerCase().trim();
+        System.out.println("onSelectTest :: "+aSelection);
+
+
+    }
+    public void onCargoSelect(SelectEvent event) {
+        System.out.println("onCargoSelect :: "+(String)event.getObject());
+
+        String normalizedName = (String)(event.getObject());
         List<Node> nodes = newOrder.getNodes();
 
         for (int i = 0; i < nodes.size()-1; i++) {

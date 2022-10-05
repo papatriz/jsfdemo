@@ -29,23 +29,28 @@ public class Node {
     public Node() {
         this.cargo = new Cargo();
         this.cargo.setCurrentNode(this);
+        this.cargo.setStatus(ECargoStatus.PREPARED);
+    }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "id=" + id +
+                ", city=" + city +
+                ", type=" + type +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Node)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Node node = (Node) o;
         return id == node.id && city == node.city && type == node.type && Objects.equals(cargo, node.cargo) && Objects.equals(order, node.order);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, city, type, cargo, order);
-    }
-
-    public Node(Cargo cargo) {
-        this.cargo = cargo;
-        cargo.setCurrentNode(this);
+        return Objects.hash(id, city, type);
     }
 }
