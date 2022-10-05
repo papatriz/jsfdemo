@@ -26,6 +26,9 @@ public class Node {
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
+    @Transient
+    private boolean finalized;
+
     public Node() {
         this.cargo = new Cargo();
         this.cargo.setCurrentNode(this);

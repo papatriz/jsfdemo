@@ -34,6 +34,7 @@ public class ManageOrdersController {
     private List<Order> orders;
     private Order newOrder = new Order();
     private List<Node> newOrderNodes;
+    private boolean validationFailed = false;
 
     @PostConstruct
     private void initNewOrder() {
@@ -42,13 +43,13 @@ public class ManageOrdersController {
         Node initNode = new Node();
 
         Cargo testCargo = new Cargo();
-        testCargo.setName("Test cargo");
+        testCargo.setName("Bananas and vodka");
         testCargo.setWeight(500);
         testCargo.setStatus(ECargoStatus.PREPARED);
 
         initNode.setCargo(testCargo);
         initNode.setType(EActionType.LOAD);
-      //  initNode.setOrder(newOrder);
+        initNode.setFinalized(true);
 
         newOrderNodes.add(initNode);
 
@@ -59,6 +60,10 @@ public class ManageOrdersController {
 
     public void addOrder() {
 
+        Node lastNode = newOrderNodes.get(newOrderNodes.size()-1);
+        String lastCargoName = lastNode.getCargo().getName();
+        if(lastCargoName.isEmpty()) newOrderNodes.remove(lastNode);
+
         orderService.saveOrder(newOrder);
         newOrder = new Order();
         initNewOrder();
@@ -66,14 +71,34 @@ public class ManageOrdersController {
     }
 
     public void addNode() {
+
+        Node lastNode = newOrderNodes.get(newOrderNodes.size()-1);
+        String lastCargoName = lastNode.getCargo().getName();
+        if (lastCargoName.isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please, enter cargo name!", ""));
+            validationFailed = true;
+            return;
+        }
+        if (checkSameCargo(lastCargoName)) {
+            Node previosCargoNode = newOrderNodes.stream().filter(s -> s.getCargo().getName().equals(lastCargoName)).findFirst().orElse(null);
+            if (previosCargoNode.getCity() == lastNode.getCity()) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cargo has to be unloaded in different city!", ""));
+                validationFailed = true;
+                return;
+            }
+        }
+
         Node extraNode = new Node();
+        extraNode.setType(EActionType.LOAD);
+        extraNode.setFinalized(true);
         extraNode.setOrder(newOrder);
         newOrderNodes.add(extraNode);
+        validationFailed = false;
     }
 
     public boolean isFirstOrLastNode(Node checkedNode) {
 
-        return newOrderNodes.indexOf(checkedNode) == 0;
+        return checkedNode.isFinalized();
     }
 
     public List<String> completeCargoName(String input) {
@@ -92,18 +117,28 @@ public class ManageOrdersController {
 
 
     }
-    public void onCargoSelect(SelectEvent event) {
-        System.out.println("onCargoSelect :: "+(String)event.getObject());
+    public void onCargoSelect(SelectEvent<String> event) {
+        System.out.println("onCargoSelect :: "+ event.getObject());
 
-        String normalizedName = (String)(event.getObject());
+        checkSameCargo(event.getObject());
+     }
+
+     private boolean checkSameCargo(String cargoName) {
+
+        String normalizedName = cargoName.toLowerCase().trim();
         List<Node> nodes = newOrder.getNodes();
+        Node lastNode = nodes.get(nodes.size()-1);
 
         for (int i = 0; i < nodes.size()-1; i++) {
-            System.out.println("Cargos in this order :: "+nodes.get(i).getCargo().getName() + " w: " + nodes.get(i).getCargo().getWeight());
             if (nodes.get(i).getCargo().getName().toLowerCase().trim().equals(normalizedName) ) {
-                System.out.println("Find similar!");
-                nodes.get(nodes.size()-1).setCargo(nodes.get(i).getCargo());
-            }
+                 lastNode.setCargo(nodes.get(i).getCargo());
+                 lastNode.setType(EActionType.UNLOAD);
+                 lastNode.setFinalized(true);
+
+                return true;
+             }
         }
+
+        return false;
      }
 }

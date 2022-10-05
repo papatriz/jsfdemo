@@ -31,13 +31,16 @@
                             </p:selectOneMenu>
                         </div>
                         <div class="ui-g-12 ui-md-6 ui-lg-3">
-                            <p:autoComplete  value="#{node.cargo.name}"
-                                            completeMethod="#{manageOrdersController.completeCargoName}" style="width: 8rem" scrollHeight="250">
+                            <p:autoComplete placeholder="Enter cargo name" value="#{node.cargo.name}" style="#{manageOrdersController.validationFailed ? 'border-color: crimson; border-width: 2px; width: 8rem' : 'width: 8rem'}"
+                                            completeMethod="#{manageOrdersController.completeCargoName}" scrollHeight="250">
                                 <p:ajax event="itemSelect" listener="#{manageOrdersController.onCargoSelect}" update="@form"/>
+                                <p:ajax event="valueChange" update="@form" />
                             </p:autoComplete>
                         </div>
                         <div class="ui-g-12 ui-md-6 ui-lg-3">
-                            <p:spinner  value="#{node.cargo.weight}" style="width: 10rem" stepFactor="100" min="100" max="10000"/>
+                            <p:spinner  value="#{node.cargo.weight}" style="width: 10rem" stepFactor="100" min="100" max="10000">
+                           <p:ajax event="valueChange" update="@form" />
+                            </p:spinner>
                         </div>
                         <div class="ui-g-12 ui-md-6 ui-lg-3">
                             <p:outputLabel value="#{node.type}" rendered="#{manageOrdersController.isFirstOrLastNode(node)}" style="position: relative; left: 7px; bottom:-7px"/>
