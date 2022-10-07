@@ -20,7 +20,7 @@ public class Order {
     private boolean isComplete;
 
     // ----- RELATED DATA -----
-    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
     private List<Node> nodes;
 
     @OneToOne(mappedBy = "order")

@@ -11,9 +11,7 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class OrderService implements IOrderService{
-
     private final IOrderRepository orderRepository;
-
     @Autowired
     public OrderService(IOrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -27,7 +25,8 @@ public class OrderService implements IOrderService{
 
     @Override
     public List<Order> getPendingOrders() {
-        return null;
+
+        return orderRepository.getPendingOrders2();
     }
 
     @Override
