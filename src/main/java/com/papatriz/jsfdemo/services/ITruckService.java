@@ -11,10 +11,9 @@ import java.util.Optional;
 @Service()
 public interface ITruckService {
     List<Truck> getAllTrucks();
-    Page<Truck> getTrucksPageable(int page, int size, boolean sorted);
     List<Truck> getSuitableTrucks(Order order);
     Optional<Truck> getTruckById(String regnum);
     void saveTruck(Truck truck);
     void removeTruck(Truck truck);
-    void updateTruck(Truck truck);
+    int getMaxCapacity();
 }

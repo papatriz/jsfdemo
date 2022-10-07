@@ -2,6 +2,7 @@ package com.papatriz.jsfdemo.controllers;
 
 import com.papatriz.jsfdemo.models.*;
 import com.papatriz.jsfdemo.services.IOrderService;
+import com.papatriz.jsfdemo.services.ITruckService;
 import lombok.Data;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.el.ELBeanName;
@@ -25,9 +26,11 @@ import java.util.stream.Collectors;
 @Join(path = "/manage_orders", to = "/manage_orders.xhtml")
 public class ManageOrdersController {
     private final IOrderService orderService;
+    private final ITruckService truckService;
     @Autowired
-    public ManageOrdersController(IOrderService orderService) {
+    public ManageOrdersController(IOrderService orderService, ITruckService truckService) {
         this.orderService = orderService;
+        this.truckService = truckService;
     }
 
     private enum CargoCycleState {
@@ -69,6 +72,8 @@ public class ManageOrdersController {
         String lastCargoName = lastNode.getCargo().getName();
         if(lastCargoName.isEmpty()) newOrderNodes.remove(lastNode);
 
+
+
         orderService.saveOrder(newOrder);
         newOrder = new Order();
         initNewOrder();
@@ -99,6 +104,12 @@ public class ManageOrdersController {
 
         if (state == CargoCycleState.ERROR) {
             showError("This cargo is already handled!");
+            validationFailed = true;
+            return;
+        }
+
+        if (truckService.getMaxCapacity() < getOrderMaxWeight(newOrder)) {
+            showError("Total cargos weight exceed single truck max capacity!");
             validationFailed = true;
             return;
         }

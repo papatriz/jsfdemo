@@ -25,10 +25,6 @@ public class TruckService implements ITruckService{
         return truckRepository.findAll();
     }
 
-    @Override
-    public Page<Truck> getTrucksPageable(int page, int size, boolean sorted) {
-        return null;
-    }
 
     @Override
     public List<Truck> getSuitableTrucks(Order order) {
@@ -51,6 +47,8 @@ public class TruckService implements ITruckService{
     }
 
     @Override
-    public void updateTruck(Truck truck) {
+    public int getMaxCapacity() {
+        return truckRepository.getMaxCapacity();
     }
+
 }
