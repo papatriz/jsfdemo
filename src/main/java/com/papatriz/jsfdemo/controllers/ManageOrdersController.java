@@ -49,6 +49,7 @@ public class ManageOrdersController {
 
         newOrderNodes = new ArrayList<>();
         Node initNode = new Node();
+        validationFailed = false;
 
         Cargo testCargo = new Cargo();
         testCargo.setName("Bananas and vodka");
@@ -72,12 +73,31 @@ public class ManageOrdersController {
         String lastCargoName = lastNode.getCargo().getName();
         if(lastCargoName.isEmpty()) newOrderNodes.remove(lastNode);
 
-
+        if (!finalCheck()) {
+            showError("All cargos must have both load and unload points!");
+            return;
+        }
 
         orderService.saveOrder(newOrder);
         newOrder = new Order();
         initNewOrder();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New order added", ""));
+    }
+
+    private boolean finalCheck() {
+
+        // check if all cargos has load and unload nodes
+        List<Cargo> checkList = new ArrayList<>();
+        for (Node node:newOrder.getNodes()) {
+            if (node.getType() == EActionType.LOAD)
+                checkList.add(node.getCargo());
+            else
+                checkList.remove(node.getCargo());
+        }
+
+        // check if total weight doesn't exceed max truck capacity
+
+        return checkList.isEmpty();
     }
 
     public void addNode() {
