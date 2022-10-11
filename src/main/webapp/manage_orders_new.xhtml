@@ -28,7 +28,6 @@
                                  styleClass="#{cs.hasCitiesError ?'ui-state-error':''}">
                   <f:selectItems value="#{citiesController.cities}" var="tmp_city"
                                  itemLabel="#{tmp_city}" itemValue="#{tmp_city}"/>
-                  <p:ajax event="itemSelect" listener="#{ordersController.onItemSelected}" update="@form" />
                </p:selectOneMenu>
             </p:column>
             <p:column headerText="Cargo" style="width: 12rem">

@@ -40,10 +40,13 @@ public class ManageOrdersControllerNew {
     private List<CargoCycle> cargoCycles;
 
     class CityBasedComparator implements Comparator<Node> {
-
         @Override
         public int compare(Node o1, Node o2) { // toDo: after implementation of ICountry make sort on distance base
-            if (o1.getCity().equals(o2.getCity())) return 0;
+            if (o1.getCity().equals(o2.getCity()))
+            {
+                if (o1.getType() == o2.getType()) return 0;
+                return o1.getType().ordinal() < o2.getType().ordinal() ? 1 : -1;
+            }
             return o1.getCity().ordinal() > o2.getCity().ordinal() ? 1 : -1;
         }
     }
@@ -117,14 +120,6 @@ public class ManageOrdersControllerNew {
         cargoCycles.remove(cs);
     }
 
-    public void onItemSelected(ItemSelectEvent event) {
-        System.out.println(event.getClass());
-
-    }
-    public void onValueChange(ValueChangeEvent event) {
-
-        System.out.println(event.getNewValue().getClass());
-    }
     public int getTruckMaxCapacity() {
        return truckService.getMaxCapacity();
     }
@@ -142,7 +137,8 @@ public class ManageOrdersControllerNew {
                     weight += checkedCargo.getWeight();
                     break;
                 case UNLOAD:
-                    List<Node> previousNodes = nodes.subList(0, i-1);
+                    if (i == 0) break;
+                    List<Node> previousNodes = nodes.subList(0, i);
                     boolean wasLoaded = !previousNodes.stream().filter(n -> n.getCargo().equals(checkedCargo)).collect(Collectors.toList()).isEmpty();
                     if(wasLoaded) weight -= node.getCargo().getWeight();
                     break;
