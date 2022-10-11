@@ -14,46 +14,47 @@
    <ui:define name="content">
       <p:panel header="Add new order" style="width: 80%; margin: auto;" toggleable="true" collapsed="false" toggleableHeader="true" toggleSpeed="200">
          <h:form id="addOrderFormNew">
-            <div class="ui-g" style="background: #F8F9FA;">
-               <div class="ui-g-12 ui-md-6 ui-lg-3" style="font-weight: bold;">Load at:</div>
-               <div class="ui-g-12 ui-md-6 ui-lg-3" style="font-weight: bold;">Unload at:</div>
-               <div class="ui-g-12 ui-md-6 ui-lg-3" style="font-weight: bold;">Cargo</div>
-               <div class="ui-g-12 ui-md-6 ui-lg-3" style="font-weight: bold;">Weight</div>
-            </div>
-            <p:divider/>
+         <p:dataTable id="addOrderDatatable" value="#{ordersController.cargoCycles}" var="cs" reflow="true"
+                      showGridlines="true">
+           <p:column headerText="Pickup" style="width: 10rem">
+              <p:selectOneMenu  value="#{cs.loadNode.city}" style="width: 9rem"
+                                styleClass="#{cs.hasCitiesError ?'ui-state-error':''}">
+                 <f:selectItems value="#{citiesController.cities}" var="tmp_city"
+                                itemLabel="#{tmp_city}" itemValue="#{tmp_city}"/>
+              </p:selectOneMenu>
+           </p:column>
+            <p:column headerText="Delivery" style="width: 10rem">
+               <p:selectOneMenu  value="#{cs.unloadNode.city}" style="width: 9rem"
+                                 styleClass="#{cs.hasCitiesError ?'ui-state-error':''}">
+                  <f:selectItems value="#{citiesController.cities}" var="tmp_city"
+                                 itemLabel="#{tmp_city}" itemValue="#{tmp_city}"/>
+                  <p:ajax event="itemSelect" listener="#{ordersController.onItemSelected}" update="@form" />
+               </p:selectOneMenu>
+            </p:column>
+            <p:column headerText="Cargo" style="width: 12rem">
+               <p:inputText placeholder="Enter cargo name" value="#{cs.cargo.name}" required="true"
+                            requiredMessage="Please, enter cargo name" style="width: 11rem"/>
+            </p:column>
+            <p:column headerText="Weight" style="width: 8rem">
+               <p:spinner  value="#{cs.cargo.weight}" style="width: 7rem" stepFactor="100" min="100" max="#{ordersController.getTruckMaxCapacity()}"
+                           upButtonStyleClass="ui-button-secondary" downButtonStyleClass="ui-button-secondary">
+               </p:spinner>
+            </p:column>
+            <p:column headerText="Remove" style="width: 5rem; text-align: center ">
+               <p:commandButton process="@this" update="@form" icon="pi pi-minus" styleClass="rounded-button ui-button-secondary"
+                                action="#{ordersController.removeCargo(cs)}" ajax="true" >
+               </p:commandButton>
+            </p:column>
+            <f:facet name="footer">
+                <p:toolbar >
+                    <p:toolbarGroup align="right">
+                        <p:commandButton value="Add cargo" styleClass="ui-button-secondary" icon="pi pi-plus" update="@form"  action="#{ordersController.addCargo}" style="margin-right: .5em" />
+                        <p:commandButton value="Add order" styleClass="ui-button-secondary" icon="pi pi-check" process="addOrderFormNew" action="#{ordersController.addOrder}" update="@form" style="margin-right: .5em"/>
+                    </p:toolbarGroup>
+                </p:toolbar>
+            </f:facet>
+         </p:dataTable>
 
-            <c:forEach items="#{ordersController.cargoCycles}" var="cs">
-               <div class="ui-g">
-                  <div class="ui-g-12 ui-md-6 ui-lg-3">
-                     <p:selectOneMenu  value="#{cs.loadNode.city}" style="width: 9rem"
-                                       styleClass="#{cs.hasCitiesError ?'ui-state-error':''}">
-                        <f:selectItems value="#{citiesController.cities}" var="tmp_city"
-                                       itemLabel="#{tmp_city}" itemValue="#{tmp_city}"/>
-                     </p:selectOneMenu>
-                  </div>
-                  <div class="ui-g-12 ui-md-6 ui-lg-3">
-                     <p:selectOneMenu  value="#{cs.unloadNode.city}" style="width: 9rem"
-                                       styleClass="#{cs.hasCitiesError ?'ui-state-error':''}">
-                        <f:selectItems value="#{citiesController.cities}" var="tmp_city"
-                                       itemLabel="#{tmp_city}" itemValue="#{tmp_city}"/>
-                        <p:ajax event="itemSelect" listener="#{ordersController.onItemSelected}" update="@form" />
-                     </p:selectOneMenu>
-                  </div>
-                  <div class="ui-g-12 ui-md-6 ui-lg-3" >
-                     <p:inputText placeholder="Enter cargo name" value="#{cs.cargo.name}" required="true"
-                                  requiredMessage="Please, enter cargo name" style="width: 12rem"/>
-                  </div>
-                  <div class="ui-g-12 ui-md-6 ui-lg-3">
-                     <p:spinner  value="#{cs.cargo.weight}" style="width: 7rem" stepFactor="100" min="100" max="#{ordersController.getTruckMaxCapacity()}">
-                     </p:spinner>
-                  </div>
-
-               </div>
-               <p:divider />
-            </c:forEach>
-            <p:commandButton update="@form" value="Add cargo" action="#{ordersController.addCargo}" />
-            <p:outputLabel value=" " />
-            <p:commandButton process="addOrderFormNew" value="Add order" action="#{ordersController.addOrder}" update="@form"/>
          </h:form>
       </p:panel>
       <!-- ===================== PENDING ORDERS LIST ====================== -->

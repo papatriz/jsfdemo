@@ -84,31 +84,37 @@ public class ManageOrdersControllerNew {
             showError("Maximum load ("+getOrderTotalWeight(orderNodes)+" kg) exceed truck max payload ("+getTruckMaxCapacity()+" kg)");
             return;
         };
-
     }
 
     public void addCargo() {
 
-        CargoCycle lastCC = cargoCycles.get(cargoCycles.size()-1);
-        lastCC.setHasWeightError(false);
-        lastCC.setHasCitiesError(false);
+        if (!cargoCycles.isEmpty()) {
 
-        // check for different load/unload points
-        if (lastCC.getLoadNode().getCity() == lastCC.getUnloadNode().getCity()) {
-            showError("Delivery has to be in different city");
-            lastCC.setHasCitiesError(true);
-            return;
+            CargoCycle lastCC = cargoCycles.get(cargoCycles.size() - 1);
+            lastCC.setHasWeightError(false);
+            lastCC.setHasCitiesError(false);
+
+            // check for different load/unload points
+            if (lastCC.getLoadNode().getCity() == lastCC.getUnloadNode().getCity()) {
+                showError("Delivery has to be in different city");
+                lastCC.setHasCitiesError(true);
+                return;
+            }
+            // check for single cargo max weight
+            if (lastCC.getCargo().getWeight() > getTruckMaxCapacity()) {
+                showError("Cargo weight exceed max truck capacity");
+                lastCC.setHasWeightError(true);
+                return;
+            }
+            // toDo: double check for cargo name not empty
         }
-        // check for single cargo max weight
-        if (lastCC.getCargo().getWeight() > getTruckMaxCapacity()) {
-            showError("Cargo weight exceed max truck capacity");
-            lastCC.setHasWeightError(true);
-            return;
-        }
-        // toDo: double check for cargo name not empty
 
         CargoCycle currentCargoCycle = new CargoCycle();
         cargoCycles.add(currentCargoCycle);
+    }
+
+    public void removeCargo(CargoCycle cs) {
+        cargoCycles.remove(cs);
     }
 
     public void onItemSelected(ItemSelectEvent event) {
