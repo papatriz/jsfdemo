@@ -2,6 +2,8 @@ package com.papatriz.jsfdemo.models;
 
 
 import lombok.Data;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -21,12 +23,14 @@ public class Order {
 
     // ----- RELATED DATA -----
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<Node> nodes;
 
     @OneToOne(mappedBy = "order")
     private Truck assignedTruck;
 
-    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<Driver> drivers;
 
     @Override

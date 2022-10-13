@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Data
 @Entity
@@ -29,8 +31,13 @@ public class Truck {
     @Column(name = "city")
     private ECity currentCity;
 
+    @Override
+    public String toString() {
+        return "Truck : " + regNumber;
+    }
+
     @OneToMany(mappedBy = "currentTruck")
-    private List<Driver> assignedDrivers;
+    private Set<Driver> assignedDrivers;
 
     @OneToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
@@ -53,4 +60,23 @@ public class Truck {
     }
 
 
+    public Truck(String regNumber) {
+        this.regNumber = regNumber;
+    }
+
+    public Truck() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Truck truck = (Truck) o;
+        return driversNum == truck.driversNum && capacity == truck.capacity && isBroken == truck.isBroken && Objects.equals(regNumber, truck.regNumber) && currentCity == truck.currentCity;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(regNumber, driversNum, capacity, isBroken, currentCity);
+    }
 }

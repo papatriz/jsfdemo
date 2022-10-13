@@ -21,7 +21,7 @@ public class Cargo {
     @Enumerated(EnumType.STRING)
     private ECargoStatus status;
 
-    @OneToOne(mappedBy = "cargo")
+    @OneToOne(mappedBy = "cargo", fetch = FetchType.LAZY)
     private Node currentNode;
 
     @Override

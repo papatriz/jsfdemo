@@ -1,11 +1,13 @@
 package com.papatriz.jsfdemo.services;
 
+import com.papatriz.jsfdemo.models.Node;
 import com.papatriz.jsfdemo.models.Order;
 import com.papatriz.jsfdemo.repositories.IOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,7 +27,11 @@ public class OrderService implements IOrderService{
 
     @Override
     public List<Order> getPendingOrders() {
-
+        /*
+        List<Order> orders = orderRepository.getPendingOrders2();
+        List<Node> nodes = new ArrayList<>();
+        orders.stream().forEach(o -> nodes.addAll(o.getNodes()));
+        nodes.stream().forEach(n -> System.out.println(n.getCargo().getWeight())); */
         return orderRepository.getPendingOrders2();
     }
 
@@ -36,6 +42,10 @@ public class OrderService implements IOrderService{
 
     @Override
     public List<Order> getAllOrders() {
-        return null;
+        List<Order> orders = orderRepository.findAll();
+        List<Node> nodes = new ArrayList<>();
+        orders.stream().forEach(o -> nodes.addAll(o.getNodes()));
+        nodes.stream().forEach(n -> System.out.println(n.getCargo().getWeight()));
+        return orders;
     }
 }

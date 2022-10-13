@@ -6,7 +6,7 @@ import com.papatriz.jsfdemo.services.ITruckService;
 import lombok.Data;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.el.ELBeanName;
-import org.primefaces.event.ItemSelectEvent;
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,11 +22,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
 @Scope(value = "session")
 @Component(value = "ordersController")
 @ELBeanName(value = "ordersController")
 @Join(path = "/manage_orders_new", to = "/manage_orders_new.xhtml")
+@Data
 public class ManageOrdersControllerNew {
 
     private final IOrderService orderService;
@@ -37,7 +38,29 @@ public class ManageOrdersControllerNew {
     }
 
     private Order newOrder = new Order();
+    private List<Truck> cachedTrucks;
+    private List<Order> cachedPendingOrders;
     private List<CargoCycle> cargoCycles;
+
+    public List<Truck> getSuitableTrucks(Order order) {
+        return cachedTrucks;
+    }
+
+    public void listener(AjaxBehaviorEvent event)  {
+        System.out.println(event.getComponent().getClass().getName());
+    }
+    public void onTruckSelect() {
+        showError("Truck changed  ");
+    }
+
+    public void onTruckSubmit(String s) {
+        showError("Truck submitted: "+s);
+
+    }
+
+    public List<Driver> getSuitableDrivers(Order order) {
+        return null;
+    }
 
     class CityBasedComparator implements Comparator<Node> {
         @Override
@@ -56,6 +79,8 @@ public class ManageOrdersControllerNew {
         cargoCycles = new ArrayList<>();
         CargoCycle currentCargoCycle = new CargoCycle();
         cargoCycles.add(currentCargoCycle);
+        cachedTrucks = truckService.getAllTrucks();
+        cachedPendingOrders = orderService.getAllOrders();
 
     }
 
@@ -82,9 +107,10 @@ public class ManageOrdersControllerNew {
 
         // check for max weight
         Collections.sort(orderNodes, new CityBasedComparator());
+        newOrder.setNodes(orderNodes);
 
-        if (getOrderTotalWeight(orderNodes) > getTruckMaxCapacity()) {
-            showError("Maximum load ("+getOrderTotalWeight(orderNodes)+" kg) exceed truck max payload ("+getTruckMaxCapacity()+" kg)");
+        if (getOrderTotalWeight(newOrder) > getTruckMaxCapacity()) {
+            showError("Maximum load ("+getOrderTotalWeight(newOrder)+" kg) exceed truck max payload ("+getTruckMaxCapacity()+" kg)");
             return;
         };
     }
@@ -124,13 +150,15 @@ public class ManageOrdersControllerNew {
        return truckService.getMaxCapacity();
     }
 
-    private int getOrderTotalWeight(List<Node> nodes) {
+    public int getOrderTotalWeight(Order order) {
+
+        List<Node> nodes = order.getNodes();
+
         int weight = 0;
         int max = 0;
 
         for (int i=0; i < nodes.size(); i++) {
             Node node = nodes.get(i);
-            System.out.println(" > "+node.getCity()+" :: "+node.getType() +" : "+node.getCargo().getWeight());
             Cargo checkedCargo = node.getCargo();
             switch (node.getType()) {
                 case LOAD:
@@ -144,6 +172,8 @@ public class ManageOrdersControllerNew {
                     break;
             }
             if (weight > max) max = weight;
+            System.out.println(" > "+node.getCity()+" :: "+node.getType() +" : "+node.getCargo().getWeight()+"  In truck: "+weight);
+
         }
         System.out.println("Max weight at moment: "+ max);
         return  max;

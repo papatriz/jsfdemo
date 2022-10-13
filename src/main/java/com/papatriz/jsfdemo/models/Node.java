@@ -18,7 +18,7 @@ public class Node {
     @Enumerated(EnumType.STRING)
     private EActionType type;
 
-    @OneToOne(cascade = {CascadeType.PERSIST})
+    @OneToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "cargo_id", referencedColumnName = "id")
     private Cargo cargo;
 

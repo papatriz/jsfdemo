@@ -57,7 +57,52 @@
          </h:form>
       </p:panel>
       <!-- ===================== PENDING ORDERS LIST ====================== -->
+       <p:panel header="View pending orders" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true" toggleSpeed="200">
+               <h:form id="pendingOrdersForm">
+                   <p:dataTable id="pendingOrdersDT" reflow="true" rowExpandMode="single" rowHover="true"
+                                var="order" value="#{ordersController.cachedPendingOrders}"  rowKey="#{order.id}"
+                                widgetVar="pOrderList">
 
+                       <p:column id="orderId" filterMatchMode="contains" headerText="Order ID" style="width: 6rem;text-align: center;" >
+                           <p:outputLabel value="#{order.id}"/>
+                       </p:column>
+                       <p:column headerText="Max weight" style="width: 9rem;text-align: center;">
+                           <p:outputLabel value="#{ordersController.getOrderTotalWeight(order)}"/>
+                       </p:column>
+                       <p:column headerText="Truck" style="width:15rem">
+
+                           <p:selectOneMenu id="assignTruck" value="#{order.assignedTruck}" style="width:11rem" converter="truckConverter">
+                               <p:ajax event="itemSelect" process="@this" listener="#{ordersController.onTruckSelect}"/>
+                               <f:selectItem itemLabel="Choose truck" itemValue="" noSelectionOption="true"/>
+                               <f:selectItems value="#{ordersController.getSuitableTrucks(order)}" var="truck" itemLabel="#{truck.regNumber}" itemValue="#{truck}">
+                               </f:selectItems>
+                           </p:selectOneMenu>
+                           <p:commandButton process="@this" action="#{ordersController.onTruckSubmit(order.assignedTruck)}" onclick="console.log('click!')" icon="pi pi-save" styleClass="ui-button-secondary"  />
+
+                       </p:column>
+                       <p:column headerText="Drivers" style="text-align: center;">
+                           <p:selectOneMenu id="assignDrivers" value="#{order.drivers}" disabled="#{order.assignedTruck == null}">
+                               <f:selectItem itemLabel="Choose Drivers" itemValue="" noSelectionOption="true"/>
+                               <f:selectItems value="#{ordersController.getSuitableDrivers(order)}"/>
+                           </p:selectOneMenu>
+                       </p:column>
+                       <p:column headerText="Save" style="align: center; width:4rem">
+                               <p:commandButton type="button" onclick="console.log('click!')" icon="pi pi-save" styleClass="ui-button-secondary"  />
+                       </p:column>
+
+
+                       <!-- ===================== EDIT FORM ====================== -->
+
+                   </p:dataTable>
+               </h:form>
+               <!-- ===================== DIALOGS ====================== -->
+               <p:confirmDialog message="Are you sure?" header="Deleting truck" severity="alert" widgetVar="confirmdelete">
+                   <p:commandButton process="@this" value="Yes Sure" action="#{fleetController.deleteSelectedTruck()}" oncomplete="PF('confirmdelete').hide()"/>
+                   <p:commandButton value="Not Yet" onclick="PF('confirmdelete').hide();" type="button" />
+               </p:confirmDialog>
+           <!-- =========================================== -->
+
+       </p:panel>
 
    </ui:define>
 </ui:composition>

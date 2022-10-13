@@ -34,4 +34,8 @@ public class  Driver {
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
+    @Override
+    public String toString() {
+        return "ID:" + id + "  " + name + " " + surname;
+    }
 }

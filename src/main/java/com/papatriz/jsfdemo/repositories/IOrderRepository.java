@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface IOrderRepository extends JpaRepository<Order, Integer> {
-@Query("select o from Order o where o.assignedTruck is null")
+@Query("from Order as ord where ord.assignedTruck is not null ")
 List<Order> getPendingOrders();
 
     @Query(value = "select *  from orders o where not exists( select * from truck where truck.order_id = o.id )", nativeQuery = true)
