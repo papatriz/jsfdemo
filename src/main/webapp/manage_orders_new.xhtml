@@ -71,8 +71,8 @@
                        </p:column>
                        <p:column headerText="Truck" style="width:15rem">
 
-                           <p:selectOneMenu id="assignTruck" value="#{order.assignedTruck}" style="width:11rem" converter="truckConverter">
-                               <p:ajax event="itemSelect" process="@this" listener="#{ordersController.onTruckSelect}"/>
+                           <p:selectOneMenu id="assignTruck" value="#{order.assignedTruck}" style="width:11rem" converter="#{truckConverter}">
+                               <p:ajax event="itemSelect" process="@this" listener="#{ordersController.onTruckSelect(order.assignedTruck)}"/>
                                <f:selectItem itemLabel="Choose truck" itemValue="" noSelectionOption="true"/>
                                <f:selectItems value="#{ordersController.getSuitableTrucks(order)}" var="truck" itemLabel="#{truck.regNumber}" itemValue="#{truck}">
                                </f:selectItems>

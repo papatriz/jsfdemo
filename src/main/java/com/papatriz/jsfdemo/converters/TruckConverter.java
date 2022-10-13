@@ -2,30 +2,34 @@ package com.papatriz.jsfdemo.converters;
 
 import com.papatriz.jsfdemo.models.Truck;
 import com.papatriz.jsfdemo.services.ITruckService;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
-@Data
-@FacesConverter(value = "truckConverter")
-public class TruckConverter implements Converter {
-    /* private final ITruckService service;
+import javax.inject.Named;
 
+@Named
+@RequestScoped
+public class TruckConverter implements Converter {
+
+    @Named("truckService")
     @Inject
-    public TruckConverter(ITruckService service) {
+    private final ITruckService service;
+
+    public TruckConverter(@Qualifier("truckService") ITruckService service) {
         this.service = service;
     }
-*/
+
+
     @Override
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String s) throws ConverterException {
-        return new Truck("XX66666");// service.getTruckById(s);
+        System.out.println("UIComp: "+uiComponent.getId()+"  Converter string value: "+s);
+        if (s.isEmpty()||s==null) return  null;
+        return  service.getTruckById(s).orElse(null);
     }
 
     @Override

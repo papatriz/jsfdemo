@@ -6,6 +6,7 @@ import com.papatriz.jsfdemo.services.ITruckService;
 import lombok.Data;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.el.ELBeanName;
+import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -46,11 +47,8 @@ public class ManageOrdersControllerNew {
         return cachedTrucks;
     }
 
-    public void listener(AjaxBehaviorEvent event)  {
-        System.out.println(event.getComponent().getClass().getName());
-    }
-    public void onTruckSelect() {
-        showError("Truck changed  ");
+    public void onTruckSelect(Truck event) {
+        showError("Truck changed, "+event.toString());
     }
 
     public void onTruckSubmit(String s) {

@@ -72,7 +72,9 @@ public class Truck {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Truck truck = (Truck) o;
-        return driversNum == truck.driversNum && capacity == truck.capacity && isBroken == truck.isBroken && Objects.equals(regNumber, truck.regNumber) && currentCity == truck.currentCity;
+        boolean result = driversNum == truck.driversNum && capacity == truck.capacity && isBroken == truck.isBroken && Objects.equals(regNumber, truck.regNumber) && currentCity == truck.currentCity;
+        System.out.println("EQUAL Truck method: "+result);
+        return result;
     }
 
     @Override
