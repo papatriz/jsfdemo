@@ -1,13 +1,13 @@
 package com.papatriz.jsfdemo.controllers;
 
 import com.papatriz.jsfdemo.models.*;
+import com.papatriz.jsfdemo.services.IDriverService;
 import com.papatriz.jsfdemo.services.IOrderService;
 import com.papatriz.jsfdemo.services.ITruckService;
 import lombok.Data;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.el.ELBeanName;
-import org.primefaces.event.ItemSelectEvent;
-import org.primefaces.event.SelectEvent;
+import org.primefaces.PrimeFaces;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -15,8 +15,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.event.ValueChangeEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -32,13 +30,15 @@ public class ManageOrdersControllerNew {
 
     private final IOrderService orderService;
     private final ITruckService truckService;
+    private final IDriverService driverService;
     @Autowired
-    public ManageOrdersControllerNew(IOrderService orderService, ITruckService truckService) {
+    public ManageOrdersControllerNew(IOrderService orderService, ITruckService truckService, IDriverService driverService) {
         this.orderService = orderService;
         this.truckService = truckService;
+        this.driverService = driverService;
     }
 
-    private Order newOrder = new Order();
+    private Order newOrder;
     private List<Truck> cachedTrucks;
     private List<Order> cachedPendingOrders;
     private List<CargoCycle> cargoCycles;
@@ -57,7 +57,7 @@ public class ManageOrdersControllerNew {
     }
 
     public List<Driver> getSuitableDrivers(Order order) {
-        return null;
+        return driverService.getAllDrivers();
     }
 
     class CityBasedComparator implements Comparator<Node> {
@@ -74,12 +74,24 @@ public class ManageOrdersControllerNew {
 
     @PostConstruct
     private void init() {
+
+        loadData();
+        initNewOrder();
+    }
+
+    private void loadData() {
+        cachedTrucks = truckService.getAllTrucks();
+        cachedPendingOrders = orderService.getAllOrders();
+        for (Order o:cachedPendingOrders) {
+            o.setMaxWeight(getOrderTotalWeight(o));
+        }
+    }
+
+    private void initNewOrder() {
+        newOrder = new Order();
         cargoCycles = new ArrayList<>();
         CargoCycle currentCargoCycle = new CargoCycle();
         cargoCycles.add(currentCargoCycle);
-        cachedTrucks = truckService.getAllTrucks();
-        cachedPendingOrders = orderService.getAllOrders();
-
     }
 
     public void addOrder() {
@@ -93,7 +105,9 @@ public class ManageOrdersControllerNew {
                 cc.setHasCitiesError(true);
                 hasError = true;
             }
-
+            cc.getLoadNode().setOrder(newOrder);
+            cc.getUnloadNode().setOrder(newOrder);
+            cc.getCargo().setStatus(ECargoStatus.PREPARED);
             orderNodes.add(cc.getLoadNode());
             orderNodes.add(cc.getUnloadNode());
         }
@@ -106,11 +120,19 @@ public class ManageOrdersControllerNew {
         // check for max weight
         Collections.sort(orderNodes, new CityBasedComparator());
         newOrder.setNodes(orderNodes);
+        newOrder.setMaxWeight(getOrderTotalWeight(newOrder));
 
-        if (getOrderTotalWeight(newOrder) > getTruckMaxCapacity()) {
+        if (newOrder.getMaxWeight() > getTruckMaxCapacity()) {
             showError("Maximum load ("+getOrderTotalWeight(newOrder)+" kg) exceed truck max payload ("+getTruckMaxCapacity()+" kg)");
             return;
         };
+
+        orderService.saveOrder(newOrder);
+        initNewOrder();
+        loadData();
+      //  PrimeFaces.current().ajax().update("");
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New order added", ""));
+
     }
 
     public void addCargo() {

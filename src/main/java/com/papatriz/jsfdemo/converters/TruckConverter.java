@@ -9,6 +9,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
+import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -24,11 +25,9 @@ public class TruckConverter implements Converter {
         this.service = service;
     }
 
-
     @Override
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String s) throws ConverterException {
-        System.out.println("UIComp: "+uiComponent.getId()+"  Converter string value: "+s);
-        if (s.isEmpty()||s==null) return  null;
+        if (s==null || s.isEmpty()) return  null;
         return  service.getTruckById(s).orElse(null);
     }
 

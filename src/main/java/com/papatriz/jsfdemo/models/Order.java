@@ -33,6 +33,9 @@ public class Order {
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Driver> drivers;
 
+    @Transient
+    private int maxWeight;
+
     @Override
     public String toString() {
         return "Order{" +

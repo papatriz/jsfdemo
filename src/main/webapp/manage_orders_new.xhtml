@@ -12,7 +12,7 @@
 <ui:composition template="layout_manager.xhtml">
    <!-- ====================== CONTENT ================================ -->
    <ui:define name="content">
-      <p:panel header="Add new order" style="width: 80%; margin: auto;" toggleable="true" collapsed="false" toggleableHeader="true" toggleSpeed="200">
+      <p:panel header="Add new order" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true" toggleSpeed="200">
          <h:form id="addOrderFormNew">
          <p:dataTable id="addOrderDatatable" value="#{ordersController.cargoCycles}" var="cs" reflow="true"
                       showGridlines="true">
@@ -48,7 +48,7 @@
                 <p:toolbar >
                     <p:toolbarGroup align="right">
                         <p:commandButton value="Add cargo" styleClass="ui-button-secondary" icon="pi pi-plus" update="@form"  action="#{ordersController.addCargo}" style="margin-right: .5em" />
-                        <p:commandButton value="Add order" styleClass="ui-button-secondary" icon="pi pi-check" process="addOrderFormNew" action="#{ordersController.addOrder}" update="@form" style="margin-right: .5em"/>
+                        <p:commandButton value="Add order" styleClass="ui-button-secondary" icon="pi pi-check" process="addOrderFormNew" action="#{ordersController.addOrder}" update="@form,pendingOrdersForm" style="margin-right: .5em"/>
                     </p:toolbarGroup>
                 </p:toolbar>
             </f:facet>
@@ -66,25 +66,22 @@
                        <p:column id="orderId" filterMatchMode="contains" headerText="Order ID" style="width: 6rem;text-align: center;" >
                            <p:outputLabel value="#{order.id}"/>
                        </p:column>
-                       <p:column headerText="Max weight" style="width: 9rem;text-align: center;">
-                           <p:outputLabel value="#{ordersController.getOrderTotalWeight(order)}"/>
+                       <p:column sortBy="#{order.maxWeight}" sortable="true" headerText="Max weight" style="width: 9rem;text-align: center;">
+                           <p:outputLabel value="#{order.maxWeight}"/>
                        </p:column>
-                       <p:column headerText="Truck" style="width:15rem">
-
+                       <p:column headerText="Truck" style="text-align: center;width:15rem">
                            <p:selectOneMenu id="assignTruck" value="#{order.assignedTruck}" style="width:11rem" converter="#{truckConverter}">
-                               <p:ajax event="itemSelect" process="@this" listener="#{ordersController.onTruckSelect(order.assignedTruck)}"/>
+                               <p:ajax event="itemSelect" update="assignDrivers" process="@this" listener="#{ordersController.onTruckSelect(order.assignedTruck)}"/>
                                <f:selectItem itemLabel="Choose truck" itemValue="" noSelectionOption="true"/>
                                <f:selectItems value="#{ordersController.getSuitableTrucks(order)}" var="truck" itemLabel="#{truck.regNumber}" itemValue="#{truck}">
                                </f:selectItems>
                            </p:selectOneMenu>
-                           <p:commandButton process="@this" action="#{ordersController.onTruckSubmit(order.assignedTruck)}" onclick="console.log('click!')" icon="pi pi-save" styleClass="ui-button-secondary"  />
-
                        </p:column>
                        <p:column headerText="Drivers" style="text-align: center;">
-                           <p:selectOneMenu id="assignDrivers" value="#{order.drivers}" disabled="#{order.assignedTruck == null}">
-                               <f:selectItem itemLabel="Choose Drivers" itemValue="" noSelectionOption="true"/>
+                           <p:selectCheckboxMenu id="assignDrivers" value="#{order.drivers}" disabled="#{order.assignedTruck == null}"
+                                                 showHeader="false" multiple="true" emptyLabel="Choose Drivers.." label="Drivers" style="width: 15rem" panelStyle="width: 15rem" updateLabel="true" dynamic="true">
                                <f:selectItems value="#{ordersController.getSuitableDrivers(order)}"/>
-                           </p:selectOneMenu>
+                           </p:selectCheckboxMenu>
                        </p:column>
                        <p:column headerText="Save" style="align: center; width:4rem">
                                <p:commandButton type="button" onclick="console.log('click!')" icon="pi pi-save" styleClass="ui-button-secondary"  />
