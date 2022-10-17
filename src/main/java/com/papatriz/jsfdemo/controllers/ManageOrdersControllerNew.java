@@ -1,20 +1,28 @@
 package com.papatriz.jsfdemo.controllers;
 
+import com.papatriz.jsfdemo.events.TruckTableChangedEvent;
 import com.papatriz.jsfdemo.models.*;
 import com.papatriz.jsfdemo.services.IDriverService;
 import com.papatriz.jsfdemo.services.IOrderService;
 import com.papatriz.jsfdemo.services.ITruckService;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.el.ELBeanName;
 import org.primefaces.PrimeFaces;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.persistence.PostPersist;
+import javax.persistence.PostRemove;
+import javax.persistence.PostUpdate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,9 +36,9 @@ import java.util.stream.Collectors;
 @Data
 public class ManageOrdersControllerNew {
 
-    private final IOrderService orderService;
-    private final ITruckService truckService;
-    private final IDriverService driverService;
+    private  final IOrderService orderService;
+    private  final ITruckService truckService;
+    private  final IDriverService driverService;
     @Autowired
     public ManageOrdersControllerNew(IOrderService orderService, ITruckService truckService, IDriverService driverService) {
         this.orderService = orderService;
@@ -42,23 +50,9 @@ public class ManageOrdersControllerNew {
     private List<Truck> cachedTrucks;
     private List<Order> cachedPendingOrders;
     private List<CargoCycle> cargoCycles;
+    private boolean needUpdate;
 
-    public List<Truck> getSuitableTrucks(Order order) {
-        return cachedTrucks;
-    }
-
-    public void onTruckSelect(Truck event) {
-        showError("Truck changed, "+event.toString());
-    }
-
-    public void onTruckSubmit(String s) {
-        showError("Truck submitted: "+s);
-
-    }
-
-    public List<Driver> getSuitableDrivers(Order order) {
-        return driverService.getAllDrivers();
-    }
+    private Logger logger = LoggerFactory.getLogger(ManageOrdersControllerNew.class);
 
     class CityBasedComparator implements Comparator<Node> {
         @Override
@@ -79,6 +73,13 @@ public class ManageOrdersControllerNew {
         initNewOrder();
     }
 
+    @EventListener
+    public void afterFleetChanged(TruckTableChangedEvent event) {
+        logger.info("onTruckTableChanged: "+event.getMessage());
+        logger.info(Thread.currentThread().getName());
+        needUpdate = true;
+    }
+
     private void loadData() {
         cachedTrucks = truckService.getAllTrucks();
         cachedPendingOrders = orderService.getAllOrders();
@@ -92,6 +93,28 @@ public class ManageOrdersControllerNew {
         cargoCycles = new ArrayList<>();
         CargoCycle currentCargoCycle = new CargoCycle();
         cargoCycles.add(currentCargoCycle);
+    }
+
+    public List<Truck> getSuitableTrucks(Order order) {
+
+        logger.info(Thread.currentThread().getName());
+
+        if (needUpdate) {
+            cachedTrucks = truckService.getAllTrucks();
+            needUpdate = false;
+            logger.info("Cached trucks refreshed");
+        }
+        int maxWeight = order.getMaxWeight();
+        List<Truck> suitableTrucks = cachedTrucks.stream().filter(truck -> truck.isAvailable() && (truck.getCapacity() >= maxWeight)).collect(Collectors.toList());
+        return suitableTrucks;
+    }
+
+    public void onTruckSelect(Truck event) {
+        showError("Truck changed, "+event.toString());
+    }
+
+    public List<Driver> getSuitableDrivers(Order order) {
+        return driverService.getAllDrivers();
     }
 
     public void addOrder() {

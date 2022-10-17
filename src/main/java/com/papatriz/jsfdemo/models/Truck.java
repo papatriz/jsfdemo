@@ -1,5 +1,6 @@
 package com.papatriz.jsfdemo.models;
 
+import com.papatriz.jsfdemo.controllers.ManageOrdersControllerNew;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +12,8 @@ import java.util.Set;
 
 @Data
 @Entity
+
 public class Truck {
-    //      private static final Logger logger = LoggerFactory.getLogger(Truck.class);
 
     @Id
     @Column(name = "regnum")

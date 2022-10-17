@@ -45,7 +45,6 @@ public class ManageFleetController {
     @IgnorePostback
    // @PostConstruct
     public void loadData(){
-        System.out.println(("Fleet loadData executed"));
 
         fleet = truckService.getAllTrucks();
     }
