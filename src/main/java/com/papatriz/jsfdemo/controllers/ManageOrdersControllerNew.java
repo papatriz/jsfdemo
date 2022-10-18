@@ -23,10 +23,7 @@ import javax.faces.context.FacesContext;
 import javax.persistence.PostPersist;
 import javax.persistence.PostRemove;
 import javax.persistence.PostUpdate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Scope(value = "session")
@@ -51,6 +48,7 @@ public class ManageOrdersControllerNew {
     private List<Order> cachedPendingOrders;
     private List<CargoCycle> cargoCycles;
     private boolean needUpdate;
+    private Map<Integer, List<Driver>> testDriversMap = new HashMap<>();
 
     private Logger logger = LoggerFactory.getLogger(ManageOrdersControllerNew.class);
 
@@ -69,6 +67,7 @@ public class ManageOrdersControllerNew {
     @PostConstruct
     private void init() {
 
+      //  orderService.getAllOrders();
         loadData();
         initNewOrder();
     }
@@ -82,9 +81,10 @@ public class ManageOrdersControllerNew {
 
     private void loadData() {
         cachedTrucks = truckService.getAllTrucks();
-        cachedPendingOrders = orderService.getAllOrders();
+        cachedPendingOrders = orderService.getPendingOrders();
         for (Order o:cachedPendingOrders) {
             o.setMaxWeight(getOrderTotalWeight(o));
+            o.setDrivers(Collections.emptyList());
         }
     }
 
@@ -96,8 +96,6 @@ public class ManageOrdersControllerNew {
     }
 
     public List<Truck> getSuitableTrucks(Order order) {
-
-        logger.info(Thread.currentThread().getName());
 
         if (needUpdate) {
             cachedTrucks = truckService.getAllTrucks();
@@ -113,7 +111,15 @@ public class ManageOrdersControllerNew {
         showError("Truck changed, "+event.toString());
     }
 
+    public void onSelectCheckboxChange(Order o) {
+
+        logger.info("On checkbox change: "+o.getDrivers().size());
+        o.getDrivers().stream().forEach(d -> logger.info(" : "+d.toString()));
+        showError("onDriverSelect: drivers num = "+o.getDrivers().size());
+    }
+
     public List<Driver> getSuitableDrivers(Order order) {
+
         return driverService.getAllDrivers();
     }
 
@@ -227,4 +233,6 @@ public class ManageOrdersControllerNew {
         FacesMessage.Severity severity = notError == null? FacesMessage.SEVERITY_INFO : FacesMessage.SEVERITY_ERROR;
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, error, ""));
     }
+
+
 }

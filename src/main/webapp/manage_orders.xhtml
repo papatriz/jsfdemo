@@ -70,8 +70,8 @@
                         <p:column id="orderId" filterMatchMode="contains" headerText="Order ID" style="text-align: center;">
                             <p:outputLabel value="#{order.id}"/>
                         </p:column>
-                        <p:column sortBy="#{manageOrdersController.getOrderMaxWeight(order)}" headerText="Max weight" style="text-align: center;">
-                            <p:outputLabel value="#{manageOrdersController.getOrderMaxWeight(order)}"/>
+                        <p:column headerText="Max weight" style="text-align: center;">
+                            <p:outputLabel value="777"/>
                         </p:column>
                         <p:column headerText="Truck" style="text-align: center; width:5rem">
                             <p:outputLabel value="#{order.assignedTruck == null? 'No truck': order.assignedTruck.regNumber }"/>

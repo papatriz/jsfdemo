@@ -70,21 +70,23 @@
                            <p:outputLabel value="#{order.maxWeight}"/>
                        </p:column>
                        <p:column headerText="Truck" style="text-align: center;width:15rem">
-                           <p:selectOneMenu id="assignTruck" value="#{order.assignedTruck}" style="width:11rem" converter="#{truckConverter}">
+                           <p:selectOneMenu id="assignTruck" value="#{order.assignedTruck}" style="width:14rem" converter="#{truckConverter}">
                                <p:ajax event="itemSelect" update="assignDrivers" process="@this" listener="#{ordersController.onTruckSelect(order.assignedTruck)}"/>
                                <f:selectItem itemLabel="Choose truck" itemValue="" noSelectionOption="true"/>
-                               <f:selectItems value="#{ordersController.getSuitableTrucks(order)}" var="truck" itemLabel="#{truck.regNumber}" itemValue="#{truck}">
+                               <f:selectItems value="#{ordersController.getSuitableTrucks(order)}" var="truck" itemLabel="#{truck.toString()}" itemValue="#{truck}">
                                </f:selectItems>
                            </p:selectOneMenu>
                        </p:column>
                        <p:column headerText="Drivers" style="text-align: center;">
-                           <p:selectCheckboxMenu id="assignDrivers" value="#{order.drivers}" disabled="#{order.assignedTruck == null}"
-                                                 showHeader="false" multiple="true" emptyLabel="Choose Drivers.." label="Drivers" style="width: 15rem" panelStyle="width: 15rem" updateLabel="true" dynamic="true">
-                               <f:selectItems value="#{ordersController.getSuitableDrivers(order)}"/>
+                           <p:selectCheckboxMenu id="assignDrivers" value="#{order.drivers}" converter="#{driverConverter}" disabled="#{order.assignedTruck == null}"
+                                                 showHeader="false" multiple="true" emptyLabel="Choose Drivers.." label="Drivers" style="width: 15rem" panelStyle="width: 15rem" updateLabel="true" dynamic="true"
+                                                >
+                               <p:ajax event="change" process="@this" listener="#{ordersController.onSelectCheckboxChange(order)}"/>
+                               <f:selectItems value="#{ordersController.getSuitableDrivers(order)}" />
                            </p:selectCheckboxMenu>
                        </p:column>
                        <p:column headerText="Save" style="align: center; width:4rem">
-                               <p:commandButton type="button" onclick="console.log('click!')" icon="pi pi-save" styleClass="ui-button-secondary"  />
+                               <p:commandButton process="@this" action="#{ordersController.onSelectCheckboxChange(order)}" onclick="console.log('click!')" icon="pi pi-save" styleClass="ui-button-secondary"  />
                        </p:column>
 
 

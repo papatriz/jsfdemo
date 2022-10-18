@@ -27,12 +27,12 @@ public class OrderService implements IOrderService{
 
     @Override
     public List<Order> getPendingOrders() {
-        /*
+
         List<Order> orders = orderRepository.getPendingOrders2();
         List<Node> nodes = new ArrayList<>();
         orders.stream().forEach(o -> nodes.addAll(o.getNodes()));
-        nodes.stream().forEach(n -> System.out.println(n.getCargo().getWeight())); */
-        return orderRepository.getPendingOrders2();
+        nodes.stream().forEach(n -> n.getCargo().getWeight());
+        return orders;
     }
 
     @Override

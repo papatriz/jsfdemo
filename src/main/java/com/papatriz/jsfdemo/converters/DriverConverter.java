@@ -1,42 +1,49 @@
 package com.papatriz.jsfdemo.converters;
 
-import com.papatriz.jsfdemo.models.Truck;
-import com.papatriz.jsfdemo.services.ITruckService;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.papatriz.jsfdemo.models.Driver;
+import com.papatriz.jsfdemo.services.IDriverService;
 
 import javax.faces.bean.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named
 @RequestScoped
-public class TruckConverter implements Converter {
-
-    @Named("truckService")
+public class DriverConverter implements Converter {
+    @Named(value = "driverService")
     @Inject
-    private final ITruckService service;
+    private final IDriverService driverService;
 
-    public TruckConverter(@Qualifier("truckService") ITruckService service) {
-        this.service = service;
+    public DriverConverter(IDriverService driverService) {
+        this.driverService = driverService;
     }
+
 
     @Override
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String s) throws ConverterException {
         if (s==null || s.isEmpty()) return  null;
-        String rn = s.substring(0, 7);
+        String idStr = s.substring(s.indexOf("id:")+4);
+        int id = Integer.parseInt(idStr);
+        Driver d = null;
+        try {
+         d = driverService.getDriverById(id);
+        }
+        catch (Exception e)
+        {
+            System.out.println("Have got exception "+e.getMessage());
+        }
 
-        return  service.getTruckById(rn).orElse(null);
+        return  d;
     }
 
     @Override
     public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object o) throws ConverterException {
         if ((o == null)||(o.toString().equals("")))  return "";
-        Truck oTruck = (Truck) o;
-        return oTruck.toString();
+        Driver d = (Driver) o;
+        return d.toString();
     }
 }

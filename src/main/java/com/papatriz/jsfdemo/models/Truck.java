@@ -34,7 +34,7 @@ public class Truck {
 
     @Override
     public String toString() {
-        return "R/N " + regNumber;
+        return regNumber+ " : "+driversNum+"dr. : "+capacity+"kg";
     }
 
     @OneToMany(mappedBy = "currentTruck")

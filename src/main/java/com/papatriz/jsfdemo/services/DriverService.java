@@ -32,8 +32,10 @@ public class DriverService implements IDriverService {
     }
 
     @Override
+    @Transactional
     public Driver getDriverById(int id) {
-        return null;
+        Driver d = driverRepository.findById(id).orElse(null);
+        return d;
     }
 
     @Override
@@ -45,9 +47,7 @@ public class DriverService implements IDriverService {
     @Override
     @Transactional
     public void removeDriver(Driver driver) {
-        System.out.println("Before:Delete DRIVER "+driver.getSurname());
         driverRepository.delete(driver);
-        System.out.println("After:Delete DRIVER "+driver.getSurname());
     }
     @Override
     @Transactional
