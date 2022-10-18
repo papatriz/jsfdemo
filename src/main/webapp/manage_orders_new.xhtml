@@ -53,7 +53,6 @@
                 </p:toolbar>
             </f:facet>
          </p:dataTable>
-
          </h:form>
       </p:panel>
       <!-- ===================== PENDING ORDERS LIST ====================== -->
@@ -62,7 +61,6 @@
                    <p:dataTable id="pendingOrdersDT" reflow="true" rowExpandMode="single" rowHover="true"
                                 var="order" value="#{ordersController.cachedPendingOrders}"  rowKey="#{order.id}"
                                 widgetVar="pOrderList">
-
                        <p:column id="orderId" filterMatchMode="contains" headerText="Order ID" style="width: 6rem;text-align: center;" >
                            <p:outputLabel value="#{order.id}"/>
                        </p:column>
@@ -79,8 +77,7 @@
                        </p:column>
                        <p:column headerText="Drivers" style="text-align: center;">
                            <p:selectCheckboxMenu id="assignDrivers" value="#{order.drivers}" converter="#{driverConverter}" disabled="#{order.assignedTruck == null}"
-                                                 showHeader="false" multiple="true" emptyLabel="Choose Drivers.." label="Drivers" style="width: 15rem" panelStyle="width: 15rem" updateLabel="true" dynamic="true"
-                                                 >
+                                                 showHeader="false" multiple="true" emptyLabel="Choose Drivers.." label="Drivers" style="width: 15rem" panelStyle="width: 15rem" updateLabel="true" dynamic="true">
                                <p:ajax event="change" process="@this" listener="#{ordersController.onSelectCheckboxChange(order)}"/>
                                <f:selectItems value="#{ordersController.getSuitableDrivers(order)}" />
                                <f:validator validatorId="driverSelectValidator" />
@@ -88,23 +85,12 @@
                            </p:selectCheckboxMenu>
                        </p:column>
                        <p:column headerText="Save" style="align: center; width:4rem">
-                               <p:commandButton process="@this" update="@form" action="#{ordersController.updateOrder(order)}" onclick="console.log('click!')" icon="pi pi-save" styleClass="ui-button-secondary"  />
+                           <p:commandButton process="@this" update="@form" action="#{ordersController.updateOrder(order)}" onclick="console.log('click!')" icon="pi pi-save" styleClass="ui-button-secondary"  />
                        </p:column>
-
-
-                       <!-- ===================== EDIT FORM ====================== -->
-
                    </p:dataTable>
                </h:form>
                <!-- ===================== DIALOGS ====================== -->
-               <p:confirmDialog message="Are you sure?" header="Deleting truck" severity="alert" widgetVar="confirmdelete">
-                   <p:commandButton process="@this" value="Yes Sure" action="#{fleetController.deleteSelectedTruck()}" oncomplete="PF('confirmdelete').hide()"/>
-                   <p:commandButton value="Not Yet" onclick="PF('confirmdelete').hide();" type="button" />
-               </p:confirmDialog>
-           <!-- =========================================== -->
-
        </p:panel>
-
    </ui:define>
 </ui:composition>
 </html>

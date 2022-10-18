@@ -136,6 +136,7 @@ public class ManageOrdersControllerNew {
         order.getDrivers().stream().forEach(driver -> {driver.setOrder(order); driver.setCurrentTruck(order.getAssignedTruck()); driverService.saveDriver(driver);});
 
         orderService.saveOrder(order);
+        loadData();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Order saved and active now", ""));
 
     }
