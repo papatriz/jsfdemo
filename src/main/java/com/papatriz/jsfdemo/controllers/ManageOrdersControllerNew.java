@@ -107,8 +107,10 @@ public class ManageOrdersControllerNew {
         return suitableTrucks;
     }
 
-    public void onTruckSelect(Truck event) {
-        showError("Truck changed, "+event.toString());
+    public void onTruckSelect(Truck truck) {
+
+
+        showError("Truck changed, "+truck.toString());
     }
 
     public void onSelectCheckboxChange(Order o) {

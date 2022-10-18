@@ -80,13 +80,15 @@
                        <p:column headerText="Drivers" style="text-align: center;">
                            <p:selectCheckboxMenu id="assignDrivers" value="#{order.drivers}" converter="#{driverConverter}" disabled="#{order.assignedTruck == null}"
                                                  showHeader="false" multiple="true" emptyLabel="Choose Drivers.." label="Drivers" style="width: 15rem" panelStyle="width: 15rem" updateLabel="true" dynamic="true"
-                                                >
+                                                 >
                                <p:ajax event="change" process="@this" listener="#{ordersController.onSelectCheckboxChange(order)}"/>
                                <f:selectItems value="#{ordersController.getSuitableDrivers(order)}" />
+                               <f:validator validatorId="driverSelectValidator" />
+                               <f:attribute name="driverNumber" value="#{order.assignedTruck.driversNum.toString()}" />
                            </p:selectCheckboxMenu>
                        </p:column>
                        <p:column headerText="Save" style="align: center; width:4rem">
-                               <p:commandButton process="@this" action="#{ordersController.onSelectCheckboxChange(order)}" onclick="console.log('click!')" icon="pi pi-save" styleClass="ui-button-secondary"  />
+                               <p:commandButton process="@form" update="@this" action="#{ordersController.onSelectCheckboxChange(order)}" onclick="console.log('click!')" icon="pi pi-save" styleClass="ui-button-secondary"  />
                        </p:column>
 
 
