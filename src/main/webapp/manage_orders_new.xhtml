@@ -88,7 +88,7 @@
                            </p:selectCheckboxMenu>
                        </p:column>
                        <p:column headerText="Save" style="align: center; width:4rem">
-                               <p:commandButton process="@form" update="@this" action="#{ordersController.onSelectCheckboxChange(order)}" onclick="console.log('click!')" icon="pi pi-save" styleClass="ui-button-secondary"  />
+                               <p:commandButton process="@this" update="@form" action="#{ordersController.updateOrder(order)}" onclick="console.log('click!')" icon="pi pi-save" styleClass="ui-button-secondary"  />
                        </p:column>
 
 

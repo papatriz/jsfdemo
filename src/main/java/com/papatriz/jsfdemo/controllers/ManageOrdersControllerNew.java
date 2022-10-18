@@ -18,6 +18,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.el.MethodExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.persistence.PostPersist;
@@ -51,6 +52,8 @@ public class ManageOrdersControllerNew {
     private Map<Integer, List<Driver>> testDriversMap = new HashMap<>();
 
     private Logger logger = LoggerFactory.getLogger(ManageOrdersControllerNew.class);
+
+
 
     class CityBasedComparator implements Comparator<Node> {
         @Override
@@ -103,7 +106,8 @@ public class ManageOrdersControllerNew {
             logger.info("Cached trucks refreshed");
         }
         int maxWeight = order.getMaxWeight();
-        List<Truck> suitableTrucks = cachedTrucks.stream().filter(truck -> truck.isAvailable() && (truck.getCapacity() >= maxWeight)).collect(Collectors.toList());
+        List<Truck> suitableTrucks = cachedTrucks.stream().filter(truck -> truck.isAvailable() && (truck.getCapacity() >= maxWeight))
+                                        .collect(Collectors.toList());
         return suitableTrucks;
     }
 
@@ -125,6 +129,16 @@ public class ManageOrdersControllerNew {
         return driverService.getAllDrivers();
     }
 
+    public void updateOrder(Order order) {
+        order.getAssignedTruck().setOrder(order);
+        order.getAssignedTruck().setAssignedDrivers(order.getDrivers());
+        truckService.saveTruck(order.getAssignedTruck());
+        order.getDrivers().stream().forEach(driver -> {driver.setOrder(order); driver.setCurrentTruck(order.getAssignedTruck()); driverService.saveDriver(driver);});
+
+        orderService.saveOrder(order);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Order saved and active now", ""));
+
+    }
     public void addOrder() {
         List<Node> orderNodes = new ArrayList<>();
         cargoCycles.stream().forEach(cargoCycle -> cargoCycle.setHasCitiesError(false));
@@ -161,7 +175,6 @@ public class ManageOrdersControllerNew {
         orderService.saveOrder(newOrder);
         initNewOrder();
         loadData();
-      //  PrimeFaces.current().ajax().update("");
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New order added", ""));
 
     }

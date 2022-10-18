@@ -38,7 +38,7 @@ public class Truck {
     }
 
     @OneToMany(mappedBy = "currentTruck")
-    private Set<Driver> assignedDrivers;
+    private List<Driver> assignedDrivers;
 
     @OneToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
