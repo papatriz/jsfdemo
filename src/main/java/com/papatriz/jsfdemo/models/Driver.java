@@ -45,8 +45,16 @@ public class  Driver {
         int hoursFromLastUpdate = (int) ((currCalendar.getTimeInMillis() - lastCalendar.getTimeInMillis()) / 3600000);
 
         workHours = hoursWorked;
+        if (currMonth > lastUpdateMonth) {
+            workHours = 0;
+            if (status == EDriverStatus.DRIVE) {
+                Calendar startMonth =  new GregorianCalendar();
+                startMonth.set(currCalendar.get(Calendar.YEAR), currMonth, 0,0,0,0);
+                hoursFromLastUpdate = (int) ((currCalendar.getTimeInMillis() - startMonth.getTimeInMillis()) / 3600000);
+            }
+        }
+
         if (status == EDriverStatus.DRIVE) workHours += hoursFromLastUpdate;
-        if (currMonth > lastUpdateMonth) workHours = 0;
 
         return workHours;
     }
