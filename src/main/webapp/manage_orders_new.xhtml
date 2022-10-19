@@ -56,7 +56,7 @@
          </h:form>
       </p:panel>
       <!-- ===================== PENDING ORDERS LIST ====================== -->
-       <p:panel header="View pending orders" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true" toggleSpeed="200">
+       <p:panel header="View pending orders" style="width: 80%; margin: auto;" toggleable="true" collapsed="false" toggleableHeader="true" toggleSpeed="200">
                <h:form id="pendingOrdersForm">
                    <p:dataTable id="pendingOrdersDT" reflow="true" rowExpandMode="single" rowHover="true"
                                 var="order" value="#{ordersController.cachedPendingOrders}"  rowKey="#{order.id}"

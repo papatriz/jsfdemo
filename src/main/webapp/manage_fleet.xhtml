@@ -39,7 +39,7 @@
      </h:form>
     </p:panel>
     <!-- ===================== TRUCK LIST ====================== -->
-    <p:panel header="View trucks list" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true" toggleSpeed="200">
+    <p:panel header="View trucks list" style="width: 80%; margin: auto;" toggleable="true" collapsed="false" toggleableHeader="true" toggleSpeed="200">
         <p:outputPanel id="dataTablePanel">
             <h:form id="editTruckForm">
             <p:dataTable id="truckListID" reflow="true" rowExpandMode="single" rowHover="true"
@@ -70,7 +70,8 @@
                 </p:column>
                 <p:column headerText="Delete" style="text-align: center; width:4rem">
                     <p:commandButton process="@this" icon="pi pi-trash" styleClass="rounded-button ui-button-warning" style="position: relative; left: -3px; bottom:13px"
-                                     action="#{fleetController.setSelectedTruck(truck)}" ajax="true" oncomplete="PF('confirmdelete').show()">
+                                     action="#{fleetController.setSelectedTruck(truck)}" ajax="true" oncomplete="PF('confirmdelete').show()"
+                                    disabled="#{truck.status == 'BUSY'}">
                     </p:commandButton>
                 </p:column>
 

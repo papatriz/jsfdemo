@@ -49,11 +49,7 @@ public class ManageOrdersControllerNew {
     private List<Order> cachedPendingOrders;
     private List<CargoCycle> cargoCycles;
     private boolean needUpdate;
-    private Map<Integer, List<Driver>> testDriversMap = new HashMap<>();
-
     private Logger logger = LoggerFactory.getLogger(ManageOrdersControllerNew.class);
-
-
 
     class CityBasedComparator implements Comparator<Node> {
         @Override
@@ -69,8 +65,6 @@ public class ManageOrdersControllerNew {
 
     @PostConstruct
     private void init() {
-
-      //  orderService.getAllOrders();
         loadData();
         initNewOrder();
     }
@@ -106,22 +100,22 @@ public class ManageOrdersControllerNew {
             logger.info("Cached trucks refreshed");
         }
         int maxWeight = order.getMaxWeight();
-        List<Truck> suitableTrucks = cachedTrucks.stream().filter(truck -> truck.isAvailable() && (truck.getCapacity() >= maxWeight))
-                                        .collect(Collectors.toList());
+        List<Truck> suitableTrucks =
+                cachedTrucks.stream().filter(truck -> truck.isAvailable() && (truck.getCapacity() >= maxWeight))
+                                     .collect(Collectors.toList());
         return suitableTrucks;
     }
 
     public void onTruckSelect(Truck truck) {
 
-
-        showError("Truck changed, "+truck.toString());
+        showError("Truck changed, "+truck.toString(), true);
     }
 
     public void onSelectCheckboxChange(Order o) {
 
         logger.info("On checkbox change: "+o.getDrivers().size());
         o.getDrivers().stream().forEach(d -> logger.info(" : "+d.toString()));
-        showError("onDriverSelect: drivers num = "+o.getDrivers().size());
+        showError("onDriverSelect: drivers num = "+o.getDrivers().size(), true);
     }
 
     public List<Driver> getSuitableDrivers(Order order) {
@@ -133,7 +127,11 @@ public class ManageOrdersControllerNew {
         order.getAssignedTruck().setOrder(order);
         order.getAssignedTruck().setAssignedDrivers(order.getDrivers());
         truckService.saveTruck(order.getAssignedTruck());
-        order.getDrivers().stream().forEach(driver -> {driver.setOrder(order); driver.setCurrentTruck(order.getAssignedTruck()); driverService.saveDriver(driver);});
+        order.getDrivers().stream().forEach(driver ->
+        {
+            driver.setOrder(order); driver.setCurrentTruck(order.getAssignedTruck());
+            driverService.saveDriver(driver);
+        });
 
         orderService.saveOrder(order);
         loadData();
@@ -169,7 +167,7 @@ public class ManageOrdersControllerNew {
         newOrder.setMaxWeight(getOrderTotalWeight(newOrder));
 
         if (newOrder.getMaxWeight() > getTruckMaxCapacity()) {
-            showError("Maximum load ("+getOrderTotalWeight(newOrder)+" kg) exceed truck max payload ("+getTruckMaxCapacity()+" kg)");
+            showError("Maximum load ("+newOrder.getMaxWeight()+" kg) exceed truck max payload ("+getTruckMaxCapacity()+" kg)");
             return;
         };
 
@@ -177,7 +175,6 @@ public class ManageOrdersControllerNew {
         initNewOrder();
         loadData();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New order added", ""));
-
     }
 
     public void addCargo() {
@@ -237,16 +234,13 @@ public class ManageOrdersControllerNew {
                     break;
             }
             if (weight > max) max = weight;
-            System.out.println(" > "+node.getCity()+" :: "+node.getType() +" : "+node.getCargo().getWeight()+"  In truck: "+weight);
-
         }
-        System.out.println("Max weight at moment: "+ max);
         return  max;
     }
 
     private void showError(String error, boolean... notError) {
 
-        FacesMessage.Severity severity = notError == null? FacesMessage.SEVERITY_INFO : FacesMessage.SEVERITY_ERROR;
+        FacesMessage.Severity severity = (notError != null)&&(notError[0])? FacesMessage.SEVERITY_INFO : FacesMessage.SEVERITY_ERROR;
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, error, ""));
     }
 
