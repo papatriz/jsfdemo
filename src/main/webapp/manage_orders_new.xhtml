@@ -89,7 +89,34 @@
                        </p:column>
                    </p:dataTable>
                </h:form>
-               <!-- ===================== DIALOGS ====================== -->
+       </p:panel>
+       <!-- ===================== ACTIVE ORDERS LIST ====================== -->
+       <p:panel header="View active orders" style="width: 80%; margin: auto;" toggleable="true" collapsed="true" toggleableHeader="true" toggleSpeed="200">
+           <h:form id="activeOrdersForm">
+               <p:dataTable id="activeOrdersDT" reflow="true" rowExpandMode="single" rowHover="true"
+                            var="order" value="#{ordersController.cachedActiveOrders}"  rowKey="#{order.id}"
+                            widgetVar="aOrderList">
+                   <p:column id="aOrderId" filterMatchMode="contains" headerText="Order ID" style="width: 6rem;text-align: center;" >
+                       <p:outputLabel value="#{order.id}"/>
+                   </p:column>
+
+                   <p:column headerText="Truck" style="text-align: center;width:11rem">
+                       <p:outputLabel value="#{order.assignedTruck.regNumber}"/>
+                   </p:column>
+                   <p:column headerText="Drivers" style="text-align: center; width: 14rem">
+                       <p:panel>
+                           <p:repeat value="#{order.drivers}" var="driver" varStatus="status">
+                               <p:outputLabel value="#{(status.index+1)}.  #{driver.name} #{driver.surname} #{driver.status}" />
+                               <p:divider rendered="#{status.index != (order.drivers.size()-1)}"/>
+                           </p:repeat>
+                       </p:panel>
+                   </p:column>
+                   <p:column headerText="Status" style="text-align: center; width:11rem">
+                       <p:outputLabel value="#{order.getStatus()}"/>
+                   </p:column>
+               </p:dataTable>
+           </h:form>
+           <!-- ===================== DIALOGS ====================== -->
        </p:panel>
    </ui:define>
 </ui:composition>

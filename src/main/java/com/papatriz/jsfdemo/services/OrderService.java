@@ -37,7 +37,8 @@ public class OrderService implements IOrderService{
 
     @Override
     public List<Order> getActiveOrders() {
-        return null;
+
+        return orderRepository.getActiveOrdersHQL();
     }
 
     @Override

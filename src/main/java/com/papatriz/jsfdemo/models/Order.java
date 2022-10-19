@@ -36,6 +36,14 @@ public class Order {
     @Transient
     private int maxWeight;
 
+    public String getStatus() {
+        if (assignedTruck==null) return "No truck";
+        if (drivers.isEmpty()) return "No drivers";
+        boolean waitDrivers = drivers.stream().anyMatch(d -> d.getStatus() == EDriverStatus.ASSIGNED || d.getStatus() == EDriverStatus.READY);
+        if (waitDrivers) return "Wait for drivers";
+        return "In progress";
+    }
+
     @Override
     public String toString() {
         return "Order{" +

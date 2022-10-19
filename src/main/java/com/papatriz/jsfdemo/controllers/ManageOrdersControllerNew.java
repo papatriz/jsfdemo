@@ -8,7 +8,10 @@ import com.papatriz.jsfdemo.services.ITruckService;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.el.ELBeanName;
+import org.ocpsoft.rewrite.faces.annotation.Deferred;
+import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 import org.primefaces.PrimeFaces;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +50,7 @@ public class ManageOrdersControllerNew {
     private Order newOrder;
     private List<Truck> cachedTrucks;
     private List<Order> cachedPendingOrders;
+    private List<Order> cachedActiveOrders;
     private List<CargoCycle> cargoCycles;
     private boolean needUpdate;
     private Logger logger = LoggerFactory.getLogger(ManageOrdersControllerNew.class);
@@ -82,6 +86,11 @@ public class ManageOrdersControllerNew {
         for (Order o:cachedPendingOrders) {
             o.setMaxWeight(getOrderTotalWeight(o));
             o.setDrivers(Collections.emptyList());
+        }
+        cachedActiveOrders = orderService.getActiveOrders();
+        for (Order o:cachedActiveOrders) {
+        //    o.setMaxWeight(getOrderTotalWeight(o));
+            logger.info("Order ID:"+o.getId()+" Drivers num: "+o.getDrivers().size());
         }
     }
 
@@ -131,6 +140,7 @@ public class ManageOrdersControllerNew {
         {
             driver.setOrder(order);
             driver.setCurrentTruck(order.getAssignedTruck());
+            driver.setStatus(EDriverStatus.ASSIGNED);
             driverService.saveDriver(driver);
         });
 
