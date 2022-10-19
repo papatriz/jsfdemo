@@ -76,6 +76,9 @@
                 <p:column sortBy="#{driver.status}" headerText="Status">
                     <p:outputLabel value="#{driver.status}" style="#{manageDriversController.getColorByStatus(driver.status)}"/>
                 </p:column>
+                <p:column sortBy="#{driver.getWorkingHours()}" headerText="Hours">
+                    <p:outputLabel value="#{driver.getWorkingHours()}"/>
+                </p:column>
                 <p:column headerText="Edit" style="width:5rem" >
                     <p:rowEditor editTitle="Edit Row" cancelTitle="Cancel Edit" saveTitle="Save Row" />
                 </p:column>

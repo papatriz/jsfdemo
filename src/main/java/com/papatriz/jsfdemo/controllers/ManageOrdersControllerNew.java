@@ -120,7 +120,7 @@ public class ManageOrdersControllerNew {
 
     public List<Driver> getSuitableDrivers(Order order) {
 
-        return driverService.getAllDrivers();
+        return driverService.getVacantDrivers();
     }
 
     public void updateOrder(Order order) {
@@ -129,7 +129,8 @@ public class ManageOrdersControllerNew {
         truckService.saveTruck(order.getAssignedTruck());
         order.getDrivers().stream().forEach(driver ->
         {
-            driver.setOrder(order); driver.setCurrentTruck(order.getAssignedTruck());
+            driver.setOrder(order);
+            driver.setCurrentTruck(order.getAssignedTruck());
             driverService.saveDriver(driver);
         });
 
@@ -243,6 +244,5 @@ public class ManageOrdersControllerNew {
         FacesMessage.Severity severity = (notError != null)&&(notError[0])? FacesMessage.SEVERITY_INFO : FacesMessage.SEVERITY_ERROR;
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, error, ""));
     }
-
 
 }

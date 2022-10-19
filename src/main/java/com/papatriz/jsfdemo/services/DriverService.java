@@ -1,6 +1,7 @@
 package com.papatriz.jsfdemo.services;
 
 import com.papatriz.jsfdemo.models.Driver;
+import com.papatriz.jsfdemo.models.EDriverStatus;
 import com.papatriz.jsfdemo.repositories.IDriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,11 @@ public class DriverService implements IDriverService {
     @Override
     public List<Driver> getAllDrivers() {
         return driverRepository.findAll();
+    }
+
+    @Override
+    public List<Driver> getVacantDrivers() {
+        return driverRepository.findByStatus(EDriverStatus.READY);
     }
 
     @Override
@@ -52,12 +58,10 @@ public class DriverService implements IDriverService {
     @Override
     @Transactional
     public void removeDriverById(int id) {
-       // driverRepository.deleteById(id);
-        System.out.println("Before: Trying to delete driver with id="+id);
-
         driverRepository.deleteCustom(id);
-        System.out.println("After: Trying to delete driver with id="+id);
     }
+
+
 
     @Override
     public void updateDriver(Driver driver) {

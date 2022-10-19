@@ -1,5 +1,5 @@
 package com.papatriz.jsfdemo.models;
 
 public enum EDriverStatus {
-    REST, ASSIGNED, READY
+    READY, ASSIGNED, DRIVE, REST
 }
