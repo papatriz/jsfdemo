@@ -2,6 +2,7 @@ package com.papatriz.jsfdemo.models;
 
 
 import lombok.Data;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -34,16 +35,4 @@ public class Cargo {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Cargo cargo = (Cargo) o;
-        return id == cargo.id && weight == cargo.weight && name.equals(cargo.name) && status == cargo.status;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, weight, status);
-    }
 }

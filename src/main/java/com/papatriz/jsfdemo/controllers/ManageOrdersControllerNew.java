@@ -128,8 +128,12 @@ public class ManageOrdersControllerNew {
     }
 
     public List<Driver> getSuitableDrivers(Order order) {
+        // toDO: implement ICountry and use it for time estimation
+        int estimatedOrderTime = 8;
 
-        return driverService.getVacantDrivers();
+        return driverService.getVacantDrivers().stream()
+                .filter(driver -> driver.getWorkingHours() < (driverService.getMaxWorkHours() - estimatedOrderTime))
+                .collect(Collectors.toList());
     }
 
     public void updateOrder(Order order) {

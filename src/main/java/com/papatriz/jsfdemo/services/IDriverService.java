@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface IDriverService {
+    int getMaxWorkHours();
     List<Driver> getAllDrivers();
     List<Driver> getVacantDrivers();
     Page<Driver> getDriversPageable(int page, int size, boolean sorted);

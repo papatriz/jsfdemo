@@ -15,11 +15,17 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class DriverService implements IDriverService {
 
+    private final int MAX_WORK_HOURS = 176;
     private final IDriverRepository driverRepository;
 
     @Autowired
     public DriverService(IDriverRepository driverRepository) {
         this.driverRepository = driverRepository;
+    }
+
+    @Override
+    public int getMaxWorkHours() {
+        return MAX_WORK_HOURS;
     }
 
     @Override
