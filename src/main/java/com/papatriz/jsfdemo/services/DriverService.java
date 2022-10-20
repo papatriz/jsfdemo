@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -36,6 +38,11 @@ public class DriverService implements IDriverService {
     @Override
     public List<Driver> getVacantDrivers() {
         return driverRepository.findByStatus(EDriverStatus.READY);
+    }
+
+    @Override
+    public Optional<Driver> getByUserId(UUID uuid) {
+        return driverRepository.findDriverByUserId(uuid);
     }
 
     @Override

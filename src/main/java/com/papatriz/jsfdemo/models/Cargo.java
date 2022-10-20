@@ -2,10 +2,7 @@ package com.papatriz.jsfdemo.models;
 
 
 import lombok.Data;
-import org.hibernate.Hibernate;
-
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Data

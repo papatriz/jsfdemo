@@ -2,8 +2,9 @@ package com.papatriz.jsfdemo.controllers;
 
 import com.papatriz.jsfdemo.models.Driver;
 import com.papatriz.jsfdemo.models.EDriverStatus;
-import com.papatriz.jsfdemo.models.ETruckStatus;
+import com.papatriz.jsfdemo.models.User;
 import com.papatriz.jsfdemo.services.IDriverService;
+import com.papatriz.jsfdemo.services.UserService;
 import lombok.Data;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.RequestAction;
@@ -29,11 +30,13 @@ import java.util.Map;
 @Join(path = "/manage_drivers", to = "/manage_drivers.xhtml")
 public class ManageDriversController {
 
-    private IDriverService driverService;
+    private final IDriverService driverService;
+    private final UserService userService;
 
     @Autowired
-    public ManageDriversController(IDriverService driverService) {
+    public ManageDriversController(IDriverService driverService, UserService userService) {
         this.driverService = driverService;
+        this.userService = userService;
     }
 
     private Driver driver = new Driver();
@@ -56,6 +59,12 @@ public class ManageDriversController {
 
     public void addDriver() {
 
+        String username = driver.getName().toLowerCase()+"."+driver.getSurname().toLowerCase();
+        String initPass = "pass";
+        User userForDriver = new User(username,initPass, driver.getEmail(), "ROLE_DRIVER");
+        userService.saveUser(userForDriver);
+
+        driver.setUserId(userForDriver.getId());
         driver.setStatus(EDriverStatus.READY);
         driverService.saveDriver(driver);
 
@@ -65,7 +74,7 @@ public class ManageDriversController {
         PrimeFaces.current().ajax().update("driverListPanel");
         PrimeFaces.current().ajax().update("addDriverForm");
 
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New driver added", "New driver added"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New driver added, created user with username "+username+" and default password", "New driver added"));
     }
 
     private void updateDriver(Driver driver) {

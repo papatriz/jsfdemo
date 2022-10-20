@@ -58,7 +58,8 @@ public class TruckService implements ITruckService{
 
     @Override
     public int getMaxCapacity() {
-        return truckRepository.getMaxCapacity();
+        int max = truckRepository.getMaxCapacity().orElse(0);
+        return max;
     }
 
 }

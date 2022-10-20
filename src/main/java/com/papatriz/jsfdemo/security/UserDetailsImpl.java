@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
 
 public class UserDetailsImpl implements UserDetails {
 
@@ -36,6 +37,8 @@ public class UserDetailsImpl implements UserDetails {
     public boolean hasRole(String role) { return this.user.hasRole(role); }
 
     public String getRole() { return this.user.getRole(); }
+
+    public UUID getId() { return this.user.getId(); }
 
 
     @Override

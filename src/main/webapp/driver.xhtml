@@ -28,7 +28,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 
 <h:body>
     <p:panelGrid columns="1" layout="flex" styleClass="center">
-    <p:outputLabel value="Hello, Driver!"/>
+    <p:outputLabel value="Hello, #{driverController.driver.name} #{driverController.driver.surname}!"/>
     <p:button href="/logout" value="LOG OUT" />
     </p:panelGrid>
 </h:body>

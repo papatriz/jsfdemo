@@ -1,12 +1,10 @@
 package com.papatriz.jsfdemo.models;
 
 import lombok.Data;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Objects;
+import java.util.*;
 
 @Data
 @Entity
@@ -32,6 +30,13 @@ public class  Driver {
     @Column(name = "updated")
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date statusUpdateTime;
+
+    @Column(name = "userid")
+    @Type(type="org.hibernate.type.UUIDCharType")
+    private UUID userId;
+
+    @Transient
+    private String email;
 
     public int getWorkingHours() {
         int workHours = 0;

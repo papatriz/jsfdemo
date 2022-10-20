@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface IDriverRepository extends JpaRepository<Driver, Integer> {
@@ -16,4 +18,5 @@ public interface IDriverRepository extends JpaRepository<Driver, Integer> {
     void deleteCustom(int entityId);
 
     List<Driver> findByStatus(EDriverStatus status);
+    Optional<Driver> findDriverByUserId(UUID uuid);
 }

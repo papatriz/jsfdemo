@@ -28,6 +28,16 @@
                     <f:selectItems value="#{citiesController.cities}" var="tmp_city"
                                    itemLabel="#{tmp_city}" itemValue="#{tmp_city}"/>
                 </p:selectOneMenu>
+                  <p:outputLabel for="email" value="Email:" />
+                  <p:inputText id="email" value="#{manageDriversController.driver.email}"
+                               required="true"
+                               requiredMessage="Please, enter email."
+                               validatorMessage="Invalid email format">
+                      <f:validateRegex
+                              pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                  </p:inputText>
+                  <p:outputLabel value=" " />
+                  <p:outputLabel value=" " />
                   <p:outputLabel value=" " />
                   <p:commandButton process="addDriverForm" value="Add driver" action="#{manageDriversController.addDriver()}" update="@form"/>
               </p:panelGrid>
@@ -84,7 +94,8 @@
                 </p:column>
                 <p:column headerText="Delete" style="width:4rem">
                     <p:commandButton process="@this" icon="pi pi-trash" styleClass="rounded-button ui-button-warning"
-                                     action="#{manageDriversController.setSelectedDriver(driver)}" ajax="true" oncomplete="PF('confirmDelDriver').show()">
+                                     action="#{manageDriversController.setSelectedDriver(driver)}" ajax="true" oncomplete="PF('confirmDelDriver').show()"
+                    disabled="#{driver.order != null}">
                     </p:commandButton>
                 </p:column>
             </p:dataTable>
