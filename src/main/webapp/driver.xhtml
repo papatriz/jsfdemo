@@ -27,10 +27,79 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 </h:head>
 
 <h:body>
-    <p:panelGrid columns="1" layout="flex" styleClass="center">
-    <p:outputLabel value="Hello, #{driverController.driver.name} #{driverController.driver.surname}!"/>
-    <p:button href="/logout" value="LOG OUT" />
-    </p:panelGrid>
+    <!-- ===================== TOOLBAR ====================== -->
+    <p:toolbar style="width: 80%; margin: auto;">
+        <p:toolbarGroup>
+           <p:outputLabel value="#{driverController.driver.name} #{driverController.driver.surname} , ID: #{driverController.driver.id}"
+                          style="font-weight:bold"/>
+            <p:divider layout="vertical"/>
+            <p:outputLabel value="Your status: #{driverController.driver.status}" style="font-weight:bold"/>
+        </p:toolbarGroup>
+        <p:toolbarGroup>
+            <p:button id="account" style="margin-right: .5em" value="Account" icon="pi pi-id-card" disabled="false" styleClass="ui-button-secondary" />
+
+            <p:button href="/logout" value="Log out" icon="pi pi-sign-out" styleClass="ui-button-outlined  ui-button-secondary" />
+        </p:toolbarGroup>
+    </p:toolbar>
+    <!-- ===================== MESSAGES OUTPUT ====================== -->
+    <p:growl id="messages" showDetail="false" closable="true"  style="width: 80%; margin: auto;">
+        <p:autoUpdate/>
+    </p:growl>
+    <!-- ===================== THERE IS ORDER PART ====================== -->
+    <p:panel header="Your order" style="width: 80%; margin: auto;" toggleable="false" collapsed="false" toggleableHeader="true" toggleSpeed="200">
+    <p:panelGrid style="width: 100%; margin: auto;" rendered="#{driverController.driver.order != null}">
+        <f:facet name="header">
+            <p:row>
+                <p:column>Order ID</p:column>
+                <p:column>Truck</p:column>
+                <p:column>Waypoints</p:column>
+                <p:column>Co-drivers</p:column>
+            </p:row>
+        </f:facet>
+        <p:row>
+        <p:column style="text-align: center">
+            <p:outputLabel value="#{driverController.driver.order.id}"/>
+        </p:column>
+        <p:column headerText="Truck" style="text-align: center">
+            <p:outputLabel value="#{driverController.driver.currentTruck.regNumber}"/>
+        </p:column>
+        <p:column headerText="Waypoints" style="text-align: center">
+            <p:commandButton id="waypoints" value="Show.." type="button" style="width: 9rem" styleClass="ui-button-outlined ui-button-secondary"/>
+            <p:overlayPanel for="waypoints" style="text-align: left">
+                <p:repeat value="#{driverController.driver.order.nodes}" var="node" varStatus="status">
+                    <p:outputLabel value="#{(status.index+1)}.  #{node.city}: #{node.cargo.name} (#{node.cargo.weight}kg) - #{node.type}" />
+                    <p:divider rendered="#{status.index != (driverController.driver.order.nodes.size()-1)}"/>
+                </p:repeat>
+            </p:overlayPanel>
+        </p:column>
+        <p:column headerText="Co-drivers" style="text-align: center">
+            <p:commandButton id="codrivers" value="Show.." type="button" style="width: 9rem" styleClass="ui-button-outlined ui-button-secondary"
+            disabled="#{driverController.driver.order.drivers.size() == 1}"/>
+            <p:overlayPanel for="codrivers" style="width:350px">
+                <p:repeat value="#{driverController.getCoDrivers()}" var="codriver" varStatus="status">
+                    <p:outputLabel value="#{(status.index+1)}.  #{codriver.name} #{codriver.surname} (#{codriver.status})" />
+                    <p:divider rendered="#{status.index != (driverController.driver.order.drivers.size()-2)}"/>
+                </p:repeat>
+            </p:overlayPanel>
+        </p:column>
+        </p:row>
+        <p:row>
+            <p:column colspan="3">
+                <p:outputLabel value="Order status:  "/>
+               <p:outputLabel value="#{driverController.driver.order.getStatus()}" style="font-weight:bold"/>
+            </p:column>
+
+            <p:column style="text-align: center">
+                <p:commandButton value="Confirm" styleClass="ui-button-secondary" icon="pi pi-check" action="#{ordersController.addCargo}" style="width: 9rem;" />
+            </p:column>
+        </p:row>
+        </p:panelGrid>
+        <!-- ===================== NO ORDER PART ====================== -->
+        <p:outputLabel value="No assigned or active orders at the moment." style="font-size: large"
+                        rendered="#{driverController.driver.order == null}"/>
+        <!-- ===================== ============= ====================== -->
+
+    </p:panel>
 </h:body>
 
 </html>

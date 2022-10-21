@@ -40,7 +40,8 @@ public class Order {
         if (assignedTruck==null) return "No truck";
         if (drivers.isEmpty()) return "No drivers";
         boolean waitDrivers = drivers.stream().anyMatch(d -> d.getStatus() == EDriverStatus.ASSIGNED || d.getStatus() == EDriverStatus.READY);
-        if (waitDrivers) return "Wait for drivers";
+        if (waitDrivers) return "Waiting for drivers";
+        if (isComplete) return "Completed";
         return "In progress";
     }
 

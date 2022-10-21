@@ -85,7 +85,7 @@
                            </p:selectCheckboxMenu>
                        </p:column>
                        <p:column headerText="Save" style="align: center; width:4rem">
-                           <p:commandButton process="@this" update="@form" action="#{ordersController.updateOrder(order)}" onclick="console.log('click!')" icon="pi pi-save" styleClass="ui-button-secondary"  />
+                           <p:commandButton process="@this" update="@form,activeOrdersForm" action="#{ordersController.updateOrder(order)}" onclick="console.log('click!')" icon="pi pi-save" styleClass="ui-button-secondary"  />
                        </p:column>
                    </p:dataTable>
                </h:form>
@@ -106,7 +106,7 @@
                    <p:column headerText="Drivers" style="text-align: center; width: 14rem">
                        <p:panel>
                            <p:repeat value="#{order.drivers}" var="driver" varStatus="status">
-                               <p:outputLabel value="#{(status.index+1)}.  #{driver.name} #{driver.surname} #{driver.status}" />
+                               <p:outputLabel value="#{(status.index+1)}.  #{driver.name} #{driver.surname} (#{driver.status})" />
                                <p:divider rendered="#{status.index != (order.drivers.size()-1)}"/>
                            </p:repeat>
                        </p:panel>

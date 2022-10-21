@@ -1,8 +1,11 @@
 package com.papatriz.jsfdemo.services;
 
+import com.papatriz.jsfdemo.controllers.DriverController;
 import com.papatriz.jsfdemo.models.Driver;
 import com.papatriz.jsfdemo.models.EDriverStatus;
 import com.papatriz.jsfdemo.repositories.IDriverRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ import java.util.UUID;
 public class DriverService implements IDriverService {
 
     private final int MAX_WORK_HOURS = 176;
+    private Logger logger = LoggerFactory.getLogger(DriverService.class);
     private final IDriverRepository driverRepository;
 
     @Autowired
@@ -42,6 +46,12 @@ public class DriverService implements IDriverService {
 
     @Override
     public Optional<Driver> getByUserId(UUID uuid) {
+        Optional<Driver> driver = driverRepository.findDriverByUserId(uuid);
+        if (driver.isPresent()) {
+            if (driver.get().getOrder() != null) {
+                 driver.get().getOrder().getNodes().stream().forEach(n -> logger.info("" + n.getCargo().getWeight()));
+            }
+        }
         return driverRepository.findDriverByUserId(uuid);
     }
 
