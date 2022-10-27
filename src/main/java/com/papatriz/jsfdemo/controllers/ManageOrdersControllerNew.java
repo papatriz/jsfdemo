@@ -6,13 +6,8 @@ import com.papatriz.jsfdemo.services.IDriverService;
 import com.papatriz.jsfdemo.services.IOrderService;
 import com.papatriz.jsfdemo.services.ITruckService;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.ocpsoft.rewrite.annotation.Join;
-import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.el.ELBeanName;
-import org.ocpsoft.rewrite.faces.annotation.Deferred;
-import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
-import org.primefaces.PrimeFaces;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +16,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.el.MethodExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.persistence.PostPersist;
-import javax.persistence.PostRemove;
-import javax.persistence.PostUpdate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -117,14 +108,14 @@ public class ManageOrdersControllerNew {
 
     public void onTruckSelect(Truck truck) {
 
-        showError("Truck changed, "+truck.toString(), true);
+        showMessage("Truck changed, "+truck.toString(), true);
     }
 
     public void onSelectCheckboxChange(Order o) {
 
         logger.info("On checkbox change: "+o.getDrivers().size());
         o.getDrivers().stream().forEach(d -> logger.info(" : "+d.toString()));
-        showError("onDriverSelect: drivers num = "+o.getDrivers().size(), true);
+        showMessage("onDriverSelect: drivers num = "+o.getDrivers().size(), true);
     }
 
     public List<Driver> getSuitableDrivers(Order order) {
@@ -150,8 +141,7 @@ public class ManageOrdersControllerNew {
 
         orderService.saveOrder(order);
         loadData();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Order saved and active now", ""));
-
+        showMessage("Order saved and active now", true);
     }
     public void addOrder() {
         List<Node> orderNodes = new ArrayList<>();
@@ -172,7 +162,7 @@ public class ManageOrdersControllerNew {
         }
 
         if (hasError) {
-            showError("Delivery has to be in different city");
+            showMessage("Delivery has to be in different city");
             return;
         }
 
@@ -182,14 +172,14 @@ public class ManageOrdersControllerNew {
         newOrder.setMaxWeight(getOrderTotalWeight(newOrder));
 
         if (newOrder.getMaxWeight() > getTruckMaxCapacity()) {
-            showError("Maximum load ("+newOrder.getMaxWeight()+" kg) exceed truck max payload ("+getTruckMaxCapacity()+" kg)");
+            showMessage("Maximum load ("+newOrder.getMaxWeight()+" kg) exceed truck max payload ("+getTruckMaxCapacity()+" kg)");
             return;
         };
 
         orderService.saveOrder(newOrder);
         initNewOrder();
         loadData();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New order added", ""));
+        showMessage("New order added", true);
     }
 
     public void addCargo() {
@@ -202,13 +192,13 @@ public class ManageOrdersControllerNew {
 
             // check for different load/unload points
             if (lastCC.getLoadNode().getCity() == lastCC.getUnloadNode().getCity()) {
-                showError("Delivery has to be in different city");
+                showMessage("Delivery has to be in different city");
                 lastCC.setHasCitiesError(true);
                 return;
             }
             // check for single cargo max weight
             if (lastCC.getCargo().getWeight() > getTruckMaxCapacity()) {
-                showError("Cargo weight exceed max truck capacity");
+                showMessage("Cargo weight exceed max truck capacity");
                 lastCC.setHasWeightError(true);
                 return;
             }
@@ -255,7 +245,7 @@ public class ManageOrdersControllerNew {
         return  max;
     }
 
-    private void showError(String error, boolean... notError) {
+    private void showMessage(String error, boolean... notError) {
 
         FacesMessage.Severity severity = (notError != null)&&(notError[0])? FacesMessage.SEVERITY_INFO : FacesMessage.SEVERITY_ERROR;
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, error, ""));

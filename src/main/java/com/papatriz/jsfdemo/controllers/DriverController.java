@@ -1,6 +1,7 @@
 package com.papatriz.jsfdemo.controllers;
 
 import com.papatriz.jsfdemo.models.Driver;
+import com.papatriz.jsfdemo.models.EDriverStatus;
 import com.papatriz.jsfdemo.models.Node;
 import com.papatriz.jsfdemo.security.UserDetailsImpl;
 import com.papatriz.jsfdemo.services.IDriverService;
@@ -45,6 +46,11 @@ public class DriverController {
         List<Driver> list = driver.getOrder().getDrivers();
 
         return list.stream().filter(other -> !other.equals(driver)).collect(Collectors.toList());
+    }
+
+    public void confirmOrder() {
+        logger.info("Set driver status to CONFIRM");
+        driver.setStatus(EDriverStatus.CONFIRM);
     }
 
     public Driver getDriver() {

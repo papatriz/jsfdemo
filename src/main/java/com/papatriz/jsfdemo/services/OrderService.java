@@ -29,9 +29,7 @@ public class OrderService implements IOrderService{
     public List<Order> getPendingOrders() {
 
         List<Order> orders = orderRepository.getPendingOrders2();
-        List<Node> nodes = new ArrayList<>();
-        orders.stream().forEach(o -> nodes.addAll(o.getNodes()));
-        nodes.stream().forEach(n -> n.getCargo().getWeight());
+        fetchNodesAndCargos(orders);
         return orders;
     }
 
@@ -44,9 +42,13 @@ public class OrderService implements IOrderService{
     @Override
     public List<Order> getAllOrders() {
         List<Order> orders = orderRepository.findAll();
+        fetchNodesAndCargos(orders);
+        return orders;
+    }
+
+    private void fetchNodesAndCargos(List<Order> orders) {
         List<Node> nodes = new ArrayList<>();
         orders.stream().forEach(o -> nodes.addAll(o.getNodes()));
-        nodes.stream().forEach(n -> System.out.println(n.getCargo().getWeight()));
-        return orders;
+        nodes.stream().forEach(n -> n.getCargo().getWeight());
     }
 }

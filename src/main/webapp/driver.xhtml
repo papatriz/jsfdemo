@@ -33,7 +33,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
            <p:outputLabel value="#{driverController.driver.name} #{driverController.driver.surname} , ID: #{driverController.driver.id}"
                           style="font-weight:bold"/>
             <p:divider layout="vertical"/>
-            <p:outputLabel value="Your status: #{driverController.driver.status}" style="font-weight:bold"/>
+            <p:outputLabel id="statusLabel" value="Your status: #{driverController.driver.status}" style="font-weight:bold"/>
         </p:toolbarGroup>
         <p:toolbarGroup>
             <p:button id="account" style="margin-right: .5em" value="Account" icon="pi pi-id-card" disabled="false" styleClass="ui-button-secondary" />
@@ -46,8 +46,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         <p:autoUpdate/>
     </p:growl>
     <!-- ===================== THERE IS ORDER PART ====================== -->
-    <p:panel header="Your order" style="width: 80%; margin: auto;" toggleable="false" collapsed="false" toggleableHeader="true" toggleSpeed="200">
-    <p:panelGrid style="width: 100%; margin: auto;" rendered="#{driverController.driver.order != null}">
+    <p:panel id="mainPanel" header="Your order" style="width: 80%; margin: auto;" toggleable="false" collapsed="false" toggleableHeader="true" toggleSpeed="200">
+    <h:form id="mainForm">
+        <p:panelGrid style="width: 100%; margin: auto;" rendered="#{driverController.driver.order != null}">
         <f:facet name="header">
             <p:row>
                 <p:column>Order ID</p:column>
@@ -90,7 +91,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
             </p:column>
 
             <p:column style="text-align: center">
-                <p:commandButton value="Confirm" styleClass="ui-button-secondary" icon="pi pi-check" action="#{ordersController.addCargo}" style="width: 9rem;" />
+                <p:commandButton value="Confirm" action="#{driverController.confirmOrder()}" update="mainPanel,statusLabel" process="@this"
+                                 styleClass="ui-button-secondary" icon="pi pi-check" style="width: 9rem;" />
             </p:column>
         </p:row>
         </p:panelGrid>
@@ -98,7 +100,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         <p:outputLabel value="No assigned or active orders at the moment." style="font-size: large"
                         rendered="#{driverController.driver.order == null}"/>
         <!-- ===================== ============= ====================== -->
-
+    </h:form>
     </p:panel>
 </h:body>
 
