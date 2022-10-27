@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface IOrderRepository extends JpaRepository<Order, Integer> {
+public interface  IOrderRepository extends JpaRepository<Order, Integer> {
 @Query("from Order as ord where ord.assignedTruck is not null and ord.drivers.size > 0")
 List<Order> getActiveOrdersHQL();
 

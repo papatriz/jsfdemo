@@ -46,7 +46,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         <p:autoUpdate/>
     </p:growl>
     <!-- ===================== THERE IS ORDER PART ====================== -->
-    <p:panel id="mainPanel" header="Your order" style="width: 80%; margin: auto;" toggleable="false" collapsed="false" toggleableHeader="true" toggleSpeed="200">
+    <p:panel id="mainPanel" header="Your current order" style="width: 80%; margin: auto;" toggleable="false" collapsed="false" toggleableHeader="true" toggleSpeed="200">
     <h:form id="mainForm">
         <p:panelGrid style="width: 100%; margin: auto;" rendered="#{driverController.driver.order != null}">
         <f:facet name="header">
@@ -85,14 +85,29 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         </p:column>
         </p:row>
         <p:row>
-            <p:column colspan="3">
+            <p:column colspan="2">
                 <p:outputLabel value="Order status:  "/>
                <p:outputLabel value="#{driverController.driver.order.getStatus()}" style="font-weight:bold"/>
             </p:column>
+            <p:column>
+                <p:panelGrid columns="1" style="width:100%; text-align: center" styleClass="ui-noborder">
 
-            <p:column style="text-align: center">
+                <p:outputLabel value="#{driverController.currentTargetPoint} "/>
+                <p:commandButton value="Done" action="#{driverController.confirmOrder()}" update="mainPanel,statusLabel" process="@this"
+                                 styleClass="ui-button-outlined ui-button-success" icon="pi pi-check" style="width: 9rem;" />
+                </p:panelGrid>
+            </p:column>
+            <p:column style="text-align: center" rendered="#{driverController.assigned}">
                 <p:commandButton value="Confirm" action="#{driverController.confirmOrder()}" update="mainPanel,statusLabel" process="@this"
                                  styleClass="ui-button-secondary" icon="pi pi-check" style="width: 9rem;" />
+            </p:column>
+            <p:column style="text-align: center" rendered="#{driverController.confirmed}">
+                <p:panelGrid columns="1" style="width:100%; text-align: center" styleClass="ui-noborder">
+                <p:commandButton value="Drive" action="#{driverController.confirmOrder()}" update="mainPanel,statusLabel" process="@this"
+                                 styleClass="ui-button-secondary" icon="pi pi-car" style="width: 9rem;" />
+                <p:commandButton value="Rest" action="#{driverController.confirmOrder()}" update="mainPanel,statusLabel" process="@this"
+                                     styleClass="ui-button-secondary" icon="pi pi-users" style="width: 9rem;" />
+                </p:panelGrid>
             </p:column>
         </p:row>
         </p:panelGrid>

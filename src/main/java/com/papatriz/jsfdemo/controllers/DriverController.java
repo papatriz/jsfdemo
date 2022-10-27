@@ -48,9 +48,24 @@ public class DriverController {
         return list.stream().filter(other -> !other.equals(driver)).collect(Collectors.toList());
     }
 
+    public String getCurrentTargetPoint() {
+        Node node = driver.getOrder().getNodes().stream().filter(n -> !n.isComplete()).findFirst().orElse(null);
+
+        return node.getCity()+" : "+node.getCargo().getName()+" ("+node.getCargo().getWeight()+" kg) - "+node.getType();
+    }
+
+    public boolean isAssigned() {
+        return driver.getStatus() == EDriverStatus.ASSIGNED;
+    }
+
+    public boolean isConfirmed() {
+        return driver.getStatus() == EDriverStatus.CONFIRM;
+    }
+
     public void confirmOrder() {
         logger.info("Set driver status to CONFIRM");
         driver.setStatus(EDriverStatus.CONFIRM);
+        driverService.saveDriver(driver);
     }
 
     public Driver getDriver() {
