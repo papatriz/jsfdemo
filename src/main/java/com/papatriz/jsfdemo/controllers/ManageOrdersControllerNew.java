@@ -229,7 +229,9 @@ public class ManageOrdersControllerNew {
 
     public int getOrderTotalWeight(Order order) {
 
+        if(order == null) return 0;
         List<Node> nodes = order.getNodes();
+        if(nodes == null || nodes.isEmpty()) return 0;
 
         int weight = 0;
         int max = 0;
