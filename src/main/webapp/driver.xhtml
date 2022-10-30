@@ -67,7 +67,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         <p:column headerText="Waypoints" style="text-align: center">
             <p:commandButton id="waypoints" value="Show.." type="button" style="width: 9rem" styleClass="ui-button-outlined ui-button-secondary"/>
             <p:overlayPanel for="waypoints" style="text-align: left">
-                <p:repeat value="#{driverController.driver.order.nodes}" var="node" varStatus="status">
+                <p:repeat value="#{driverController.getWayPoints()}" var="node" varStatus="status">
                     <p:outputLabel value="#{(status.index+1)}.  #{node.city}: #{node.cargo.name} (#{node.cargo.weight}kg) - #{node.type}" />
                     <p:divider rendered="#{status.index != (driverController.driver.order.nodes.size()-1)}"/>
                 </p:repeat>

@@ -46,7 +46,7 @@ public class ManageOrdersControllerNew {
     private boolean needUpdate;
     private Logger logger = LoggerFactory.getLogger(ManageOrdersControllerNew.class);
 
-    class CityBasedComparator implements Comparator<Node> {
+    static class CityBasedComparator implements Comparator<Node> { // toDo: move to Node class
         @Override
         public int compare(Node o1, Node o2) { // toDo: after implementation of ICountry make sort on distance base
             if (o1.getCity().equals(o2.getCity()))
@@ -236,7 +236,7 @@ public class ManageOrdersControllerNew {
                 case UNLOAD:
                     if (i == 0) break;
                     List<Node> previousNodes = nodes.subList(0, i);
-                    boolean wasLoaded = !previousNodes.stream().filter(n -> n.getCargo().equals(checkedCargo)).collect(Collectors.toList()).isEmpty();
+                    boolean wasLoaded = previousNodes.stream().anyMatch(n -> n.getCargo().equals(checkedCargo));
                     if(wasLoaded) weight -= node.getCargo().getWeight();
                     break;
             }
