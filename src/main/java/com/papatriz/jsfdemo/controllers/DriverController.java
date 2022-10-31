@@ -3,6 +3,7 @@ package com.papatriz.jsfdemo.controllers;
 import com.papatriz.jsfdemo.models.*;
 import com.papatriz.jsfdemo.security.UserDetailsImpl;
 import com.papatriz.jsfdemo.services.IDriverService;
+import com.papatriz.jsfdemo.services.IOrderService;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.el.ELBeanName;
 import org.slf4j.Logger;
@@ -22,10 +23,12 @@ import java.util.stream.Collectors;
 @ELBeanName(value = "driverController")
 @Join(path = "/driver", to = "/driver.xhtml")
 public class DriverController {
-    @Autowired
     private final IDriverService driverService;
-    public DriverController(IDriverService driverService) {
+    private final IOrderService orderService;
+    @Autowired
+    public DriverController(IDriverService driverService, IOrderService orderService) {
         this.driverService = driverService;
+        this.orderService = orderService;
     }
     private final Logger logger = LoggerFactory.getLogger(DriverController.class);
     private Driver driver;
@@ -50,7 +53,6 @@ public class DriverController {
         return node.get().getCity()+" : "+node.get().getCargo().getName()+" ("+node.get().getCargo().getWeight()+" kg) - "+node.get().getType();
     }
 
-    //toDo: Move to the OrderService, refactor ManagerController (saving order, calculate weight)
     public List<Node> getWayPoints() {
 
         return driver.getOrder().getNodes();
@@ -72,5 +74,17 @@ public class DriverController {
 
     public Driver getDriver() {
         return driver;
+    }
+
+    public void setWayPointComplete() {
+        Optional<Node> node = driver.getOrder().getNodes().stream().filter(n -> !n.isComplete()).findFirst();
+        if (node.isEmpty()) {
+            // Order complete, do some things
+            driver.getOrder().setComplete(true);
+            orderService.saveOrder(driver.getOrder());
+            return;
+        }
+        node.get().setComplete(true);
+        orderService.saveOrder(driver.getOrder());
     }
 }

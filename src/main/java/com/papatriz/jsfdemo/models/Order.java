@@ -22,8 +22,9 @@ public class Order {
     private boolean isComplete;
 
     // ----- RELATED DATA -----
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @Fetch(value = FetchMode.SUBSELECT)
+    @OrderBy
     private List<Node> nodes;
 
     @OneToOne(mappedBy = "order")

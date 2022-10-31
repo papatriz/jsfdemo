@@ -59,7 +59,7 @@ public class OrderService implements IOrderService{
             throw new NoLoadCargoPointException("There is no load points at all");
         }
         ECity startCity = startNode.get().getCity();
-        origin.sort(new NodeComparatorDistanceBased(startCity)); //toDo: sort based on distance from start city
+        origin.sort(new NodeComparatorDistanceBased(startCity));
 
         boolean restartCycle = false;
 

@@ -67,7 +67,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
             <p:commandButton id="waypoints" value="Show.." type="button" style="width: 9rem" styleClass="ui-button-outlined ui-button-secondary"/>
             <p:overlayPanel for="waypoints" style="text-align: left">
                 <p:repeat value="#{driverController.getWayPoints()}" var="node" varStatus="status">
-                    <p:outputLabel value="#{(status.index+1)}.  #{node.city}: #{node.cargo.name} (#{node.cargo.weight}kg) - #{node.type}" />
+                    <p:outputLabel value="#{(status.index+1)}.  #{node.city}: #{node.cargo.name} (#{node.cargo.weight}kg) - #{node.type}"
+                    style="#{node.complete ? 'color:green':''}" />
                     <p:divider rendered="#{status.index != (driverController.driver.order.nodes.size()-1)}"/>
                 </p:repeat>
             </p:overlayPanel>
@@ -90,10 +91,10 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
             </p:column>
             <p:column>
                 <p:panelGrid columns="1" style="width:100%; text-align: center" styleClass="ui-noborder">
-
-                <p:outputLabel value="#{driverController.currentTargetPoint} "/>
-                <p:commandButton value="Done" action="#{driverController.confirmOrder()}" update="mainPanel,statusLabel" process="@this"
-                                 disabled="#{!driverController.confirmed}" styleClass="ui-button-outlined ui-button-success" icon="pi pi-check" style="width: 9rem;" />
+                    <p:outputLabel value="Next destination: " style="font-weight: bold"/>
+                    <p:outputLabel value="#{driverController.currentTargetPoint} "/>
+                    <p:commandButton value="Done" action="#{driverController.setWayPointComplete()}" update="mainPanel,statusLabel" process="@this"
+                                 disabled="#{!driverController.confirmed || driverController.driver.order.complete}" styleClass="ui-button-outlined ui-button-success" icon="pi pi-check" style="width: 9rem;" />
                 </p:panelGrid>
             </p:column>
             <p:column style="text-align: center" rendered="#{driverController.assigned}">
