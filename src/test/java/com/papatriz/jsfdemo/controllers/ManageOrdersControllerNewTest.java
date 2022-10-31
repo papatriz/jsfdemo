@@ -1,12 +1,12 @@
 package com.papatriz.jsfdemo.controllers;
 
 import com.papatriz.jsfdemo.models.*;
+import com.papatriz.jsfdemo.services.IOrderService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,23 +15,23 @@ import static org.junit.jupiter.api.Assertions.*;
 class ManageOrdersControllerNewTest {
 
     @Autowired
-    ManageOrdersControllerNew controller;
+    IOrderService orderService;
 
     @Test
     void getOrderTotalWeight_SimpleOrder() {
-        assertEquals(100, controller.getOrderTotalWeight(createSimpleTestOrder()));
+        assertEquals(100, orderService.getOrderMaxWeight(createSimpleTestOrder()));
     }
     @Test
     void getOrderTotalWeight_ComplexOrder() {
-        assertEquals(150, controller.getOrderTotalWeight(createComplexTestOrder()));
+        assertEquals(150, orderService.getOrderMaxWeight(createComplexTestOrder()));
     }
     @Test
     void getOrderTotalWeight_NullOrder() {
-        assertEquals(0, controller.getOrderTotalWeight(null));
+        assertEquals(0, orderService.getOrderMaxWeight(null));
     }
     @Test
     void getOrderTotalWeight_NewOrder() {
-        assertEquals(0, controller.getOrderTotalWeight(new Order()));
+        assertEquals(0, orderService.getOrderMaxWeight(new Order()));
     }
 
     // Data creation

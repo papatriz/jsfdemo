@@ -1,6 +1,7 @@
 package com.papatriz.jsfdemo.controllers;
 
 import com.papatriz.jsfdemo.events.TruckTableChangedEvent;
+import com.papatriz.jsfdemo.exceptions.NoLoadCargoPointException;
 import com.papatriz.jsfdemo.models.*;
 import com.papatriz.jsfdemo.services.IDriverService;
 import com.papatriz.jsfdemo.services.IOrderService;
@@ -46,18 +47,6 @@ public class ManageOrdersControllerNew {
     private boolean needUpdate;
     private Logger logger = LoggerFactory.getLogger(ManageOrdersControllerNew.class);
 
-    static class CityBasedComparator implements Comparator<Node> { // toDo: move to Node class
-        @Override
-        public int compare(Node o1, Node o2) { // toDo: after implementation of ICountry make sort on distance base
-            if (o1.getCity().equals(o2.getCity()))
-            {
-                if (o1.getType() == o2.getType()) return 0;
-                return o1.getType().ordinal() < o2.getType().ordinal() ? 1 : -1;
-            }
-            return o1.getCity().ordinal() > o2.getCity().ordinal() ? 1 : -1;
-        }
-    }
-
     @PostConstruct
     private void init() {
         loadData();
@@ -75,7 +64,7 @@ public class ManageOrdersControllerNew {
         cachedTrucks = truckService.getAllTrucks();
         cachedPendingOrders = orderService.getPendingOrders();
         for (Order o:cachedPendingOrders) {
-            o.setMaxWeight(getOrderTotalWeight(o));
+            o.setMaxWeight(orderService.getOrderMaxWeight(o));
             o.setDrivers(Collections.emptyList());
         }
         cachedActiveOrders = orderService.getActiveOrders();
@@ -100,10 +89,9 @@ public class ManageOrdersControllerNew {
             logger.info("Cached trucks refreshed");
         }
         int maxWeight = order.getMaxWeight();
-        List<Truck> suitableTrucks =
-                cachedTrucks.stream().filter(truck -> truck.isAvailable() && (truck.getCapacity() >= maxWeight))
-                                     .collect(Collectors.toList());
-        return suitableTrucks;
+        return cachedTrucks.stream()
+                .filter(truck -> truck.isAvailable() && (truck.getCapacity() >= maxWeight))
+                             .collect(Collectors.toList());
     }
 
     public void onTruckSelect(Truck truck) {
@@ -143,13 +131,13 @@ public class ManageOrdersControllerNew {
         loadData();
         showMessage("Order saved and active now", true);
     }
-    public void addOrder() {
+    public void addOrder() throws NoLoadCargoPointException {
         List<Node> orderNodes = new ArrayList<>();
         cargoCycles.stream().forEach(cargoCycle -> cargoCycle.setHasCitiesError(false));
         boolean hasError = false;
 
         for (CargoCycle cc:cargoCycles) {
-            // final check for different pickup/delivery points to handle usercase then user change city in already added node
+            // final check for different pickup/delivery points to handle user case then user change city in already added node
             if (cc.getLoadNode().getCity() == cc.getUnloadNode().getCity()) {
                 cc.setHasCitiesError(true);
                 hasError = true;
@@ -166,15 +154,15 @@ public class ManageOrdersControllerNew {
             return;
         }
 
-        // check for max weight
-        Collections.sort(orderNodes, new CityBasedComparator());
         newOrder.setNodes(orderNodes);
-        newOrder.setMaxWeight(getOrderTotalWeight(newOrder));
+        orderService.makeWayBill(newOrder);
+
+        newOrder.setMaxWeight(orderService.getOrderMaxWeight(newOrder));
 
         if (newOrder.getMaxWeight() > getTruckMaxCapacity()) {
             showMessage("Maximum load ("+newOrder.getMaxWeight()+" kg) exceed truck max payload ("+getTruckMaxCapacity()+" kg)");
             return;
-        };
+        }
 
         orderService.saveOrder(newOrder);
         initNewOrder();
@@ -202,7 +190,6 @@ public class ManageOrdersControllerNew {
                 lastCC.setHasWeightError(true);
                 return;
             }
-            // toDo: double check for cargo name not empty
         }
 
         CargoCycle currentCargoCycle = new CargoCycle();
@@ -215,34 +202,6 @@ public class ManageOrdersControllerNew {
 
     public int getTruckMaxCapacity() {
        return truckService.getMaxCapacity();
-    }
-
-    public int getOrderTotalWeight(Order order) {
-
-        if(order == null) return 0;
-        List<Node> nodes = order.getNodes();
-        if(nodes == null || nodes.isEmpty()) return 0;
-
-        int weight = 0;
-        int max = 0;
-
-        for (int i=0; i < nodes.size(); i++) {
-            Node node = nodes.get(i);
-            Cargo checkedCargo = node.getCargo();
-            switch (node.getType()) {
-                case LOAD:
-                    weight += checkedCargo.getWeight();
-                    break;
-                case UNLOAD:
-                    if (i == 0) break;
-                    List<Node> previousNodes = nodes.subList(0, i);
-                    boolean wasLoaded = previousNodes.stream().anyMatch(n -> n.getCargo().equals(checkedCargo));
-                    if(wasLoaded) weight -= node.getCargo().getWeight();
-                    break;
-            }
-            if (weight > max) max = weight;
-        }
-        return  max;
     }
 
     private void showMessage(String error, boolean... notError) {

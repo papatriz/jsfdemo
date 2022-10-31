@@ -1,6 +1,5 @@
 package com.papatriz.jsfdemo.controllers;
 
-import com.papatriz.jsfdemo.exceptions.NoLoadCargoPointException;
 import com.papatriz.jsfdemo.models.*;
 import com.papatriz.jsfdemo.security.UserDetailsImpl;
 import com.papatriz.jsfdemo.services.IDriverService;
@@ -11,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -29,9 +27,8 @@ public class DriverController {
     public DriverController(IDriverService driverService) {
         this.driverService = driverService;
     }
-    private Logger logger = LoggerFactory.getLogger(DriverController.class);
+    private final Logger logger = LoggerFactory.getLogger(DriverController.class);
     private Driver driver;
-    private ICountry country = new Country();
 
     @PostConstruct
     private void init() {
@@ -47,58 +44,16 @@ public class DriverController {
     }
 
     public String getCurrentTargetPoint() {
-        Node node = driver.getOrder().getNodes().stream().filter(n -> !n.isComplete()).findFirst().orElse(null);
+        Optional<Node> node = driver.getOrder().getNodes().stream().filter(n -> !n.isComplete()).findFirst();
+        if (node.isEmpty()) return "Order complete";
 
-        return node.getCity()+" : "+node.getCargo().getName()+" ("+node.getCargo().getWeight()+" kg) - "+node.getType();
+        return node.get().getCity()+" : "+node.get().getCargo().getName()+" ("+node.get().getCargo().getWeight()+" kg) - "+node.get().getType();
     }
 
     //toDo: Move to the OrderService, refactor ManagerController (saving order, calculate weight)
-    public List<Node> getWayPoints() throws NoLoadCargoPointException {
+    public List<Node> getWayPoints() {
 
-        List<Node> origin = driver.getOrder().getNodes();
-        origin.sort(new ManageOrdersControllerNew.CityBasedComparator()); //toDo: sort based on distance from start city
-
-        boolean restartCycle = false;
-
-        for (int i=0; i < origin.size()-1; i++) {
-            if (restartCycle) {
-                i=0;
-                restartCycle = false;
-            }
-            if(origin.get(i).getType() == EActionType.UNLOAD) {
-                List<Node> previousNodes = (i > 0)? origin.subList(0, i) : new ArrayList<>();
-                Cargo checkedCargo = origin.get(i).getCargo();
-                boolean wasLoaded = previousNodes.stream().anyMatch(ni -> ni.getCargo().equals(checkedCargo));
-
-                if (!wasLoaded) {
-                    List<Node> nextNodes = origin.subList(i+1, origin.size());
-                    Optional<Node> loadNode = nextNodes.stream().filter(n -> n.getCargo().equals(checkedCargo)).findFirst();
-                    if (!loadNode.isPresent()) {
-                        throw new NoLoadCargoPointException("Can't find load point for cargo "+checkedCargo);
-                    }
-                    else {
-                        int loadIndex = origin.indexOf(loadNode.get());
-                        Node tmpNode = origin.get(i);
-                        origin.remove(tmpNode);
-                        origin.add(loadIndex, tmpNode);
-
-                        ECity lastCity = loadNode.get().getCity();
-
-                        origin.subList(loadIndex, origin.size()).sort((o1, o2) -> {
-                            if (o1.getCity() == o2.getCity()) return 0;
-                            int distance1 = country.getDistance(o1.getCity(), lastCity);
-                            int distance2 = country.getDistance(o2.getCity(), lastCity);
-                            return (distance1 > distance2) ? 1 : -1;
-                        });
-                     restartCycle = true;
-                    }
-                }
-            }
-        }
-        for (Node n:origin) {
-            logger.info(n.toString());
-        }
-        return origin;
+        return driver.getOrder().getNodes();
     }
 
     public boolean isAssigned() {
