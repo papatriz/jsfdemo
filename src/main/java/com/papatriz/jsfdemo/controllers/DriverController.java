@@ -1,5 +1,6 @@
 package com.papatriz.jsfdemo.controllers;
 
+import com.papatriz.jsfdemo.exceptions.NoLoadCargoPointException;
 import com.papatriz.jsfdemo.models.*;
 import com.papatriz.jsfdemo.security.UserDetailsImpl;
 import com.papatriz.jsfdemo.services.IDriverService;
@@ -51,10 +52,11 @@ public class DriverController {
         return node.getCity()+" : "+node.getCargo().getName()+" ("+node.getCargo().getWeight()+" kg) - "+node.getType();
     }
 
-    public List<Node> getWayPoints() throws Exception {
+    //toDo: Move to the OrderService, refactor ManagerController (saving order, calculate weight)
+    public List<Node> getWayPoints() throws NoLoadCargoPointException {
 
         List<Node> origin = driver.getOrder().getNodes();
-        origin.sort(new ManageOrdersControllerNew.CityBasedComparator());
+        origin.sort(new ManageOrdersControllerNew.CityBasedComparator()); //toDo: sort based on distance from start city
 
         boolean restartCycle = false;
 
@@ -71,18 +73,25 @@ public class DriverController {
                 if (!wasLoaded) {
                     List<Node> nextNodes = origin.subList(i+1, origin.size());
                     Optional<Node> loadNode = nextNodes.stream().filter(n -> n.getCargo().equals(checkedCargo)).findFirst();
-                    int loadIndex = origin.indexOf(loadNode.get());
-                    Node tmpNode = origin.get(i);
-                    origin.remove(tmpNode);
-                    origin.add(loadIndex, tmpNode);
-                    ECity lastCity = loadNode.get().getCity();
-                    origin.subList(loadIndex, origin.size()).sort((o1, o2) -> {
-                        if (o1.getCity() == o2.getCity()) return 0;
-                        int distance1 = country.getDistance(o1.getCity(), lastCity);
-                        int distance2 = country.getDistance(o2.getCity(), lastCity);
-                        return (distance1 > distance2) ? 1 : -1;
-                    });
-                    restartCycle = true;
+                    if (!loadNode.isPresent()) {
+                        throw new NoLoadCargoPointException("Can't find load point for cargo "+checkedCargo);
+                    }
+                    else {
+                        int loadIndex = origin.indexOf(loadNode.get());
+                        Node tmpNode = origin.get(i);
+                        origin.remove(tmpNode);
+                        origin.add(loadIndex, tmpNode);
+
+                        ECity lastCity = loadNode.get().getCity();
+
+                        origin.subList(loadIndex, origin.size()).sort((o1, o2) -> {
+                            if (o1.getCity() == o2.getCity()) return 0;
+                            int distance1 = country.getDistance(o1.getCity(), lastCity);
+                            int distance2 = country.getDistance(o2.getCity(), lastCity);
+                            return (distance1 > distance2) ? 1 : -1;
+                        });
+                     restartCycle = true;
+                    }
                 }
             }
         }
