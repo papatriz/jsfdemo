@@ -1,5 +1,6 @@
 package com.papatriz.jsfdemo.controllers;
 
+import com.papatriz.jsfdemo.exceptions.NoLoadCargoPointException;
 import com.papatriz.jsfdemo.models.*;
 import com.papatriz.jsfdemo.services.IOrderService;
 import org.junit.jupiter.api.Test;
@@ -95,6 +96,11 @@ class ManageOrdersControllerNewTest {
         nodes.add(node02);
         nodes.add(node03);
         order.setNodes(nodes);
+        try {
+            orderService.makeWayBill(order);
+        } catch (NoLoadCargoPointException e) {
+            throw new RuntimeException(e);
+        }
 
         return order;
     }
