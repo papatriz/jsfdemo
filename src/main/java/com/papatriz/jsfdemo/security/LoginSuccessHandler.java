@@ -24,10 +24,17 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
                                         Authentication authentication) throws ServletException, IOException {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
+        System.out.println("LOGIN SUCCESS");
         // String redirectURL = request.getContextPath();
         String redirectURL = request.getContextPath() +"/"+ roleHandler.getLandingPageForRole(userDetails.getRole());
-        System.out.println("REDIRECT TO "+redirectURL);
-        response.sendRedirect(redirectURL);
+
+        if (userDetails.getUser().isNeedChangePassword()) {
+            response.addHeader("landing", redirectURL);
+            response.sendRedirect(request.getContextPath() +"/changePassword");
+        }
+        else {
+            response.sendRedirect(redirectURL);
+        }
+
     }
 }
