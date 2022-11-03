@@ -16,11 +16,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import javax.faces.context.FacesContext;
+import java.io.IOException;
+import java.io.Serializable;
+
 @Scope(value = "session")
 @Component(value = "changePassController")
 @ELBeanName(value = "changePassController")
 @Join(path = "/changePassword", to = "/changePassword.xhtml")
-public class ChangePasswordController {
+public class ChangePasswordController implements Serializable {
     @Autowired
     private final UserService userService;
     private final Logger logger = LoggerFactory.getLogger(ChangePasswordController.class);
@@ -53,8 +57,9 @@ public class ChangePasswordController {
         logger.info("USER WITH EXPIRED PASS: "+user.getUsername());
     }
 
-    public String saveNewPassword() {
+    public String saveNewPassword() throws IOException {
 
+      //  FacesContext.getCurrentInstance().getExternalContext().redirect("/logout?faces-redirect=true");
       //  if (!userService.checkIfValidOldPassword(user, oldPassword)) return "";
         return "/logout?faces-redirect=true";
     }
