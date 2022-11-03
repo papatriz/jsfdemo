@@ -62,8 +62,19 @@ public class ManageDriversController {
         String username = driver.getName().toLowerCase()+"."+driver.getSurname().toLowerCase();
         String initPass = "pass";
         User userForDriver = new User(username,initPass, driver.getEmail(), "ROLE_DRIVER");
+        userForDriver.setNeedChangePassword(true);
         userService.saveUser(userForDriver);
+// TEST TO CREATE NEW USERS WITH HASHED PASSWORDS!!!
+        /*
+        User userManager = new User("manager",initPass, driver.getEmail(), "ROLE_MANAGER");
+        userForDriver.setNeedChangePassword(true);
+        userService.saveUser(userManager);
 
+        User userAdmin = new User("admin",initPass, driver.getEmail(), "ROLE_ADMIN");
+        userForDriver.setNeedChangePassword(true);
+        userService.saveUser(userAdmin);
+         */
+// =================================================
         driver.setUserId(userForDriver.getId());
         driver.setStatus(EDriverStatus.READY);
         driverService.saveDriver(driver);

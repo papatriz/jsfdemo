@@ -37,6 +37,9 @@ public class User {
     @Column
     private String role;
 
+    @Column(name = "changepass")
+    private boolean needChangePassword;
+
     public boolean hasRole(String role){
 
         return this.role.equals(role);
