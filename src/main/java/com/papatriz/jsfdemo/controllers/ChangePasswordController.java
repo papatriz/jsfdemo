@@ -59,8 +59,10 @@ public class ChangePasswordController implements Serializable {
 
     public String saveNewPassword() throws IOException {
 
-      //  FacesContext.getCurrentInstance().getExternalContext().redirect("/logout?faces-redirect=true");
-      //  if (!userService.checkIfValidOldPassword(user, oldPassword)) return "";
+        user.setPassword(newPassword);
+       // user.setNeedChangePassword(false);
+        userService.saveUser(user);
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/logout?faces-redirect=true");
         return "/logout?faces-redirect=true";
     }
     public String getOldPassword() {

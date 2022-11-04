@@ -33,5 +33,12 @@ public class OldPasswordValidator implements Validator {
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(msg);
         }
+        String newPassword = facesContext.getExternalContext().getRequestParameterMap().get("changePasswordForm:newPassword");
+
+        if (input.equals(newPassword))  {
+            FacesMessage msg = new FacesMessage("The new password must be different from the old one", "");
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+            throw new ValidatorException(msg);
+        }
     }
 }
