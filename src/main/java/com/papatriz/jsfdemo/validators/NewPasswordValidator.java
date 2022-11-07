@@ -15,10 +15,10 @@ import java.util.UUID;
 
 @Component
 @Scope("request")
-public class OldPasswordValidator implements Validator {
+public class NewPasswordValidator implements Validator {
     private final UserService userService;
     @Autowired
-    public OldPasswordValidator(UserService userService) {
+    public NewPasswordValidator(UserService userService) {
         this.userService = userService;
     }
 
@@ -28,12 +28,11 @@ public class OldPasswordValidator implements Validator {
         UUID userId = (UUID) uiComponent.getAttributes().get("userId");
         User user = userService.getUserById(userId);
 
-        if(!userService.checkIfValidOldPassword(user, input)) {
-            FacesMessage msg = new FacesMessage("Old password invalid", "");
+        if(userService.checkIfValidOldPassword(user, input)) {
+            FacesMessage msg = new FacesMessage("The new password must be different from the old one", "");
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(msg);
         }
-       // String newPassword = facesContext.getExternalContext().getRequestParameterMap().get("changePasswordForm:newPassword");
 
-    }
+        }
 }
