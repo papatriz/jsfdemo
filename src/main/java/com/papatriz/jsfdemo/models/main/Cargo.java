@@ -1,4 +1,4 @@
-package com.papatriz.jsfdemo.models;
+package com.papatriz.jsfdemo.models.main;
 
 
 import lombok.Data;

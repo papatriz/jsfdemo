@@ -1,14 +1,10 @@
-package com.papatriz.jsfdemo.models;
+package com.papatriz.jsfdemo.models.main;
 
-import com.papatriz.jsfdemo.controllers.ManageOrdersControllerNew;
 import lombok.Data;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Data
 @Entity

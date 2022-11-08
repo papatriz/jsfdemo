@@ -1,8 +1,7 @@
 package com.papatriz.jsfdemo.services;
 
-import com.papatriz.jsfdemo.models.Order;
-import com.papatriz.jsfdemo.models.Truck;
-import org.springframework.data.domain.Page;
+import com.papatriz.jsfdemo.models.main.Order;
+import com.papatriz.jsfdemo.models.main.Truck;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

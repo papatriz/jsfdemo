@@ -1,9 +1,9 @@
 package com.papatriz.jsfdemo.services;
 
 import com.papatriz.jsfdemo.events.TruckTableChangedEvent;
-import com.papatriz.jsfdemo.models.Order;
-import com.papatriz.jsfdemo.models.Truck;
-import com.papatriz.jsfdemo.repositories.ITruckRepository;
+import com.papatriz.jsfdemo.models.main.Order;
+import com.papatriz.jsfdemo.models.main.Truck;
+import com.papatriz.jsfdemo.repositories.main.ITruckRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

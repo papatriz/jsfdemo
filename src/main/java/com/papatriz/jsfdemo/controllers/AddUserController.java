@@ -1,14 +1,12 @@
 package com.papatriz.jsfdemo.controllers;
 
-import com.papatriz.jsfdemo.models.User;
+import com.papatriz.jsfdemo.models.auth.User;
 import com.papatriz.jsfdemo.services.UserService;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.el.ELBeanName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import javax.faces.bean.ManagedProperty;
 
 @Scope(value = "session")
 @Component(value = "addUserController")

@@ -2,7 +2,7 @@ package com.papatriz.jsfdemo.controllers;
 
 import com.papatriz.jsfdemo.events.TruckTableChangedEvent;
 import com.papatriz.jsfdemo.exceptions.NoLoadCargoPointException;
-import com.papatriz.jsfdemo.models.*;
+import com.papatriz.jsfdemo.models.main.*;
 import com.papatriz.jsfdemo.services.IDriverService;
 import com.papatriz.jsfdemo.services.IOrderService;
 import com.papatriz.jsfdemo.services.ITruckService;

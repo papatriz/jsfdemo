@@ -1,9 +1,9 @@
 package com.papatriz.jsfdemo.comparators;
 
-import com.papatriz.jsfdemo.models.Country;
-import com.papatriz.jsfdemo.models.ECity;
-import com.papatriz.jsfdemo.models.ICountry;
-import com.papatriz.jsfdemo.models.Node;
+import com.papatriz.jsfdemo.models.main.Country;
+import com.papatriz.jsfdemo.models.main.ECity;
+import com.papatriz.jsfdemo.models.main.ICountry;
+import com.papatriz.jsfdemo.models.main.Node;
 
 import java.util.Comparator;
 

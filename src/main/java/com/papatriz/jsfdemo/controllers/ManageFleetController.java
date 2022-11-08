@@ -1,7 +1,7 @@
 package com.papatriz.jsfdemo.controllers;
 
-import com.papatriz.jsfdemo.models.ETruckStatus;
-import com.papatriz.jsfdemo.models.Truck;
+import com.papatriz.jsfdemo.models.main.ETruckStatus;
+import com.papatriz.jsfdemo.models.main.Truck;
 import com.papatriz.jsfdemo.services.ITruckService;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.RequestAction;
@@ -10,7 +10,6 @@ import org.ocpsoft.rewrite.faces.annotation.Deferred;
 import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.ToggleEvent;
-import org.primefaces.model.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,6 @@
 package com.papatriz.jsfdemo.converters;
 
-import com.papatriz.jsfdemo.models.Truck;
+import com.papatriz.jsfdemo.models.main.Truck;
 import com.papatriz.jsfdemo.services.ITruckService;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -9,7 +9,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 import javax.inject.Named;
 

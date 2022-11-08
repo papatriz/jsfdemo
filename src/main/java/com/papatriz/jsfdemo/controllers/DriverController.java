@@ -1,6 +1,8 @@
 package com.papatriz.jsfdemo.controllers;
 
-import com.papatriz.jsfdemo.models.*;
+import com.papatriz.jsfdemo.models.main.Driver;
+import com.papatriz.jsfdemo.models.main.EDriverStatus;
+import com.papatriz.jsfdemo.models.main.Node;
 import com.papatriz.jsfdemo.security.UserDetailsImpl;
 import com.papatriz.jsfdemo.services.IDriverService;
 import com.papatriz.jsfdemo.services.IOrderService;

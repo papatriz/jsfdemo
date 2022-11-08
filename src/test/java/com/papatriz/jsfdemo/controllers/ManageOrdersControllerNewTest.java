@@ -1,7 +1,7 @@
 package com.papatriz.jsfdemo.controllers;
 
 import com.papatriz.jsfdemo.exceptions.NoLoadCargoPointException;
-import com.papatriz.jsfdemo.models.*;
+import com.papatriz.jsfdemo.models.main.*;
 import com.papatriz.jsfdemo.services.IOrderService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

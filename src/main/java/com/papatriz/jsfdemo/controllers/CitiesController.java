@@ -1,6 +1,6 @@
 package com.papatriz.jsfdemo.controllers;
 
-import com.papatriz.jsfdemo.models.ECity;
+import com.papatriz.jsfdemo.models.main.ECity;
 import org.ocpsoft.rewrite.el.ELBeanName;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

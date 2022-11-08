@@ -1,6 +1,6 @@
 package com.papatriz.jsfdemo.controllers;
 
-import com.papatriz.jsfdemo.models.User;
+import com.papatriz.jsfdemo.models.auth.User;
 import com.papatriz.jsfdemo.services.UserService;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.RequestAction;
@@ -13,11 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import java.util.List;
-import java.util.Random;
 
 @Scope (value = "session")
 @Component (value = "userListController")

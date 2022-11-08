@@ -1,6 +1,6 @@
 package com.papatriz.jsfdemo.validators;
 
-import com.papatriz.jsfdemo.models.User;
+import com.papatriz.jsfdemo.models.auth.User;
 import com.papatriz.jsfdemo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

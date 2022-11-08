@@ -1,7 +1,7 @@
-package com.papatriz.jsfdemo.repositories;
+package com.papatriz.jsfdemo.repositories.main;
 
-import com.papatriz.jsfdemo.models.Driver;
-import com.papatriz.jsfdemo.models.EDriverStatus;
+import com.papatriz.jsfdemo.models.main.Driver;
+import com.papatriz.jsfdemo.models.main.EDriverStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

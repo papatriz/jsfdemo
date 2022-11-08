@@ -1,8 +1,8 @@
 package com.papatriz.jsfdemo.controllers;
 
-import com.papatriz.jsfdemo.models.Driver;
-import com.papatriz.jsfdemo.models.EDriverStatus;
-import com.papatriz.jsfdemo.models.User;
+import com.papatriz.jsfdemo.models.main.Driver;
+import com.papatriz.jsfdemo.models.main.EDriverStatus;
+import com.papatriz.jsfdemo.models.auth.User;
 import com.papatriz.jsfdemo.services.IDriverService;
 import com.papatriz.jsfdemo.services.UserService;
 import lombok.Data;

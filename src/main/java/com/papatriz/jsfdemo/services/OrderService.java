@@ -2,8 +2,8 @@ package com.papatriz.jsfdemo.services;
 
 import com.papatriz.jsfdemo.comparators.NodeComparatorDistanceBased;
 import com.papatriz.jsfdemo.exceptions.NoLoadCargoPointException;
-import com.papatriz.jsfdemo.models.*;
-import com.papatriz.jsfdemo.repositories.IOrderRepository;
+import com.papatriz.jsfdemo.models.main.*;
+import com.papatriz.jsfdemo.repositories.main.IOrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

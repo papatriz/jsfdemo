@@ -1,6 +1,6 @@
 package com.papatriz.jsfdemo.services;
 
-import com.papatriz.jsfdemo.models.Driver;
+import com.papatriz.jsfdemo.models.main.Driver;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

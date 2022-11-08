@@ -1,6 +1,6 @@
-package com.papatriz.jsfdemo.repositories;
+package com.papatriz.jsfdemo.repositories.main;
 
-import com.papatriz.jsfdemo.models.Order;
+import com.papatriz.jsfdemo.models.main.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

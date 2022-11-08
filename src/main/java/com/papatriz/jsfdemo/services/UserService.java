@@ -1,7 +1,7 @@
 package com.papatriz.jsfdemo.services;
 
-import com.papatriz.jsfdemo.models.User;
-import com.papatriz.jsfdemo.repositories.UserRepository;
+import com.papatriz.jsfdemo.models.auth.User;
+import com.papatriz.jsfdemo.repositories.auth.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {

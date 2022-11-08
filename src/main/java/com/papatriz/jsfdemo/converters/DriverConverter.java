@@ -1,6 +1,6 @@
 package com.papatriz.jsfdemo.converters;
 
-import com.papatriz.jsfdemo.models.Driver;
+import com.papatriz.jsfdemo.models.main.Driver;
 import com.papatriz.jsfdemo.services.IDriverService;
 
 import javax.faces.bean.RequestScoped;

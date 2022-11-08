@@ -1,7 +1,7 @@
 package com.papatriz.jsfdemo.services;
 
-import com.papatriz.jsfdemo.models.User;
-import com.papatriz.jsfdemo.repositories.UserRepository;
+import com.papatriz.jsfdemo.models.auth.User;
+import com.papatriz.jsfdemo.repositories.auth.UserRepository;
 import com.papatriz.jsfdemo.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

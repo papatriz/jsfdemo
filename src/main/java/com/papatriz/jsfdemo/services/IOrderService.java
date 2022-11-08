@@ -1,7 +1,7 @@
 package com.papatriz.jsfdemo.services;
 
 import com.papatriz.jsfdemo.exceptions.NoLoadCargoPointException;
-import com.papatriz.jsfdemo.models.Order;
+import com.papatriz.jsfdemo.models.main.Order;
 
 import java.util.List;
 

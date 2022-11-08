@@ -1,6 +1,6 @@
 package com.papatriz.jsfdemo.controllers;
 
-import com.papatriz.jsfdemo.models.User;
+import com.papatriz.jsfdemo.models.auth.User;
 import com.papatriz.jsfdemo.security.UserDetailsImpl;
 import com.papatriz.jsfdemo.services.UserService;
 import org.ocpsoft.rewrite.annotation.Join;
@@ -60,7 +60,7 @@ public class ChangePasswordController implements Serializable {
     public String saveNewPassword() throws IOException {
 
         user.setPassword(newPassword);
-       // user.setNeedChangePassword(false);
+        user.setNeedChangePassword(false);
         userService.saveUser(user);
         FacesContext.getCurrentInstance().getExternalContext().redirect("/logout?faces-redirect=true");
         return "/logout?faces-redirect=true";

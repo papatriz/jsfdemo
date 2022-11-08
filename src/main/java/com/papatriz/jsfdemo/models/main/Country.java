@@ -1,6 +1,4 @@
-package com.papatriz.jsfdemo.models;
-
-import org.springframework.context.annotation.Bean;
+package com.papatriz.jsfdemo.models.main;
 
 import java.util.HashMap;
 

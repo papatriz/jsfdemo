@@ -1,6 +1,6 @@
 package com.papatriz.jsfdemo.controllers;
 
-import com.papatriz.jsfdemo.models.*;
+import com.papatriz.jsfdemo.models.main.*;
 import com.papatriz.jsfdemo.services.IOrderService;
 import com.papatriz.jsfdemo.services.ITruckService;
 import lombok.Data;
