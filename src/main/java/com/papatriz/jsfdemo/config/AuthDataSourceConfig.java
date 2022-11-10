@@ -34,8 +34,8 @@ public class AuthDataSourceConfig {
     }
 
     @Bean(name = "authEntityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean authEntityManagerFactory(
-            EntityManagerFactoryBuilder builder) {
+    public LocalContainerEntityManagerFactoryBean authEntityManagerFactory(EntityManagerFactoryBuilder builder) {
+
         return builder
                 .dataSource(authDataSource())
                 .packages("com.papatriz.jsfdemo.models.auth")
@@ -43,8 +43,8 @@ public class AuthDataSourceConfig {
     }
 
     @Bean
-    public PlatformTransactionManager authTransactionManager(
-            final @Qualifier("authEntityManagerFactory") LocalContainerEntityManagerFactoryBean authEntityManagerFactory) {
+    public PlatformTransactionManager authTransactionManager(final @Qualifier("authEntityManagerFactory") LocalContainerEntityManagerFactoryBean authEntityManagerFactory) {
+
         return new JpaTransactionManager(authEntityManagerFactory.getObject());
     }
 }
