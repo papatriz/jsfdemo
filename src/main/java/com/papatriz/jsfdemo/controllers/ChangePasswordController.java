@@ -32,20 +32,11 @@ public class ChangePasswordController implements Serializable {
     private User user;
     private String oldPassword = "";
     private String newPassword = "";
+    private boolean passStrongEnough;
 
     public ChangePasswordController(UserService userService) {
         this.userService = userService;
     }
-
-    public boolean isPassStrongEnough() {
-        return passStrongEnough;
-    }
-
-    public void setPassStrongEnough(boolean passStrongEnough) {
-        this.passStrongEnough = passStrongEnough;
-    }
-
-    private boolean passStrongEnough;
 
     @Deferred
     @RequestAction
@@ -57,32 +48,35 @@ public class ChangePasswordController implements Serializable {
         logger.info("USER WITH EXPIRED PASS: "+user.getUsername());
     }
 
-    public String saveNewPassword() throws IOException {
+    public void saveNewPassword() throws IOException {
 
         user.setPassword(newPassword);
         user.setNeedChangePassword(false);
         userService.saveUser(user);
         FacesContext.getCurrentInstance().getExternalContext().redirect("/logout?faces-redirect=true");
-        return "/logout?faces-redirect=true";
     }
+
+    // GETTERS AND SETTERS
     public String getOldPassword() {
         return oldPassword;
     }
-
     public void setOldPassword(String oldPassword) {
         this.oldPassword = oldPassword;
     }
-
     public String getNewPassword() {
         return newPassword;
     }
-
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
     }
-
     public User getUser() {
         return user;
+    }
+    public boolean isPassStrongEnough() {
+        return passStrongEnough;
+    }
+    public void setPassStrongEnough(boolean passStrongEnough) {
+        this.passStrongEnough = passStrongEnough;
     }
 
 }

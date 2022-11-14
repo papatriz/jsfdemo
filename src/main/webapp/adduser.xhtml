@@ -13,8 +13,6 @@
 </h:head>
 
 <h:body>
-    <p:outputLabel value="#{addUserController.testmessage}" />
-
     <h:form id="addUserForm">
         <p:panel header="User Details">
             <h:panelGrid columns="1">
@@ -32,11 +30,9 @@
                         <f:selectItem itemLabel="MANAGER" itemValue="ROLE_MANAGER"/>
                         <f:selectItem itemLabel="DRIVER" itemValue="ROLE_DRIVER"/>
                         <f:selectItem itemLabel="ADMINISTRATOR" itemValue="ROLE_ADMIN"/>
-
                     </p:selectOneMenu>
                 </div>
                    <p:commandButton value="Save" action="#{addUserController.addUser}" />
-
             </h:panelGrid>
         </p:panel>
     </h:form>

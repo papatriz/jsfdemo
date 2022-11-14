@@ -17,10 +17,8 @@ public class  Driver {
     private String name;
     @Column
     private String surname;
-
     @Column(name = "hours")
     private int hoursWorked;
-
     @Enumerated(EnumType.STRING)
     private EDriverStatus status;
 
@@ -37,6 +35,8 @@ public class  Driver {
 
     @Transient
     private String email;
+    @Transient
+    private final int MILLIS_TO_HOURS = 3600000;
 
     public int getWorkingHours() {
         int workHours = 0;
@@ -47,7 +47,7 @@ public class  Driver {
 
         int currMonth = currCalendar.get(Calendar.MONTH);
         int lastUpdateMonth = lastCalendar.get(Calendar.MONTH);
-        int hoursFromLastUpdate = (int) ((currCalendar.getTimeInMillis() - lastCalendar.getTimeInMillis()) / 3600000);
+        int hoursFromLastUpdate = (int) ((currCalendar.getTimeInMillis() - lastCalendar.getTimeInMillis()) / MILLIS_TO_HOURS);
 
         workHours = hoursWorked;
         if (currMonth > lastUpdateMonth) {
@@ -55,7 +55,7 @@ public class  Driver {
             if (status == EDriverStatus.DRIVE) {
                 Calendar startMonth =  new GregorianCalendar();
                 startMonth.set(currCalendar.get(Calendar.YEAR), currMonth, 0,0,0,0);
-                hoursFromLastUpdate = (int) ((currCalendar.getTimeInMillis() - startMonth.getTimeInMillis()) / 3600000);
+                hoursFromLastUpdate = (int) ((currCalendar.getTimeInMillis() - startMonth.getTimeInMillis()) / MILLIS_TO_HOURS);
             }
         }
 

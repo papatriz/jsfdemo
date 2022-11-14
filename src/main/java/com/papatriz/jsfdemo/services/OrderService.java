@@ -7,6 +7,10 @@ import com.papatriz.jsfdemo.repositories.main.IOrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +23,6 @@ import java.util.Optional;
 public class OrderService implements IOrderService{
     private final IOrderRepository orderRepository;
     private final Logger logger = LoggerFactory.getLogger(OrderService.class);
-
     @Autowired
     public OrderService(IOrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -49,6 +52,12 @@ public class OrderService implements IOrderService{
         List<Order> orders = orderRepository.findAll();
         fetchNodesAndCargos(orders);
         return orders;
+    }
+
+    @Override
+    public Page<Order> getLastNOrders(int n) {
+
+        return orderRepository.findAll(PageRequest.of(0, n, Sort.Direction.DESC, "id"));
     }
 
     public void makeWayBill(Order order) throws NoLoadCargoPointException {

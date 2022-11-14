@@ -43,10 +43,7 @@ public class ManageFleetController {
     @RequestAction
     @IgnorePostback
    // @PostConstruct
-    public void loadData(){
-
-        fleet = truckService.getAllTrucks();
-    }
+    public void loadData() { fleet = truckService.getAllTrucks(); }
 
     @PostConstruct
     public void setDefaultDriversNum() {
@@ -90,7 +87,6 @@ public class ManageFleetController {
         System.out.println("DELETE TRUCK "+selectedTruck.getRegNumber());
 
         truckService.removeTruck(selectedTruck);
-       // selectedTruck = new Truck();
         loadData();
         PrimeFaces.current().ajax().update("dataTablePanel");
 
@@ -99,21 +95,7 @@ public class ManageFleetController {
     }
 
     public void onRowToggle(ToggleEvent event) {
-
         System.out.println( "Inside onRowToggle in Fleet controller");
-
-        System.out.println( event.getComponent());
-        System.out.println( event.getComponent().getId());
-
-        System.out.println( event.getVisibility());
-
-
-        // String dataStr = ((Truck)event.getData()).getRegNumber();
-
-      //  FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Truck "+dataStr+" ready to edit", ""));
-
-        // System.out.println(dataStr );
-
     }
 
     public String getColorByStatus(ETruckStatus status) {
@@ -121,17 +103,12 @@ public class ManageFleetController {
     }
 
     public List<Truck> getFilteredTrucks() {
-        System.out.println("getFilteredTrucks called");
 
         return filteredTrucks;
     }
 
     public void setFilteredTrucks(List<Truck> filteredTrucks) {
-        System.out.println("setFilteredTrucks called");
-        for (Truck truck:filteredTrucks) {
-            System.out.println(truck.getRegNumber());
 
-        }
         this.filteredTrucks = filteredTrucks;
     }
 
@@ -146,10 +123,7 @@ public class ManageFleetController {
         return truck;
     }
 
-    public void setSelectedTruck(Truck selectedTruck) {
-        System.out.println("Truck selected "+selectedTruck.getRegNumber());
-        this.selectedTruck = selectedTruck;
-    }
+    public void setSelectedTruck(Truck selectedTruck) { this.selectedTruck = selectedTruck; }
 
 
 }

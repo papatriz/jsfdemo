@@ -30,10 +30,11 @@ public class WebSecurityConfig {
 
                 httpSecurity
                 .authorizeRequests()
-                    .mvcMatchers("/manager", "/manager/**").hasAnyRole("MANAGER", "ADMIN")
-                    .mvcMatchers("/driver").hasAnyRole("DRIVER", "ADMIN")
-                    .mvcMatchers("/userlist").hasRole("ADMIN")
-                    .antMatchers("/**").authenticated()
+                     .antMatchers("/api").permitAll()
+                     .mvcMatchers("/manager", "/manager/**").hasAnyRole("MANAGER", "ADMIN")
+                     .mvcMatchers("/driver").hasAnyRole("DRIVER", "ADMIN")
+                     .mvcMatchers("/userlist").hasRole("ADMIN")
+                     .antMatchers("/**").authenticated()
                 .and()
                 .exceptionHandling().accessDeniedPage("/error/accessDenied")
                 .and()

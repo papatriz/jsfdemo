@@ -36,13 +36,9 @@ public class UserListController {
     }
 
     public List<User> getUsers() {
-
         return users;
     }
-
-    public void setSelectedUser(User user)
-    {
-        System.out.println("User selected : "+user.getUsername());
+    public void setSelectedUser(User user) {
         selectedUser = user;
     }
     public OutputLabel getLabel() {
@@ -53,17 +49,7 @@ public class UserListController {
         this.label = label;
     }
 
-    public void deleteUser(User user){
-
-        userService.deleteUser(user);
-        loadData();
-        PrimeFaces.current().ajax().update("form:testContainer");
-        PrimeFaces.current().ajax().update("test");
-        String message = "User "+user.getUsername()+" deleted";
-        label.setValue(message);
-    }
     public void deleteSelectedUser(){
-        System.out.println("deleteUser executed, user id is "+selectedUser.getId());
         userService.deleteUser(selectedUser);
         loadData();
         PrimeFaces.current().ajax().update("form:testContainer");

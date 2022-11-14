@@ -18,7 +18,6 @@ public class MessagesListener implements PhaseListener {
       //  System.out.println("After RENDER_RESPONSE");
 
     }
-
     @Override
     public void beforePhase(PhaseEvent phaseEvent) {
      //   System.out.println("Before RENDER_RESPONSE");

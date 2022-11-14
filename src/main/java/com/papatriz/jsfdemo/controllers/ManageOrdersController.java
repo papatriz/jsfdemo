@@ -32,7 +32,6 @@ public class ManageOrdersController {
         this.orderService = orderService;
         this.truckService = truckService;
     }
-
     private enum CargoCycleState {
         INIT,
         COMPLETE,

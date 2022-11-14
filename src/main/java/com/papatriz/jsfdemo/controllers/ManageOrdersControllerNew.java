@@ -132,6 +132,7 @@ public class ManageOrdersControllerNew {
         showMessage("Order saved and active now", true);
     }
     public void addOrder() throws NoLoadCargoPointException {
+
         List<Node> orderNodes = new ArrayList<>();
         cargoCycles.stream().forEach(cargoCycle -> cargoCycle.setHasCitiesError(false));
         boolean hasError = false;

@@ -31,14 +31,15 @@ public class MainDataSourceConfig {
     @Primary
     @ConfigurationProperties("spring.datasource.configuration")
     public DataSource mainDataSource() {
+
         return mainDataSourceProperties().initializeDataSourceBuilder()
                 .type(HikariDataSource.class).build();
     }
 
     @Primary
     @Bean(name = "mainEntityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean mainEntityManagerFactory(
-            EntityManagerFactoryBuilder builder) {
+    public LocalContainerEntityManagerFactoryBean mainEntityManagerFactory(EntityManagerFactoryBuilder builder) {
+
         return builder
                 .dataSource(mainDataSource())
                 .packages("com.papatriz.jsfdemo.models.main")
@@ -47,8 +48,8 @@ public class MainDataSourceConfig {
 
     @Primary
     @Bean
-    public PlatformTransactionManager mainTransactionManager(
-            final @Qualifier("mainEntityManagerFactory") LocalContainerEntityManagerFactoryBean mainEntityManagerFactory) {
+    public PlatformTransactionManager mainTransactionManager(final @Qualifier("mainEntityManagerFactory") LocalContainerEntityManagerFactoryBean mainEntityManagerFactory) {
+
         return new JpaTransactionManager(mainEntityManagerFactory.getObject());
     }
 }

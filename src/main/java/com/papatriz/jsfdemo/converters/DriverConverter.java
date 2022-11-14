@@ -22,9 +22,9 @@ public class DriverConverter implements Converter {
         this.driverService = driverService;
     }
 
-
     @Override
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String s) throws ConverterException {
+
         if (s==null || s.isEmpty()) return  null;
         String idStr = s.substring(s.indexOf("id:")+4);
         int id = Integer.parseInt(idStr);
@@ -32,9 +32,8 @@ public class DriverConverter implements Converter {
         try {
          d = driverService.getDriverById(id);
         }
-        catch (Exception e)
-        {
-            System.out.println("Have got exception "+e.getMessage());
+        catch (Exception e) {
+            System.out.println("Cant get driver, have got exception "+e.getMessage());
         }
 
         return  d;

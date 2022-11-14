@@ -15,13 +15,7 @@ import org.springframework.stereotype.Component;
 public class AddUserController {
 
     private final UserService userService;
-
     private User user = new User();
-    private String testmessage = "ADD USER CONTROLLER TEST MESSAGE";
-
-    public String getTestmessage() {
-        return testmessage;
-    }
 
     @Autowired
     public AddUserController(UserService userService) {
@@ -35,10 +29,7 @@ public class AddUserController {
         return  "/userlist.xhtml?faces-redirect=true";
     }
 
-    public User getUser() {
-        System.out.println("getUser called");
-        return user;
-    }
+    public User getUser() { return user; }
 
 
 }

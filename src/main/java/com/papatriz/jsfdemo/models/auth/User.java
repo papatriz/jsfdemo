@@ -24,16 +24,12 @@ public class User {
         this.email = email;
         this.role = role;
     }
-
     @Column
     private String username;
-
     @Column
     private String password;
-
     @Column
     private String email;
-
     @Column
     private String role;
 
