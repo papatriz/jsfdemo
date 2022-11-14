@@ -25,7 +25,7 @@ public class RestApiController {
     @GetMapping("")
     public List<OrderDTO> simpleOrderList() {
 
-        return orderService.getLastNOrders(4)
+        return orderService.getLastNOrders(10)
                 .stream()
                 .map(orderMapper::toDTO)
                 .collect(Collectors.toList());

@@ -22,7 +22,7 @@ public class Order {
     private boolean isComplete;
 
     // ----- RELATED DATA -----
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy
     private List<Node> nodes;
@@ -38,7 +38,7 @@ public class Order {
     private int maxWeight;
 
     public String getStatus() {
-        if (assignedTruck==null) return "No truck";
+        if (assignedTruck==null) return "Pending";
         if (drivers.isEmpty()) return "No drivers";
         boolean waitDrivers = drivers.stream().anyMatch(d -> d.getStatus() == EDriverStatus.ASSIGNED || d.getStatus() == EDriverStatus.READY);
         if (waitDrivers) return "Waiting for drivers";

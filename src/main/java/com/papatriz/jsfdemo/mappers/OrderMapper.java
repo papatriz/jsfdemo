@@ -16,7 +16,7 @@ public class OrderMapper {
         oDTO.setId(order.getId());
         oDTO.setComplete(order.isComplete());
         oDTO.setStatus(order.getStatus());
-        oDTO.setAssignedTruck(order.getAssignedTruck().getRegNumber());
+        oDTO.setAssignedTruck(order.getAssignedTruck() == null? "N/A": order.getAssignedTruck().getRegNumber());
         Optional<Node> currentNode = order.getNodes().stream().filter(n -> !n.isComplete()).findFirst();
         String currCity = (currentNode.isEmpty())? "Finished" : currentNode.get().getCity().toString();
         oDTO.setCurrentCity(currCity);
