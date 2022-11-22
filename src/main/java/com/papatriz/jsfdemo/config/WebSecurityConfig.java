@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableWebSecurity
@@ -30,6 +31,7 @@ public class WebSecurityConfig {
 
                 httpSecurity
                 .authorizeRequests()
+                     .antMatchers("/ws/**").permitAll()
                      .antMatchers("/api").permitAll()
                      .mvcMatchers("/manager", "/manager/**").hasAnyRole("MANAGER", "ADMIN")
                      .mvcMatchers("/driver").hasAnyRole("DRIVER", "ADMIN")
@@ -48,9 +50,11 @@ public class WebSecurityConfig {
                     .logoutUrl("/logout");
 
                 httpSecurity.csrf().disable();
+          //      httpSecurity.cors().configurationSource(new CorsConfiguration().addAllowedOrigin("http://localhost:8081"));
 
         return httpSecurity.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoderNone()

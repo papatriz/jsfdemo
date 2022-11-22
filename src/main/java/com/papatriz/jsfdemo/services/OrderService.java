@@ -1,15 +1,16 @@
 package com.papatriz.jsfdemo.services;
 
 import com.papatriz.jsfdemo.comparators.NodeComparatorDistanceBased;
+import com.papatriz.jsfdemo.events.NewOrderAddedEvent;
 import com.papatriz.jsfdemo.exceptions.NoLoadCargoPointException;
 import com.papatriz.jsfdemo.models.main.*;
 import com.papatriz.jsfdemo.repositories.main.IOrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,15 +23,18 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class OrderService implements IOrderService{
     private final IOrderRepository orderRepository;
+    private final ApplicationEventPublisher publisher;
     private final Logger logger = LoggerFactory.getLogger(OrderService.class);
     @Autowired
-    public OrderService(IOrderRepository orderRepository) {
+    public OrderService(IOrderRepository orderRepository, ApplicationEventPublisher publisher) {
         this.orderRepository = orderRepository;
+        this.publisher = publisher;
     }
     @Override
     @Transactional
     public void saveOrder(Order order) {
         orderRepository.save(order);
+        publisher.publishEvent(new NewOrderAddedEvent("new order"));
     }
 
     @Override

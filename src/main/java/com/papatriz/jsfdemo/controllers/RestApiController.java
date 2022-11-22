@@ -4,6 +4,7 @@ import com.papatriz.jsfdemo.dtos.OrderDTO;
 import com.papatriz.jsfdemo.mappers.OrderMapper;
 import com.papatriz.jsfdemo.services.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ public class RestApiController {
     }
 
     @GetMapping("")
+    @CrossOrigin(origins = "*")
     public List<OrderDTO> simpleOrderList() {
 
         return orderService.getLastNOrders(10)
