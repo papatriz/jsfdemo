@@ -1,5 +1,6 @@
 package com.papatriz.jsfdemo.controllers;
 
+import com.papatriz.jsfdemo.annotations.CustomProfile;
 import com.papatriz.jsfdemo.events.TruckTableChangedEvent;
 import com.papatriz.jsfdemo.exceptions.NoLoadCargoPointException;
 import com.papatriz.jsfdemo.models.main.*;
@@ -27,7 +28,8 @@ import java.util.stream.Collectors;
 @ELBeanName(value = "ordersController")
 @Join(path = "/manage_orders_new", to = "/manage_orders_new.xhtml")
 @Data
-public class ManageOrdersControllerNew {
+@CustomProfile
+public class ManageOrdersControllerNew implements IManageOrdersControllerNew {
 
     private  final IOrderService orderService;
     private  final ITruckService truckService;
@@ -48,11 +50,31 @@ public class ManageOrdersControllerNew {
     private Logger logger = LoggerFactory.getLogger(ManageOrdersControllerNew.class);
 
     @PostConstruct
-    private void init() {
+    void init() {
         loadData();
         initNewOrder();
     }
+    void initNewOrder() {
+        newOrder = new Order();
+        cargoCycles = new ArrayList<>();
+        CargoCycle currentCargoCycle = new CargoCycle();
+        cargoCycles.add(currentCargoCycle);
+    }
 
+    void loadData() {
+        cachedTrucks = truckService.getAllTrucks();
+        cachedPendingOrders = orderService.getPendingOrders();
+        for (Order o : cachedPendingOrders) {
+            o.setMaxWeight(orderService.getOrderMaxWeight(o));
+            o.setDrivers(Collections.emptyList());
+        }
+        cachedActiveOrders = orderService.getActiveOrders();
+        for (Order o : cachedActiveOrders) {
+            //    o.setMaxWeight(getOrderTotalWeight(o));
+            logger.info("Order ID:" + o.getId() + " Drivers num: " + o.getDrivers().size());
+        }
+    }
+    @Override
     @EventListener
     public void afterFleetChanged(TruckTableChangedEvent event) {
         logger.info("onTruckTableChanged: "+event.getMessage());
@@ -60,27 +82,7 @@ public class ManageOrdersControllerNew {
         needUpdate = true;
     }
 
-    private void loadData() {
-        cachedTrucks = truckService.getAllTrucks();
-        cachedPendingOrders = orderService.getPendingOrders();
-        for (Order o:cachedPendingOrders) {
-            o.setMaxWeight(orderService.getOrderMaxWeight(o));
-            o.setDrivers(Collections.emptyList());
-        }
-        cachedActiveOrders = orderService.getActiveOrders();
-        for (Order o:cachedActiveOrders) {
-        //    o.setMaxWeight(getOrderTotalWeight(o));
-            logger.info("Order ID:"+o.getId()+" Drivers num: "+o.getDrivers().size());
-        }
-    }
-
-    private void initNewOrder() {
-        newOrder = new Order();
-        cargoCycles = new ArrayList<>();
-        CargoCycle currentCargoCycle = new CargoCycle();
-        cargoCycles.add(currentCargoCycle);
-    }
-
+    @Override
     public List<Truck> getSuitableTrucks(Order order) {
 
         if (needUpdate) {
@@ -94,11 +96,13 @@ public class ManageOrdersControllerNew {
                              .collect(Collectors.toList());
     }
 
+    @Override
     public void onTruckSelect(Truck truck) {
 
         showMessage("Truck changed, "+truck.toString(), true);
     }
 
+    @Override
     public void onSelectCheckboxChange(Order o) {
 
         logger.info("On checkbox change: "+o.getDrivers().size());
@@ -106,6 +110,7 @@ public class ManageOrdersControllerNew {
         showMessage("onDriverSelect: drivers num = "+o.getDrivers().size(), true);
     }
 
+    @Override
     public List<Driver> getSuitableDrivers(Order order) {
         // toDO: implement ICountry and use it for time estimation
         int estimatedOrderTime = 8;
@@ -115,6 +120,7 @@ public class ManageOrdersControllerNew {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public void updateOrder(Order order) {
         order.getAssignedTruck().setOrder(order);
         order.getAssignedTruck().setAssignedDrivers(order.getDrivers());
@@ -131,6 +137,7 @@ public class ManageOrdersControllerNew {
         loadData();
         showMessage("Order saved and active now", true);
     }
+    @Override
     public void addOrder() throws NoLoadCargoPointException {
 
         List<Node> orderNodes = new ArrayList<>();
@@ -171,6 +178,8 @@ public class ManageOrdersControllerNew {
         showMessage("New order added", true);
     }
 
+
+    @Override
     public void addCargo() {
 
         if (!cargoCycles.isEmpty()) {
@@ -197,10 +206,14 @@ public class ManageOrdersControllerNew {
         cargoCycles.add(currentCargoCycle);
     }
 
+
+    @Override
     public void removeCargo(CargoCycle cs) {
         cargoCycles.remove(cs);
     }
 
+
+    @Override
     public int getTruckMaxCapacity() {
        return truckService.getMaxCapacity();
     }

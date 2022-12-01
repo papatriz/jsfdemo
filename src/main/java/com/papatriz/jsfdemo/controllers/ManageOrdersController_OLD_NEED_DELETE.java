@@ -24,11 +24,11 @@ import java.util.stream.Collectors;
 @Component(value = "manageOrdersController")
 @ELBeanName(value = "manageOrdersController")
 @Join(path = "/manage_orders", to = "/manage_orders.xhtml")
-public class ManageOrdersController {
+public class ManageOrdersController_OLD_NEED_DELETE {
     private final IOrderService orderService;
     private final ITruckService truckService;
     @Autowired
-    public ManageOrdersController(IOrderService orderService, ITruckService truckService) {
+    public ManageOrdersController_OLD_NEED_DELETE(IOrderService orderService, ITruckService truckService) {
         this.orderService = orderService;
         this.truckService = truckService;
     }
